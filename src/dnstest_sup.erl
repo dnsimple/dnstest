@@ -1,5 +1,4 @@
--module(erldns_test_sup).
-
+-module(dnstest_sup).
 -behavior(supervisor).
 
 % API
@@ -10,13 +9,13 @@
 
 -define(SUPERVISOR, ?MODULE).
 
-%% Helper macro for declaring children of supervisor
--define(CHILD(I, Type, Args), {I, {I, start_link, Args}, permanent, 5000, Type, [I]}).
-
 %% Public API
 start_link() ->
   supervisor:start_link({local, ?SUPERVISOR}, ?MODULE, []).
 
 init(_Args) ->
-  Procs = [],
-  {ok, {{one_for_one, 20, 10}, Procs}}.
+  lager:info("Supervisor is starting procs"),
+  Procs = [
+    {dnstest_harness, {dnstest_harness, start_link, []}, permanent, 5000, worker, [dnstest_harness]}
+  ],
+  {ok, {{one_for_one, 5, 10}, Procs}}.
