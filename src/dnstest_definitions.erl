@@ -1,6 +1,6 @@
 -module(dnstest_definitions).
 
--include("dns_records.hrl").
+-include("dns.hrl").
 
 -export([definitions/0]).
 
@@ -11,14 +11,14 @@ definitions() ->
     % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='nxdomain.example.com.', qtype=ANY
 
-    {any_nxdomain, [
+    {any_nxdomain, {
       {question, {"nxdomain.example.com", ?DNS_TYPE_ANY}},
       {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
       {records, [
-        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, <<"ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400">>},
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
         {<<".">>, ?DNS_CLASS_IN, ?DNS_TYPE_OPT, 32768}
       ]}
-    ]},
+    }},
 
     % 0	example.com.	IN	MX	120	10 smtp-servers.example.com.
     % 0	example.com.	IN	MX	120	15 smtp-servers.test.com.
@@ -34,12 +34,22 @@ definitions() ->
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='example.com.', qtype=ANY
 
-    {any_query, [
+    {any_query, {
       {question, {"example.com", ?DNS_TYPE_ANY}},
       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
       {records, [
-        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, <<"10 smtp-servers.example.com">>}
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{preference=10, exchange = <<"smtp-servers.example.com">>}},
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{preference=10, exchange = <<"smtp-servers.example.com">>}},
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.example.com">>}},
+        {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+
+        {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,1}}},
+        {<<"ns2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,2}}},
+        {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,2}}},
+        {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,3}}},
+        {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
       ]}
-    ]}
+    }}
   ].
 
