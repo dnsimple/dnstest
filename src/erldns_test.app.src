@@ -1,0 +1,10 @@
+{application, erldns_test,
+ [{description, "Conformance tests for DNS servers"},
+  {vsn, git},
+  {modules, [erldns_test,
+             erldns_test_app]},
+  {registered, []},
+  {mod, { erldns_test_app, []}},
+  {applications, [kernel, stdlib]}]}.
+
+
