@@ -58,31 +58,38 @@ run([], TestResults) -> TestResults;
 run([{Name, Conditions}|Rest], TestResults) ->
   lager:info("Running test ~p", [Name]),
 
-  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedAnswers}} = Conditions,
+  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}} = Conditions,
+  {{answers, ExpectedAnswers}, {authority, ExpectedAuthority}, {additional, ExpectedAdditional}} = ExpectedRecords,
 
   % Run the test
   Questions = [#dns_query{name=Qname, type=Qtype}],
   Message = #dns_message{rd = false, qc=1, questions=Questions},
   {ok, Response} = send_udp_query(Message, {127,0,0,1}, 8053),
-  lager:info("Response: ~p", [Response]),
+  lager:debug("Response: ~p", [Response]),
 
   % Check the results
-  test_header(ExpectedHeader, Response),
-  test_answers(ExpectedAnswers, Response),
+  Results = [
+    test_header(ExpectedHeader, Response),
+    test_records(ExpectedAnswers, Response#dns_message.answers, answers),
+    test_records(ExpectedAuthority, Response#dns_message.authority, authority),
+    test_records(ExpectedAdditional, Response#dns_message.additional, additional)
+  ],
 
-  run(Rest, TestResults).
+  run(Rest, TestResults ++ [{Name, Results}]).
 
 % Test expected answers against actual answers.
-test_answers(ExpectedAnswers, Response) ->
-  ActualAnswers = lists:map(fun({dns_rr, Name, Class, Type, TTL, Data}) ->
+test_records(ExpectedRecords, ActualRecords, SectionType) ->
+  ActualRecordsSorted = lists:sort(lists:map(fun({dns_rr, Name, Class, Type, TTL, Data}) ->
         {Name, Class, Type, TTL, Data}
-  end, Response#dns_message.answers),
-
-  MatchResult = ExpectedAnswers =:= ActualAnswers,
-  lager:info("Expected answers: ~p", [ExpectedAnswers]),
-  lager:info("Actual answers: ~p", [ActualAnswers]),
-  lager:info("Answer match? ~p", [MatchResult]),
-  MatchResult.
+    end, ActualRecords)),
+  ExpectedRecordsSorted = lists:sort(ExpectedRecords),
+  case ExpectedRecordsSorted =:= ActualRecordsSorted of
+    false ->
+      lager:info("Expected ~p: ~p", [SectionType, ExpectedRecordsSorted]),
+      lager:info("Actual ~p: ~p", [SectionType, ActualRecordsSorted]),
+      false;
+    true -> true
+  end.
 
 % Test expected header values against actual header values.
 test_header(ExpectedHeader, Response) ->
@@ -95,11 +102,13 @@ test_header(ExpectedHeader, Response) ->
     aa=Response#dns_message.aa,
     oc=Response#dns_message.oc
   },
-  MatchResult = ExpectedHeader =:= ActualHeader,
-  lager:info("Expected header: ~p", [ExpectedHeader]),
-  lager:info("Actual header: ~p", [ActualHeader]),
-  lager:info("Header match? ~p", [MatchResult]),
-  MatchResult.
+  case ExpectedHeader =:= ActualHeader of
+    false ->
+      lager:info("Expected header: ~p", [ExpectedHeader]),
+      lager:info("Actual header: ~p", [ActualHeader]),
+      false;
+    true -> true
+  end.
 
 % Send the message to the given host:port via UDP.
 send_udp_query(Message, Host, Port) ->

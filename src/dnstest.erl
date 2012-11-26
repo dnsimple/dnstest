@@ -8,5 +8,5 @@ start() ->
   run().
 
 run() ->
-  gen_server:call(dnstest_harness, {run, dnstest_definitions:definitions()}).
-
+  TestResults = gen_server:call(dnstest_harness, {run, dnstest_definitions:definitions()}),
+  lager:info("Test results: ~p", [TestResults]).
