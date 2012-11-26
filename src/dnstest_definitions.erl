@@ -74,6 +74,57 @@ definitions() ->
             {authority, []},
             {additional, []}
           }}
+      }},
+
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='test.com.', qtype=A
+
+    {apex_level_a_but_no_a, {
+        {question, {"test.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % 0	wtest.com.	IN	A	3600	9.9.9.9
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='wtest.com.', qtype=A
+
+    {apex_level_a, {
+        {question, {"wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {9,9,9,9}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	test.com.	IN	NS	3600	ns1.test.com.
+    % 0	test.com.	IN	NS	3600	ns2.test.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='test.com.', qtype=NS
+
+    {apex_level_ns, {
+        {question, {"test.com", ?DNS_TYPE_NS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"ns1.test.com">>}},
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"ns2.test.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
       }}
+
   ].
 
