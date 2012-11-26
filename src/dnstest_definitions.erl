@@ -59,5 +59,21 @@ definitions() ->
           {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
         ]}
     }}}}
+
+    % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.something.wtest.com.', qtype=ANY
+
+    {any_wildcard, {
+      {question, {"www.something.wtest.com", ?DNS_TYPE_ANY}},
+      {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+      {records, {
+          {answers, [
+              {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}}
+            ]},
+          {authority, []},
+          {additional, []}
+      }}
+    }}
   ].
 
