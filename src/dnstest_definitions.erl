@@ -124,7 +124,64 @@ definitions() ->
             {authority, []},
             {additional, []}
           }}
+      }},
+
+    % 0	outpost.example.com.	IN	A	120	192.168.2.1
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='outpost.example.com.', qtype=A
+
+    {basic_a_resolution, {
+        {question, {"outpost.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"outpost.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	ipv6.example.com.	IN	AAAA	120	2001:6a8:0:1:210:4bff:fe4b:4c61
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='ipv6.example.com.', qtype=AAAA
+
+    {basic_aaaa_resolution, {
+        {question, {"ipv6.example.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"ipv6.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{ip = {8193,1704,0,1,528,19455,65099,19553}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	hwinfo.example.com.	IN	HINFO	120	"abc" "def"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='hwinfo.example.com.', qtype=HINFO
+
+    {basic_hinfo, {
+        {question, {"hwinfo.example.com", ?DNS_TYPE_HINFO}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"hwinfo.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_HINFO, 120, #dns_rrdata_hinfo{cpu = <<"abc">>, os = <<"def">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
       }}
+
+    % 0	location.example.com.	IN	LOC	120	51 56 0.123 N 5 54 0.000 E 4.00m 1.00m 10000.00m 10.00m
+    % 0	location.example.com.	IN	LOC	120	51 56 1.456 S 5 54 0.000 E 4.00m 2.00m 10000.00m 10.00m
+    % 0	location.example.com.	IN	LOC	120	51 56 2.789 N 5 54 0.000 W 4.00m 3.00m 10000.00m 10.00m
+    % 0	location.example.com.	IN	LOC	120	51 56 3.012 S 5 54 0.000 W 4.00m 4.00m 10000.00m 10.00m
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='location.example.com.', qtype=LOC
+
+
 
   ].
 
