@@ -246,6 +246,131 @@ definitions() ->
             {authority, []},
             {additional, []}
           }}
+      }},
+
+    % 0	text.example.com.	IN	TXT	120	"Hi, this is some text"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='text.example.com.', qtype=TXT
+
+    {basic_txt_resolution, {
+        {question, {"text.example.com", ?DNS_TYPE_TXT}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"text.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120, #dns_rrdata_txt{txt = [<<"Hi, this is some text">>]}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % If a CNAME wildcard is present, but there is also a direct hit for the qname
+    % but not for the qtype, a NODATA response should ensue. This test runs at the
+    % root of the domain (the 'apex')
+
+    % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='secure.wtest.com.', qtype=A
+
+    {cname_and_wildcard_at_root, {
+        {question, {"secure.wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.wtest.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % If a CNAME wildcard is present, and it matches, but points to a record that
+    % does not have the requested type, a CNAME should be emitted plus a SOA to
+    % indicate no match with the right record
+
+    % 0	yo.test.test.com.	IN	CNAME	3600	server1.test.com.
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='yo.test.test.com.', qtype=AAAA
+
+    {cname_and_wildcard_but_no_correct_type, {
+        {question, {"yo.test.test.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"yo.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600, #dns_rrdata_cname{dname = <<"server1.test.com">>}}
+              ]},
+            {authority, [
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % If a CNAME wildcard is present, but there is also a direct hit for the qname
+    % but not for the qtype, a NODATA response should ensue.
+
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.test.test.com.', qtype=MX
+
+    {cname_and_wildcard, {
+        {question, {"www.test.test.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % Tries to resolve the AAAA for www.example.com, which is a CNAME to
+    % outpost.example.com, which has an A record, but no AAAA record. Should show
+    % CNAME and SOA.
+
+    % 0	www.example.com.	IN	CNAME	120	outpost.example.com.
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.example.com.', qtype=AAAA
+
+    {cname_but_no_correct_type, {
+        {question, {"www.example.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example.com">>}}
+              ]},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+
+    % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
+    % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
+    % 2	italy-ns1.example.com.	IN	A	120	192.168.5.1
+    % 2	italy-ns2.example.com.	IN	A	120	192.168.5.2
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='www.italy.example.com.', qtype=A
+
+    {internal_referral, {
+        {question, {"www.italy.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"italy.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"italy-ns1.example.com">>}},
+                {<<"italy.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"italy-ns2.example.com">>}}
+              ]},
+            {additional, [
+                {<<"italy-ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}},
+                {<<"italy-ns2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,2}}}
+              ]}
+          }}
       }}
 
   ].

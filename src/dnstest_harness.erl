@@ -31,6 +31,9 @@ init([]) ->
 
 handle_call({run, Definition}, _From, State) ->
   TestResults = run(Definition),
+  {reply, TestResults, State};
+handle_call({run_target, Definition, Names}, _From, State) ->
+  TestResults = run(Definition, Names),
   {reply, TestResults, State}.
 
 handle_cast(Message, State) ->
@@ -52,10 +55,21 @@ code_change(PreviousVersion, State, Extra) ->
 %% Internal API
 
 % Run the test with the given definition.
-run(Definition) -> run(Definition, []).
+run(Definition) -> run(Definition, [], []).
+run(Definition, Names) -> run(Definition, Names, []).
 
-run([], TestResults) -> TestResults;
-run([{Name, Conditions}|Rest], TestResults) ->
+run([], _, TestResults) -> TestResults;
+run([{Name, Conditions}|Rest], Names, TestResults) ->
+  case length(Names) of
+    0 -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
+    _ ->
+      case lists:member(atom_to_list(Name), Names) of
+        true -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
+        false -> run(Rest, Names, TestResults)
+      end
+  end.
+
+run_test(Name, Conditions) ->
   lager:info("Running test ~p", [Name]),
 
   {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}} = Conditions,
@@ -75,7 +89,7 @@ run([{Name, Conditions}|Rest], TestResults) ->
     test_records(ExpectedAdditional, Response#dns_message.additional, additional)
   ],
 
-  run(Rest, TestResults ++ [{Name, Results}]).
+  [{Name, Results}].
 
 % Test expected answers against actual answers.
 test_records(ExpectedRecords, ActualRecords, SectionType) ->
