@@ -172,7 +172,7 @@ definitions() ->
             {authority, []},
             {additional, []}
           }}
-      }}
+      }},
 
     % 0	location.example.com.	IN	LOC	120	51 56 0.123 N 5 54 0.000 E 4.00m 1.00m 10000.00m 10.00m
     % 0	location.example.com.	IN	LOC	120	51 56 1.456 S 5 54 0.000 E 4.00m 2.00m 10000.00m 10.00m
@@ -181,7 +181,72 @@ definitions() ->
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='location.example.com.', qtype=LOC
 
+    %{basic_loc, {
+        %{question, {"location.example.com", ?DNS_TYPE_LOC}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{records, {
+            %{answers, [
+                %{<<"location.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_LOC, 120, #dns_rrdata_loc{lat="51 56 0.123 N", lon="5 54 0.000 E", alt="4.00", size="1.00", horiz="10000.00", vert="10.00"}}
+              %]},
+            %{authority, []},
+            %{additional, []}
+          %}}
+      %}},
 
+    % 0	example.com.	IN	NS	120	ns1.example.com.
+    % 0	example.com.	IN	NS	120	ns2.example.com.
+    % 2	ns1.example.com.	IN	A	120	192.168.1.1
+    % 2	ns2.example.com.	IN	A	120	192.168.1.2
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=NS
+
+    {basic_ns_resolution, {
+        {question, {"example.com", ?DNS_TYPE_NS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.example.com">>}}
+              ]},
+            {authority, []},
+            {additional, [
+                {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,1}}},
+                {<<"ns2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,2}}}
+              ]}
+          }}
+      }},
+
+    % 0	example.com.	IN	SOA	100000	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=SOA
+
+    {basic_soa_resolution, {
+        {question, {"example.com", ?DNS_TYPE_SOA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	_ldap._tcp.dc.test.com.	IN	SRV	3600	0 100 389 server2.example.net.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='_ldap._tcp.dc.test.com.', qtype=SRV
+
+    {basic_srv_resolution, {
+        {question, {"_ldap._tcp.dc.test.com", ?DNS_TYPE_SRV}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"_ldap._tcp.dc.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SRV, 3600, #dns_rrdata_srv{priority=0, weight=100, port=389, target= <<"server2.example.net">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }}
 
   ].
 
