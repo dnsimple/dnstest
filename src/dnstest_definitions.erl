@@ -292,7 +292,7 @@ definitions() ->
           }}
       }},
 
-    % If a CNAME wildcard is present, and it matches, but points to a record that
+    % If a CNAME wildcard is present, but it points to a record that
     % does not have the requested type, a CNAME should be emitted plus a SOA to
     % indicate no match with the right record
 
@@ -317,6 +317,8 @@ definitions() ->
 
     % If a CNAME wildcard is present, but there is also a direct hit for the qname
     % but not for the qtype, a NODATA response should ensue.
+    %
+    % In this case www.test.test.com is an A record, but the query is for an MX.
 
     % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
