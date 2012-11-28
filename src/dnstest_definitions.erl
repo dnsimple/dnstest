@@ -382,6 +382,26 @@ definitions() ->
           }}
       }},
 
+    % ANY query for a CNAME to a local NXDOMAIN.
+
+    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxd.example.com.', qtype=ANY
+
+    {cname_to_nxdomain_any, {
+        {question, {"nxd.example.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+
     % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
     % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
     % 2	italy-ns1.example.com.	IN	A	120	192.168.5.1
