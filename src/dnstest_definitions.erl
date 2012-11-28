@@ -76,6 +76,9 @@ definitions() ->
           }}
       }},
 
+    % Test for A query for test.com in test.com. Should return an AA nodata, since
+    % there is no A record there.
+
     % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='test.com.', qtype=A
@@ -92,6 +95,8 @@ definitions() ->
           }}
       }},
 
+    % Test for A query for wtest.com in wtest.com. Should return an AA A record.
+
     % 0	wtest.com.	IN	A	3600	9.9.9.9
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='wtest.com.', qtype=A
@@ -107,6 +112,9 @@ definitions() ->
             {additional, []}
           }}
       }},
+
+    % Test for NS query for test.com IN NS blah.test.com at APEX level. Should
+    % return AA.
 
     % 0	test.com.	IN	NS	3600	ns1.test.com.
     % 0	test.com.	IN	NS	3600	ns2.test.com.
