@@ -130,7 +130,10 @@ definitions() ->
                 {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"ns2.test.com">>}}
               ]},
             {authority, []},
-            {additional, []}
+            {additional, [
+                {<<"ns1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {1,1,1,1}}},
+                {<<"ns2.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {2,2,2,2}}}
+              ]}
           }}
       }},
 
