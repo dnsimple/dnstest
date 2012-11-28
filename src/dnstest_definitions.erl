@@ -401,6 +401,48 @@ definitions() ->
           }}
       }},
 
+    % CNAME to a local NXDOMAIN.
+
+    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxd.example.com.', qtype=A
+
+    {cname_to_nxdomain, {
+        {question, {"nxd.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}}
+              ]},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % 0	server1.example.com.	IN	CNAME	120	server1.france.example.com.
+    % 1	france.example.com.	IN	NS	120	ns1.otherprovider.net.
+    % 1	france.example.com.	IN	NS	120	ns2.otherprovider.net.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='server1.example.com.', qtype=A
+
+    {cname_to_referral, {
+        {question, {"server1.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"server1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"server1.france.example.com">>}}
+              ]},
+            {authority, [
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.otherprovider.net">>}},
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.otherprovider.net">>}}
+              ]},
+            {additional, []}
+          }}
+      }},
 
     % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
     % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
