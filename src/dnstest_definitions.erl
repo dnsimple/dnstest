@@ -359,6 +359,25 @@ definitions() ->
           }}
       }},
 
+    % 0	loop1.example.com.	IN	CNAME	120	loop2.example.com.
+    % 0	loop2.example.com.	IN	CNAME	120	loop3.example.com.
+    % 0	loop3.example.com.	IN	CNAME	120	loop1.example.com.
+    % Rcode: 2, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='loop1.example.com.', qtype=A
+
+    {cname_loop_breakout, {
+        {question, {"loop1.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_SERVFAIL, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"loop1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"loop2.example.com">>}},
+                {<<"loop2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"loop3.example.com">>}},
+                {<<"loop3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"loop1.example.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
 
     % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
     % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
