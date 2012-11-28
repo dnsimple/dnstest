@@ -29,15 +29,16 @@ start_link() ->
 init([]) ->
   {ok, #state{}}.
 
-handle_call({run, Definition}, _From, State) ->
-  TestResults = run(Definition),
-  {reply, TestResults, State};
-handle_call({run_target, Definition, Names}, _From, State) ->
-  TestResults = run(Definition, Names),
-  {reply, TestResults, State}.
+handle_call(_Message, _From, State) ->
+  {reply, ok, State}.
 
-handle_cast(Message, State) ->
-  lager:info("handle_cast(~p)", [Message]),
+handle_cast({run, Definition}, State) ->
+  TestResults = run(Definition),
+  dnstest_reporter:report(TestResults),
+  {noreply, State};
+handle_cast({run_target, Definition, Names}, State) ->
+  TestResults = run(Definition, Names),
+  dnstest_reporter:report(TestResults),
   {noreply, State}.
 
 handle_info(Message, State) ->
