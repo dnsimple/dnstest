@@ -615,6 +615,44 @@ definitions() ->
           }}
       }},
 
+    % If we CNAME to another locally-hosted domain, while following the chain,
+    % we should make sure to update the left hand side too, even when hitting
+    % a wildcard.
+
+    % 0	bla.something.wtest.com.	IN	A	3600	4.3.2.1
+    % 0	semi-external.example.com.	IN	CNAME	120	bla.something.wtest.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='semi-external.example.com.', qtype=A
+
+    {cross_domain_cname_to_wildcard, {
+        {question, {"semi-external.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"semi-external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"bla.something.wtest.com">>}},
+                {<<"bla.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.something.wtest.com.', qtype=A
+
+    {direct_wildcard, {
+        {question, {"www.something.wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
     % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
     % 2	italy-ns1.example.com.	IN	A	120	192.168.5.1
