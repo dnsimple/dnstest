@@ -763,6 +763,70 @@ definitions() ->
           }}
       }},
      
+    % 0	www.a.b.c.d.e.something.wtest.com.	IN	A	3600	4.3.2.1
+    % 0	www.a.b.c.d.e.something.wtest.com.	IN	RRSIG	3600	A 8 3 3600 [expiry] [inception] [keytag] wtest.com. ...
+    % 1	a.something.wtest.com.	IN	NSEC	86400	wtest.com. A RRSIG NSEC
+    % 1	a.something.wtest.com.	IN	RRSIG	86400	NSEC 8 4 86400 [expiry] [inception] [keytag] wtest.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.a.b.c.d.e.something.wtest.com.', qtype=A
+
+    {five_levels_wildcard_one_below_apex, {
+        {question, {"www.a.b.c.d.e.something.wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.a.b.c.d.e.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	www.a.b.c.d.e.wtest.com.	IN	A	3600	6.7.8.9
+    % 0	www.a.b.c.d.e.wtest.com.	IN	RRSIG	3600	A 8 7 3600 [expiry] [inception] [keytag] wtest.com. ...
+    % 1	*.a.b.c.d.e.wtest.com.	IN	NSEC	86400	ns1.wtest.com. A RRSIG NSEC
+    % 1	*.a.b.c.d.e.wtest.com.	IN	RRSIG	86400	NSEC 8 7 86400 [expiry] [inception] [keytag] wtest.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.a.b.c.d.e.wtest.com.', qtype=A
+
+    {five_levels_wildcard, {
+        {question, {"www.a.b.c.d.e.wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.a.b.c.d.e.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {6,7,8,9}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % Verify that asking for A of a glue record returns a referral.
+
+    % 1	usa.example.com.	IN	NS	120	usa-ns1.usa.example.com.
+    % 1	usa.example.com.	IN	NS	120	usa-ns2.usa.example.com.
+    % 2	usa-ns1.usa.example.com.	IN	A	120	192.168.4.1
+    % 2	usa-ns2.usa.example.com.	IN	A	120	192.168.4.2
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='usa-ns2.usa.example.com.', qtype=A
+
+    {glue_record, {
+        {question, {"usa-ns2.usa.example.com", ?DNS_TYPE_A}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"usa-ns1.usa.example.com">>}},
+                {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"usa-ns2.usa.example.com">>}}
+              ]},
+            {additional, [
+                {<<"usa-ns1.usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,4,1}}},
+                {<<"usa-ns2.usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,4,2}}}
+              ]}
+          }}
+      }},
 
     % 1	italy.example.com.	IN	NS	120	italy-ns1.example.com.
     % 1	italy.example.com.	IN	NS	120	italy-ns2.example.com.
