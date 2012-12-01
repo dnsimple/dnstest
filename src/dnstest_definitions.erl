@@ -1096,6 +1096,199 @@ definitions() ->
           }}
       }},
 
+    % 1	blah.test.com.	IN	NS	3600	blah.test.com.
+    % 2	blah.test.com.	IN	A	3600	192.168.6.1
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='blah.test.com.', qtype=MX
+
+    {ns_with_identical_glue, {
+        {question, {"blah.test.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"blah.test.com">>}}
+              ]},
+            {additional, [
+                {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {192,168,6,1}}}
+              ]}
+          }}
+      }},
+
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='no-such-host.example.com.', qtype=A
+
+    {nx_domain_for_unknown_record, {
+        {question, {"no-such-host.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % If there is a more-specific subtree that matches part of a name,
+    % a less-specific wildcard cannot match it.
+
+    % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.a.something.wtest.com.', qtype=A
+
+    {obscured_wildcard, {
+        {question, {"www.a.something.wtest.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.wtest.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % 0	outpost.example.com.	IN	A	120	192.168.2.1
+    % 0	www.example.com.	IN	CNAME	120	outpost.example.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.example.com.', qtype=A
+
+    {one_step_cname_resolution, {
+        {question, {"www.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example.com">>}},
+                {<<"outpost.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 1	france.example.com.	IN	NS	120	ns1.otherprovider.net.
+    % 1	france.example.com.	IN	NS	120	ns2.otherprovider.net.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='www.france.example.com.', qtype=A
+
+    {out_of_baliwick_referral, {
+        {question, {"www.france.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.otherprovider.net">>}},
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.otherprovider.net">>}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % DNS employs label compression to fit big answers in a small packet. This
+    % test performs a query that without proper compression would not fit.
+
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.1
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.10
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.11
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.12
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.13
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.14
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.15
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.16
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.17
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.18
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.19
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.2
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.20
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.21
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.22
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.23
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.24
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.25
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.3
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.4
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.5
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.6
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.7
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.8
+    % 0	toomuchinfo-a.example.com.	IN	A	120	192.168.99.9
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='toomuchinfo-a.example.com.', qtype=A
+
+    {pretty_big_packet, {
+        {question, {"toomuchinfo-a.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,1}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,2}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,3}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,4}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,5}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,6}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,7}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,8}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,9}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,10}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,11}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,12}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,13}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,14}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,15}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,16}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,17}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,18}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,19}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,20}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,21}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,22}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,23}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,24}}},
+                {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,25}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	server1.test.com.	IN	RP	3600	ahu.ds9a.nl. counter.test.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='server1.test.com.', qtype=RP
+
+    {rp, {
+        {question, {"server1.test.com", ?DNS_TYPE_RP}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"server1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RP, 3600, #dns_rrdata_rp{mbox = <<"ahu.ds9a.nl">>, txt = <<"counter.test.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % A referral with the same name as the NS record itself, but now for a SOA
+    % record.
+
+    % 1	france.example.com.	IN	NS	120	ns1.otherprovider.net.
+    % 1	france.example.com.	IN	NS	120	ns2.otherprovider.net.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='france.example.com.', qtype=SOA
+
+    {same_level_referral_soa, {
+        {question, {"france.example.com", ?DNS_TYPE_SOA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.otherprovider.net">>}},
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.otherprovider.net">>}}
+              ]},
+            {additional, []}
+          }}
+      }},
 
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
