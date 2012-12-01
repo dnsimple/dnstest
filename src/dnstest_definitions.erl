@@ -1290,6 +1290,114 @@ definitions() ->
           }}
       }},
 
+    % 1	france.example.com.	IN	NS	120	ns1.otherprovider.net.
+    % 1	france.example.com.	IN	NS	120	ns2.otherprovider.net.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='france.example.com.', qtype=A
+
+    {same_level_referral, {
+        {question, {"france.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.otherprovider.net">>}},
+                {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.otherprovider.net">>}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % Make sure a name that is two labels beneath an apex, with the first label
+    % existing but the second absent, generates a correct NSEC(3) denial.
+
+    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
+    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 1	outpost.example.com.	IN	NSEC	86400	semi-external.example.com. A RRSIG NSEC
+    % 1	outpost.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nx.outpost.example.com.', qtype=A
+
+    % TODO
+
+    % UDP dns packets can only be 512 bytes long - when they are longer, they need
+    % to get truncated, and have the 'TC' bit set, to inform the client that they
+    % need to requery over TCP. This query however does not need truncation, since
+    % the information that causes things to go over limit is 'additional'.
+
+    % 0	together-too-much.example.com.	IN	MX	120	25 toomuchinfo-a.example.com.
+    % 0	together-too-much.example.com.	IN	MX	120	25 toomuchinfo-b.example.com.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % 2	toomuchinfo-X.example.com.	IN	A	120	192.168.99.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='together-too-much.example.com.', qtype=MX
+
+    {too_big_for_udp_query_no_truncate_additional, {
+        {question, {"together-too-much.example.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"together-too-much.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"toomuchinfo-a.example.com">>, preference = 25}},
+                {<<"together-too-much.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"toomuchinfo-b.example.com">>, preference = 25}}
+              ]},
+            {authority, []},
+            {additional, [
+                % In our case we just don't send any additionals if the packet is too large, since it is a performance
+                % enhancement only.
+
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,1}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,2}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,3}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,4}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,5}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,6}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,7}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,8}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,9}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,10}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,11}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,12}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,13}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,14}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,15}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,16}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,17}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,18}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,19}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,20}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,21}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,22}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,23}}},
+                %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,24}}}
+              ]}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
