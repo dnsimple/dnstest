@@ -1055,6 +1055,48 @@ definitions() ->
           }}
       }},
 
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='outpost.example.com.', qtype=AAAA
+
+    {non_existing_record_other_types_exist, {
+        {question, {"outpost.example.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % Verify that asking for NS at a delegation point returns a referral.
+
+    % 1	usa.example.com.	IN	NS	120	usa-ns1.usa.example.com.
+    % 1	usa.example.com.	IN	NS	120	usa-ns2.usa.example.com.
+    % 2	usa-ns1.usa.example.com.	IN	A	120	192.168.4.1
+    % 2	usa-ns2.usa.example.com.	IN	A	120	192.168.4.2
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='usa.example.com.', qtype=NS
+
+    {ns_at_delegation, {
+        {question, {"usa.example.com", ?DNS_TYPE_NS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"usa-ns1.usa.example.com">>}},
+                {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"usa-ns2.usa.example.com">>}}
+              ]},
+            {additional, [
+                {<<"usa-ns1.usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,4,1}}},
+                {<<"usa-ns2.usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,4,2}}}
+              ]}
+          }}
+      }},
+
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
