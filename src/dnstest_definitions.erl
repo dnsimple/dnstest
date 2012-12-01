@@ -1398,6 +1398,77 @@ definitions() ->
           }}
       }},
 
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % 0	toomuchinfo-b.example.com.	IN	A	120	192.168.99.
+    % Rcode: 0, RD: 0, QR: 1, TC: 1, AA: 1, opcode: 0
+    % Reply to question for qname='toomuchinfo-b.example.com.', qtype=A
+
+    {too_big_for_udp_query, {
+        {question, {"toomuchinfo-b.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=true, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,26}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,27}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,28}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,29}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,30}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,31}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,32}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,33}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,34}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,35}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,36}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,37}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,38}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,39}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,40}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,41}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,42}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,43}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,44}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,45}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,46}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,47}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,48}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,49}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,50}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,66}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,67}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,68}}},
+                {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,69}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
