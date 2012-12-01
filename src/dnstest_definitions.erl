@@ -932,6 +932,52 @@ definitions() ->
           }}
       }},
 
+    % 0	multitext.example.com.	IN	TXT	120	"text part one" "text part two" "text part three"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='multitext.example.com.', qtype=TXT
+
+    {multi_txt_resolution, {
+        {question, {"multitext.example.com", ?DNS_TYPE_TXT}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"multitext.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120, #dns_rrdata_txt{txt = [<<"text part one">>,<<"text part two">>, <<"text part three">>]}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % Example.com has two MX records, one of which is out-of-bailiwick and should
+    % not receive additional processing. The other is internal to the zone and has
+    % three A records, which should all be in the additional section. For
+    % additional difficulty, the question contains an odd CaSe.
+
+    % 0	exAmplE.com.	IN	MX	120	10 smtp-servers.exAmplE.com.
+    % 0	exAmplE.com.	IN	MX	120	15 smtp-servers.test.com.
+    % 2	smtp-servers.exAmplE.com.	IN	A	120	192.168.0.2
+    % 2	smtp-servers.exAmplE.com.	IN	A	120	192.168.0.3
+    % 2	smtp-servers.exAmplE.com.	IN	A	120	192.168.0.4
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='exAmplE.com.', qtype=MX
+
+    {mx_case_sensitivity_with_ap, {
+        {question, {"exAmplE.com", ?DNS_TYPE_MX}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"smtp-servers.exAmplE.com">>, preference = 10}},
+                {<<"exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"smtp-servers.test.com">>, preference = 15}}
+              ]},
+            {authority, []},
+            {additional, [
+                {<<"smtp-servers.exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,2}}},
+                {<<"smtp-servers.exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,3}}},
+                {<<"smtp-servers.exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
+              ]}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
