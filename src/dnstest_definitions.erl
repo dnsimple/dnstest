@@ -978,6 +978,83 @@ definitions() ->
           }}
       }},
 
+    % MX records cannot point to CNAMEs, according to the RFC. Yet when this
+    % happens, a nameserver should not fall over, but let the mailserver process
+    % the CNAME further (all do, even qmail).
+
+    % 0	mail.example.com.	IN	MX	120	25 smtp1.example.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='mail.example.com.', qtype=MX
+
+    {mx_to_cname, {
+        {question, {"mail.example.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"mail.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"smtp1.example.com">>, preference = 25}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	example.com.	IN	MX	120	10 smtp-servers.example.com.
+    % 0	example.com.	IN	MX	120	15 smtp-servers.test.com.
+    % 2	smtp-servers.example.com.	IN	A	120	192.168.0.2
+    % 2	smtp-servers.example.com.	IN	A	120	192.168.0.3
+    % 2	smtp-servers.example.com.	IN	A	120	192.168.0.4
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=MX
+
+    {mx_with_simple_additional_processing, {
+        {question, {"example.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"smtp-servers.example.com">>, preference = 10}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{exchange = <<"smtp-servers.test.com">>, preference = 15}}
+              ]},
+            {authority, []},
+            {additional, [
+                {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,2}}},
+                {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,3}}},
+                {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
+              ]}
+          }}
+      }},
+
+    % 0	enum.test.com.	IN	NAPTR	3600	100 50 "u" "e2u+sip" "" testuser.domain.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='enum.test.com.', qtype=NAPTR
+
+    {naptr, {
+        {question, {"enum.test.com", ?DNS_TYPE_NAPTR}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"enum.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NAPTR, 3600, #dns_rrdata_naptr{order = 100, preference = 50, flags = <<"u">>, services = <<"e2u+sip">>, regexp = <<>>, replacement = <<"testuser.domain.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='ns1.example.com.', qtype=AAAA
+
+    {non_existing_record_other_types_exist_ns, {
+        {question, {"ns1.example.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
