@@ -1558,6 +1558,22 @@ definitions() ->
           }}
       }},
 
+    % 1	sub.test.test.com.	IN	NS	3600	ns-test.example.net.test.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='www.sub.test.test.com.', qtype=A
+
+    {wildcard_overlaps_delegation, {
+        {question, {"www.sub.test.test.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"sub.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"ns-test.example.net.test.com">>}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
