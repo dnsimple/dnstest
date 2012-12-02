@@ -1469,6 +1469,95 @@ definitions() ->
           }}
       }},
 
+    % When asked for a domain for which a nameserver is not authoritative, it
+    % should return with an empty no-error packet, and drop the AA bit
+
+    % 1	.	IN	NS	518400	a.root-servers.net.
+    % 1	.	IN	NS	518400	b.root-servers.net.
+    % 1	.	IN	NS	518400	c.root-servers.net.
+    % 1	.	IN	NS	518400	d.root-servers.net.
+    % 1	.	IN	NS	518400	e.root-servers.net.
+    % 1	.	IN	NS	518400	f.root-servers.net.
+    % 1	.	IN	NS	518400	g.root-servers.net.
+    % 1	.	IN	NS	518400	h.root-servers.net.
+    % 1	.	IN	NS	518400	i.root-servers.net.
+    % 1	.	IN	NS	518400	j.root-servers.net.
+    % 1	.	IN	NS	518400	k.root-servers.net.
+    % 1	.	IN	NS	518400	l.root-servers.net.
+    % 1	.	IN	NS	518400	m.root-servers.net.
+    % 2	a.root-servers.net.	IN	A	3600000	198.41.0.4
+    % 2	b.root-servers.net.	IN	A	3600000	192.228.79.201
+    % 2	c.root-servers.net.	IN	A	3600000	192.33.4.12
+    % 2	d.root-servers.net.	IN	A	3600000	128.8.10.90
+    % 2	e.root-servers.net.	IN	A	3600000	192.203.230.10
+    % 2	f.root-servers.net.	IN	A	3600000	192.5.5.241
+    % 2	g.root-servers.net.	IN	A	3600000	192.112.36.4
+    % 2	h.root-servers.net.	IN	A	3600000	128.63.2.53
+    % 2	i.root-servers.net.	IN	A	3600000	192.36.148.17
+    % 2	j.root-servers.net.	IN	A	3600000	192.58.128.30
+    % 2	k.root-servers.net.	IN	A	3600000	193.0.14.129
+    % 2	l.root-servers.net.	IN	A	3600000	198.32.64.12
+    % 2	m.root-servers.net.	IN	A	3600000	202.12.27.33
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
+    % Reply to question for qname='this.domain.is.not.in.powerdns.', qtype=A
+
+   {unknown_domain, {
+        {question, {"this.domain.is.not.in.the.server", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
+              ]},
+            {additional, [
+                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
+                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
+                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
+                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
+                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
+                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
+                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
+                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
+                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
+                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
+                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
+                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
+                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
+              ]}
+          }}
+      }},
+
+    % This test tries to resolve a TXT record that is directly available in
+    % the database, but is longer than 255 characters. This requires splitting.
+
+    % 0	very-long-txt.test.com.	IN	TXT	3600	"A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you" " won't believe how long!"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='very-long-txt.test.com.', qtype=TXT
+
+    {very_long_text, {
+        {question, {"very-long-txt.test.com", ?DNS_TYPE_TXT}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"very-long-txt.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600, #dns_rrdata_txt{txt = [<<"A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you">>, <<" won't believe how long!">>]}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     % 1	wtest.com.	IN	SOA	3600	ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=TXT
