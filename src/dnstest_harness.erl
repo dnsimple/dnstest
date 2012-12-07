@@ -15,6 +15,9 @@
     code_change/3
   ]).
 
+% Internal API
+-export([run_test/2]).
+
 -record(state, {}).
 
 -define(SERVER, ?MODULE).
@@ -35,10 +38,12 @@ handle_call(_Message, _From, State) ->
 handle_cast({run, Definition}, State) ->
   TestResults = run(Definition),
   dnstest_reporter:report(TestResults),
+  dnstest_metrics:slowest(),
   {noreply, State};
 handle_cast({run_target, Definition, Names}, State) ->
   TestResults = run(Definition, Names),
   dnstest_reporter:report(TestResults),
+  dnstest_metrics:display(Names),
   {noreply, State}.
 
 handle_info(Message, State) ->
@@ -55,6 +60,12 @@ code_change(PreviousVersion, State, Extra) ->
 
 %% Internal API
 
+measure(Name, FunctionName, Args) when is_list(Args) ->
+  {T, R} = timer:tc(?MODULE, FunctionName, Args),
+  dnstest_metrics:insert(Name, T),
+  R;
+measure(Name, FunctionName, Arg) -> measure(Name, FunctionName, [Arg]). 
+
 % Run the test with the given definition.
 run(Definition) -> run(Definition, [], []).
 run(Definition, Names) -> run(Definition, Names, []).
@@ -62,10 +73,10 @@ run(Definition, Names) -> run(Definition, Names, []).
 run([], _, TestResults) -> TestResults;
 run([{Name, Conditions}|Rest], Names, TestResults) ->
   case length(Names) of
-    0 -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
+    0 -> run(Rest, Names, TestResults ++ measure(Name, run_test, [Name, Conditions]));
     _ ->
       case lists:member(atom_to_list(Name), Names) of
-        true -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
+        true -> run(Rest, Names, TestResults ++ measure(Name, run_test, [Name, Conditions]));
         false -> run(Rest, Names, TestResults)
       end
   end.
@@ -131,7 +142,7 @@ send_udp_query(Message, Host, Port) ->
   lager:debug("Sending UDP query to ~p", [Host]),
   {ok, Socket} = gen_udp:open(0, [binary, {active, false}]),
   gen_udp:send(Socket, Host, Port, Packet),
-  QueryResponse = case gen_udp:recv(Socket, 65535, 3000) of
+  QueryResponse = case gen_udp:recv(Socket, 65535, 6000) of
     {ok, {Host, _Port, Reply}} -> {ok, dns:decode_message(Reply)};
     {error, Error} -> {error, Error, {server, {Host, Port}}};
     Response -> Response

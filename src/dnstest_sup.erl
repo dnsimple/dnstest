@@ -16,6 +16,7 @@ start_link() ->
 init(_Args) ->
   lager:info("Supervisor is starting procs"),
   Procs = [
-    {dnstest_harness, {dnstest_harness, start_link, []}, permanent, 5000, worker, [dnstest_harness]}
+    {dnstest_harness, {dnstest_harness, start_link, []}, permanent, 5000, worker, [dnstest_harness]},
+    {dnstest_metrics, {dnstest_metrics, start_link, []}, permanent, 5000, worker, [dnstest_metrics]}
   ],
   {ok, {{one_for_one, 5, 10}, Procs}}.
