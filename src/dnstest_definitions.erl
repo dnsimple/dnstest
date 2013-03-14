@@ -11,12 +11,12 @@ erldns_definitions() ->
   [
     {ns_recursion_breakout, {
         {question, {"rns.example.com", ?DNS_TYPE_NS}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
         {records, {
-            {answers, [
+            {answers, []},
+            {authority, [
                 {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"rns.example.com">>}}
               ]},
-            {authority, []},
             {additional, [
                 {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1, 2, 3, 4}}}
               ]}
