@@ -17,7 +17,9 @@ erldns_definitions() ->
                 {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"rns.example.com">>}}
               ]},
             {authority, []},
-            {additional, []}
+            {additional, [
+                {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1, 2, 3, 4}}}
+              ]}
           }}}}
   ].
 
