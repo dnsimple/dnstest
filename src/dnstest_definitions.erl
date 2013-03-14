@@ -5,6 +5,23 @@
 -export([definitions/0]).
 
 definitions() ->
+  pdns_definitions() ++ erldns_definitions().
+
+erldns_definitions() ->
+  [
+    {ns_recursion_breakout, {
+        {question, {"rns.example.com", ?DNS_TYPE_NS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"rns.example.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}}}
+  ].
+
+pdns_definitions() ->
   [
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768	
