@@ -1,4 +1,4 @@
 #!/bin/sh
 
-erl -pa ebin deps/**/ebin -s dnstest -- $*
+erl -config dnstest.config -pa ebin deps/**/ebin -s dnstest -- $*
 
