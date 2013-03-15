@@ -18,8 +18,18 @@ run() -> run([]).
 run(Name) when is_atom(Name) ->
   run([atom_to_list(Name)]);
 run([]) ->
-  lager:info("Running all tests"),
-  gen_server:cast(dnstest_harness, {run, dnstest_definitions:definitions()});
+  dnstest_metrics:start(),
+  lager:info("Running all tests (#~p)", [dnstest_metrics:run_number()]),
+  DefinitionsModule = definitions_module(),
+  gen_server:cast(dnstest_harness, {run, DefinitionsModule:definitions()});
 run(Names) ->
-  lager:info("Running targeted tests: ~p", [Names]),
-  gen_server:cast(dnstest_harness, {run_target, dnstest_definitions:definitions(), Names}).
+  dnstest_metrics:start(),
+  lager:info("Running targeted tests: ~p (#~p)", [Names, dnstest_metrics:run_number()]),
+  DefinitionsModule = definitions_module(),
+  gen_server:cast(dnstest_harness, {run_target, DefinitionsModule:definitions(), Names}).
+
+definitions_module() ->
+  case application:get_env(dnstest, definitions) of
+    {ok, Module} -> Module;
+    _ -> dnstest_definitions
+  end.

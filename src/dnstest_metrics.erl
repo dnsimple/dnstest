@@ -3,7 +3,7 @@
 -behavior(gen_server).
 
 % Public API
--export([start_link/0, insert/2, clear/0, display/0, display/1, slowest/0]).
+-export([start_link/0, start/0, run_number/0, insert/2, clear/0, display/0, display/1, slowest/0]).
 
 % Gen server hooks
 -export([init/1,
@@ -16,11 +16,20 @@
 
 -define(SERVER, ?MODULE).
 
--record(state, {data=[]}).
+-record(state, {run_number = 0, data=[]}).
 
 % Public API
 start_link() ->
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+
+%% Marks the start of a test run. This will increment a counter
+%% so that tests run together can be displayed together.
+start() ->
+  gen_server:call(?SERVER, {start}).
+
+%% Get the current run number.
+run_number() ->
+  gen_server:call(?SERVER, {run_number}).
 
 insert(Name, Time) ->
   gen_server:cast(?SERVER, {insert, Name, Time}).
@@ -39,6 +48,12 @@ slowest() ->
 % Gen server functions
 init(_) ->
   {ok, #state{}}.
+
+handle_call({start}, _From, State) ->
+  {reply, ok, State#state{run_number = State#state.run_number + 1}};
+
+handle_call({run_number}, _From, State) ->
+  {reply, State#state.run_number, State};
 
 handle_call({insert, Name, Time}, _From, State) -> 
   {reply, ok, State#state{data = State#state.data ++ [{Name, Time}]}};

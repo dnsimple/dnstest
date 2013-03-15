@@ -16,11 +16,14 @@
   ]).
 
 % Internal API
--export([run_test/2]).
+-export([send_request/2]).
 
 -record(state, {}).
 
 -define(SERVER, ?MODULE).
+-define(DEFAULT_IPV4_ADDRESS, {127,0,0,1}).
+-define(DEFAULT_IPV6_ADDRESS, {0,0,0,0,0,0,0,1}).
+-define(DEFAULT_PORT, 53).
 
 % Public API
 
@@ -73,10 +76,10 @@ run(Definition, Names) -> run(Definition, Names, []).
 run([], _, TestResults) -> TestResults;
 run([{Name, Conditions}|Rest], Names, TestResults) ->
   case length(Names) of
-    0 -> run(Rest, Names, TestResults ++ measure(Name, run_test, [Name, Conditions]));
+    0 -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
     _ ->
       case lists:member(atom_to_list(Name), Names) of
-        true -> run(Rest, Names, TestResults ++ measure(Name, run_test, [Name, Conditions]));
+        true -> run(Rest, Names, TestResults ++ run_test(Name, Conditions));
         false -> run(Rest, Names, TestResults)
       end
   end.
@@ -87,10 +90,10 @@ run_test(Name, Conditions) ->
   {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}} = Conditions,
   {{answers, ExpectedAnswers}, {authority, ExpectedAuthority}, {additional, ExpectedAdditional}} = ExpectedRecords,
 
+  lager:debug("Sending to host ~p and port ~p", [host(), port()]),
+
   % Run the test
-  Questions = [#dns_query{name=Qname, type=Qtype}],
-  Message = #dns_message{rd = false, qc=1, questions=Questions},
-  {ok, Response} = send_udp_query(Message, {127,0,0,1}, 8053),
+  {ok, Response} = measure(Name, send_request, [Qname, Qtype]),
   lager:debug("Response: ~p", [Response]),
 
   % Check the results
@@ -102,6 +105,11 @@ run_test(Name, Conditions) ->
   ],
 
   [{Name, Results}].
+
+send_request(Qname, Qtype) ->
+  Questions = [#dns_query{name=Qname, type=Qtype}],
+  Message = #dns_message{rd = false, qc=1, questions=Questions},
+  send_udp_query(Message, host(), port()).
 
 % Test expected answers against actual answers.
 test_records(ExpectedRecords, ActualRecords, SectionType) ->
@@ -149,3 +157,28 @@ send_udp_query(Message, Host, Port) ->
   end,
   gen_udp:close(Socket),
   QueryResponse.
+
+host() ->
+  host(inet4).
+
+host(Key) when (Key =:= inet4) or (Key =:= inet6) ->
+  case application:get_env(dnstest, Key) of
+    {ok, Host} -> parse_address(Host);
+    _ -> default_address(Key)
+  end.
+
+default_address(inet4) ->
+  ?DEFAULT_IPV4_ADDRESS;
+default_address(inet6) ->
+  ?DEFAULT_IPV6_ADDRESS.
+
+port() ->
+  case application:get_env(dnstest, port) of
+    {ok, Port} -> Port;
+    _ -> ?DEFAULT_PORT
+  end.
+
+parse_address(Address) when is_list(Address) ->
+  {ok, Tuple} = inet_parse:address(Address),
+  Tuple;
+parse_address(Address) -> Address.
