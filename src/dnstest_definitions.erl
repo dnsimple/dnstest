@@ -31,7 +31,18 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-          }}}}
+          }}}},
+
+    {ns_aaaa_record, {
+        {question, {"ns1.example.com", ?DNS_TYPE_AAAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{ip = {8193,3512,34211,0,0,35374,880,29492}}}
+              ]},
+            {authority, []},
+            {additional, []}
+      }}}}
 
   ].
 
