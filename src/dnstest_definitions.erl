@@ -20,7 +20,19 @@ erldns_definitions() ->
             {additional, [
                 {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1, 2, 3, 4}}}
               ]}
+          }}}},
+
+    {ns_a_record, {
+        {question, {"ns1.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192, 168, 1, 1}}}
+              ]},
+            {authority, []},
+            {additional, []}
           }}}}
+
   ].
 
 pdns_definitions() ->
@@ -50,6 +62,7 @@ pdns_definitions() ->
     % 0	example.com.	IN	SOA	100000	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 2	.	IN	OPT	0	
     % 2	ns1.example.com.	IN	A	120	192.168.1.1
+    % 2 ns1.example.com.        IN      AAAA    120     2001:0db8:85a3:0000:0000:8a2e:0370:7334
     % 2	ns2.example.com.	IN	A	120	192.168.1.2
     % 2	smtp-servers.example.com.	IN	A	120	192.168.0.2
     % 2	smtp-servers.example.com.	IN	A	120	192.168.0.3
@@ -72,6 +85,7 @@ pdns_definitions() ->
             {additional, [
                 %{<<".">>, ?DNS_CLASS_IN, ?DNS_TYPE_OPT, 0},
                 {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,1}}},
+                {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{ip = {8193,3512,34211,0,0,35374,880,29492}}},
                 {<<"ns2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,2}}},
                 {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,2}}},
                 {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,3}}},
@@ -226,6 +240,7 @@ pdns_definitions() ->
     % 0	example.com.	IN	NS	120	ns1.example.com.
     % 0	example.com.	IN	NS	120	ns2.example.com.
     % 2	ns1.example.com.	IN	A	120	192.168.1.1
+    % 2 ns1.example.com.        IN      AAAA    120     2001:0db8:85a3:0000:0000:8a2e:0370:7334
     % 2	ns2.example.com.	IN	A	120	192.168.1.2
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='example.com.', qtype=NS
@@ -241,6 +256,7 @@ pdns_definitions() ->
             {authority, []},
             {additional, [
                 {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,1}}},
+                {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{ip = {8193,3512,34211,0,0,35374,880,29492}}},
                 {<<"ns2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,1,2}}}
               ]}
           }}
@@ -1060,10 +1076,10 @@ pdns_definitions() ->
 
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='ns1.example.com.', qtype=AAAA
+    % Reply to question for qname='ns2.example.com.', qtype=AAAA
 
     {non_existing_record_other_types_exist_ns, {
-        {question, {"ns1.example.com", ?DNS_TYPE_AAAA}},
+        {question, {"ns2.example.com", ?DNS_TYPE_AAAA}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {records, {
             {answers, []},
