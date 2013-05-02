@@ -1,3 +1,5 @@
+%% -*- coding: utf-8 -*-
+
 -module(dnstest_definitions).
 
 -include("dns.hrl").
@@ -48,6 +50,22 @@ erldns_definitions() ->
 
 pdns_definitions() ->
   [
+
+    % 0	aland.test.com.	IN	TXT	3600	"\195\133LAND ISLANDS"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='aland.test.com.', qtype=TXT
+
+    {'8_bit_txt', {
+        {question, {"aland.test.com", ?DNS_TYPE_TXT}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"aland.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600, #dns_rrdata_txt{txt = [<<"ÅLAND ISLANDS"/utf8>>]}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}}},
+
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768	
     % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
