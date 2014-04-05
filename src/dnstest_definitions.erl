@@ -44,7 +44,18 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-      }}}}
+      }}}},
+
+    {cname_case, {
+        {question, {"WWW.example.com", ?DNS_TYPE_CNAME}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"WWW.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example.com">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}}}
 
   ].
 
