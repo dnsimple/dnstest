@@ -712,6 +712,9 @@ pdns_definitions() ->
           }}
       }},
 
+    % TODO: direct_dnskey
+    % TODO: direct_rrsig
+
     % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='www.something.wtest.com.', qtype=A
@@ -763,6 +766,18 @@ pdns_definitions() ->
             {additional, []}
           }}
       }},
+
+    % TODO: ds_at_secure_delegation
+    % TODO: ds_at_unsecure_delegation
+    % TODO: ds_at_unsecure_zone_cut
+    % TODO: ds_inside_delegation
+
+    % TODO: ent_any
+    % TODO: ent_axfr
+    % TODO: ent_rr_enclosed_in_ent
+    % TODO: ent_soa
+    % TODO: ent_wildcard_below_ent
+    % TODO: ent
 
     % A series of CNAME pointers can lead to an outside reference, which should be
     % passed in the Answer section. PowerDNS sends an unauthoritative NOERROR,
