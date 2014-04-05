@@ -779,6 +779,24 @@ pdns_definitions() ->
     % TODO: ent_wildcard_below_ent
     % TODO: ent
 
+
+    % 4 TXT records with 0 to 3 backslashes before a semicolon.
+
+    % 0	text0.example.com.	IN	TXT	120	"k=rsa; p=one"
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='text0.example.com.', qtype=TXT
+
+    {escaped_txt_1, {
+        {question, {"text0.example.com", ?DNS_TYPE_TXT}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"text0.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120, #dns_rrdata_txt{txt = [<<"k=rsa; p=one">>]}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
     % A series of CNAME pointers can lead to an outside reference, which should be
     % passed in the Answer section. PowerDNS sends an unauthoritative NOERROR,
     % bind sends a SERVFAIL.
