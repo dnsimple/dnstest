@@ -2,7 +2,7 @@
 
 -module(dnstest_definitions).
 
--include("dns.hrl").
+-include_lib("dns/include/dns.hrl").
 
 -export([definitions/0]).
 
