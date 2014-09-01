@@ -986,6 +986,18 @@ pdns_definitions() ->
           }}
       }},
 
+    {internal_referral_glue, {
+        {question, {"italy-ns1.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"italy-ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.test.com.', qtype=TXT
