@@ -16,7 +16,7 @@
   ]).
 
 % Internal API
--export([send_request/2]).
+-export([send_request/3]).
 
 -record(state, {}).
 
@@ -84,16 +84,18 @@ run([{Name, Conditions}|Rest], Names, TestResults) ->
       end
   end.
 
+run_test(Name, {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}}) ->
+  run_test(Name, {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {options, []}, {records, ExpectedRecords}});
 run_test(Name, Conditions) ->
   lager:info("Running test ~p", [Name]),
 
-  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}} = Conditions,
+  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {options, Options}, {records, ExpectedRecords}} = Conditions,
   {{answers, ExpectedAnswers}, {authority, ExpectedAuthority}, {additional, ExpectedAdditional}} = ExpectedRecords,
 
   lager:debug("Sending to host ~p and port ~p", [host(), port()]),
 
   % Run the test
-  {ok, Response} = measure(Name, send_request, [Qname, Qtype]),
+  {ok, Response} = measure(Name, send_request, [Qname, Qtype, Options]),
   lager:debug("Response: ~p", [Response]),
 
   % Check the results
@@ -106,17 +108,27 @@ run_test(Name, Conditions) ->
 
   [{Name, Results}].
 
-send_request(Qname, Qtype) ->
+send_request(Qname, Qtype, Options) ->
   Questions = [#dns_query{name=Qname, type=Qtype}],
-  Message = #dns_message{rd = false, qc=1, questions=Questions},
+  Additional = case proplists:get_bool(dnssec, Options) of
+                 true -> [#dns_optrr{dnssec=true}];
+                 false -> []
+               end,
+  Message = #dns_message{rd = false, qc=1, adc=1, questions=Questions, additional=Additional},
   send_udp_query(Message, host(), port()).
 
 % Test expected answers against actual answers.
 test_records(ExpectedRecords, ActualRecords, SectionType) ->
+  ActualRecordsFiltered = lists:filter(dns_rr_filter(), ActualRecords),
+
   ActualRecordsSorted = lists:sort(lists:map(fun({dns_rr, Name, Class, Type, TTL, Data}) ->
         {Name, Class, Type, TTL, Data}
-    end, ActualRecords)),
-  ExpectedRecordsSorted = lists:sort(ExpectedRecords),
+    end, ActualRecordsFiltered)),
+
+  ExpectedRecordsSorted = lists:sort(lists:map(fun({Name, Class, Type, TTL, Data}) ->
+                                          {Name, Class, Type, TTL, fill_data(Data, ActualRecordsSorted)}
+                                      end, ExpectedRecords)),
+
   case ExpectedRecordsSorted =:= ActualRecordsSorted of
     false ->
       lager:info("Expected ~p: ~p", [SectionType, ExpectedRecordsSorted]),
@@ -182,3 +194,27 @@ parse_address(Address) when is_list(Address) ->
   {ok, Tuple} = inet_parse:address(Address),
   Tuple;
 parse_address(Address) -> Address.
+
+fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
+  {_, _, _, _, RRSig} = lists:last(lists:filter(fun({_, _, _, _, RRData}) ->
+                           case RRData of
+                             #dns_rrdata_rrsig{} -> true;
+                             _ -> false
+                           end
+                       end, ActualRecords)),
+  ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
+                                 inception = RRSig#dns_rrdata_rrsig.inception,
+                                 key_tag = RRSig#dns_rrdata_rrsig.key_tag,
+                                 signature = RRSig#dns_rrdata_rrsig.signature
+                                };
+
+fill_data(Data, _) -> Data.
+
+
+dns_rr_filter() ->
+  fun(R) ->
+      case R of
+        #dns_rr{} -> true;
+        _ -> false
+      end
+  end.

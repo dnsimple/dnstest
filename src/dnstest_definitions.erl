@@ -2,6 +2,7 @@
 
 -module(dnstest_definitions).
 
+-include("dnstest.hrl").
 -include_lib("dns/include/dns.hrl").
 
 -export([definitions/0]).
@@ -132,6 +133,28 @@ pdns_definitions() ->
                 {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
               ]}
           }}}},
+
+    % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
+    % 0	www.something.wtest.com.	IN	RRSIG	3600	A 8 3 3600 [expiry] [inception] [keytag] wtest.com. ...
+    % 1	a.something.wtest.com.	IN	NSEC	86400	wtest.com. A RRSIG NSEC
+    % 1	a.something.wtest.com.	IN	RRSIG	86400	NSEC 8 4 86400 [expiry] [inception] [keytag] wtest.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.something.wtest.com.', qtype=ANY
+
+    {any_wildcard_dnssec, {
+        {question, {"www.something.wtest.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}},
+                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"wtest.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
 
     % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
