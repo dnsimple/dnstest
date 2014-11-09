@@ -119,15 +119,8 @@ send_request(Qname, Qtype, Options) ->
 
 % Test expected answers against actual answers.
 test_records(ExpectedRecords, ActualRecords, SectionType) ->
-  ActualRecordsFiltered = lists:filter(dns_rr_filter(), ActualRecords),
-
-  ActualRecordsSorted = lists:sort(lists:map(fun({dns_rr, Name, Class, Type, TTL, Data}) ->
-        {Name, Class, Type, TTL, Data}
-    end, ActualRecordsFiltered)),
-
-  ExpectedRecordsSorted = lists:sort(lists:map(fun({Name, Class, Type, TTL, Data}) ->
-                                          {Name, Class, Type, TTL, fill_data(Data, ActualRecordsSorted)}
-                                      end, ExpectedRecords)),
+  ActualRecordsSorted = lists:sort(lists:map(record_to_tuple_function(), lists:filter(dns_rr_filter(), ActualRecords))),
+  ExpectedRecordsSorted = lists:sort(lists:map(fill_data_function(ActualRecordsSorted), ExpectedRecords)),
 
   case ExpectedRecordsSorted =:= ActualRecordsSorted of
     false ->
@@ -195,36 +188,50 @@ parse_address(Address) when is_list(Address) ->
   Tuple;
 parse_address(Address) -> Address.
 
+
 fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
   lager:info("Expected RRData: ~p", [ExpectedRRData]),
-
   TypeCovered = ExpectedRRData#dns_rrdata_rrsig.type_covered,
-  RRSigSet = lists:filter(fun({_, _, _, _, RRData}) ->
-                              case RRData of
-                                #dns_rrdata_rrsig{type_covered = TypeCovered} -> 
-                                  lager:info("RRData: ~p", [RRData]),
-                                  true;
-                                _ -> false
-                              end
-                          end, ActualRecords),
-
-  case RRSigSet of
-    [] -> ExpectedRRData;
-    [{_, _, _, _, RRSig}|_] -> 
-      ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
-                                      inception = RRSig#dns_rrdata_rrsig.inception,
-                                      key_tag = RRSig#dns_rrdata_rrsig.key_tag,
-                                      signature = RRSig#dns_rrdata_rrsig.signature
-                                     }
-  end;
+  RRSigSet = lists:filter(dns_rrsig_filter(TypeCovered), ActualRecords),
+  update_rrsig(ExpectedRRData, RRSigSet);
 
 fill_data(Data, _) -> Data.
 
+
+
+update_rrsig(ExpectedRRData, []) -> ExpectedRRData;
+update_rrsig(ExpectedRRData, [{_, _, _, _, RRSig}|_]) ->
+  ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
+                                  inception = RRSig#dns_rrdata_rrsig.inception,
+                                  key_tag = RRSig#dns_rrdata_rrsig.key_tag,
+                                  signature = RRSig#dns_rrdata_rrsig.signature
+                                 }.
+
+
+record_to_tuple_function() ->
+  fun({dns_rr, Name, Class, Type, TTL, Data}) ->
+      {Name, Class, Type, TTL, Data}
+  end.
+
+fill_data_function(ActualRecordsSorted) ->
+  fun({Name, Class, Type, TTL, Data}) ->
+      {Name, Class, Type, TTL, fill_data(Data, ActualRecordsSorted)}
+  end.
 
 dns_rr_filter() ->
   fun(R) ->
       case R of
         #dns_rr{} -> true;
+        _ -> false
+      end
+  end.
+
+dns_rrsig_filter(TypeCovered) ->
+  fun({_, _, _, _, RRData}) ->
+      case RRData of
+        #dns_rrdata_rrsig{type_covered = TypeCovered} ->
+          lager:info("RRData: ~p", [RRData]),
+          true;
         _ -> false
       end
   end.
