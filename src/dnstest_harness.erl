@@ -196,17 +196,27 @@ parse_address(Address) when is_list(Address) ->
 parse_address(Address) -> Address.
 
 fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
-  {_, _, _, _, RRSig} = lists:last(lists:filter(fun({_, _, _, _, RRData}) ->
-                           case RRData of
-                             #dns_rrdata_rrsig{} -> true;
-                             _ -> false
-                           end
-                       end, ActualRecords)),
-  ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
-                                 inception = RRSig#dns_rrdata_rrsig.inception,
-                                 key_tag = RRSig#dns_rrdata_rrsig.key_tag,
-                                 signature = RRSig#dns_rrdata_rrsig.signature
-                                };
+  lager:info("Expected RRData: ~p", [ExpectedRRData]),
+
+  TypeCovered = ExpectedRRData#dns_rrdata_rrsig.type_covered,
+  RRSigSet = lists:filter(fun({_, _, _, _, RRData}) ->
+                              case RRData of
+                                #dns_rrdata_rrsig{type_covered = TypeCovered} -> 
+                                  lager:info("RRData: ~p", [RRData]),
+                                  true;
+                                _ -> false
+                              end
+                          end, ActualRecords),
+
+  case RRSigSet of
+    [] -> ExpectedRRData;
+    [{_, _, _, _, RRSig}|_] -> 
+      ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
+                                      inception = RRSig#dns_rrdata_rrsig.inception,
+                                      key_tag = RRSig#dns_rrdata_rrsig.key_tag,
+                                      signature = RRSig#dns_rrdata_rrsig.signature
+                                     }
+  end;
 
 fill_data(Data, _) -> Data.
 
