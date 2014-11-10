@@ -754,6 +754,30 @@ pdns_definitions() ->
            {additional, []}
           }}
       }},
+
+    % 0	example.com.	IN	DNSKEY	86400	256 3 8 ...
+    % 0	example.com.	IN	DNSKEY	86400	257 3 8 ...
+    % 0	example.com.	IN	RRSIG	86400	DNSKEY 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=DNSKEY
+
+    {direct_dnskey_dnssec, {
+        {question, {"example.com", ?DNS_TYPE_DNSKEY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+           {answers, [
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+            ]},
+           {authority, []},
+           {additional, []}
+          }}
+      }},
+
+
     % TODO: direct_rrsig
 
     % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1

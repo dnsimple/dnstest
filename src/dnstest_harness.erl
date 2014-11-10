@@ -192,19 +192,31 @@ parse_address(Address) -> Address.
 fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
   lager:info("Expected RRData: ~p", [ExpectedRRData]),
   TypeCovered = ExpectedRRData#dns_rrdata_rrsig.type_covered,
-  RRSigSet = lists:filter(dns_rrsig_filter(TypeCovered), ActualRecords),
+  RRSigSet = lists:filter(rrsig_filter(TypeCovered), ActualRecords),
   update_rrsig(ExpectedRRData, RRSigSet);
+
+fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_dnskey) ->
+  Flags = ExpectedRRData#dns_rrdata_dnskey.flags,
+  DNSKeySet = lists:filter(dnskey_filter(Flags), ActualRecords),
+  update_dnskey(ExpectedRRData, DNSKeySet);
 
 fill_data(Data, _) -> Data.
 
 
 
 update_rrsig(ExpectedRRData, []) -> ExpectedRRData;
-update_rrsig(ExpectedRRData, [{_, _, _, _, RRSig}|_]) ->
-  ExpectedRRData#dns_rrdata_rrsig{expiration = RRSig#dns_rrdata_rrsig.expiration,
-                                  inception = RRSig#dns_rrdata_rrsig.inception,
-                                  key_tag = RRSig#dns_rrdata_rrsig.key_tag,
-                                  signature = RRSig#dns_rrdata_rrsig.signature
+update_rrsig(ExpectedRRData, [{_, _, _, _, Data}|_]) ->
+  ExpectedRRData#dns_rrdata_rrsig{expiration = Data#dns_rrdata_rrsig.expiration,
+                                  inception = Data#dns_rrdata_rrsig.inception,
+                                  key_tag = Data#dns_rrdata_rrsig.key_tag,
+                                  signature = Data#dns_rrdata_rrsig.signature
+                                 }.
+
+update_dnskey(ExpectedRRData, []) -> ExpectedRRData;
+update_dnskey(ExpectedRRData, [{_, _, _, _, Data}|_]) ->
+  ExpectedRRData#dns_rrdata_dnskey{
+                                  key_tag = Data#dns_rrdata_dnskey.key_tag,
+                                  public_key = Data#dns_rrdata_dnskey.public_key
                                  }.
 
 
@@ -226,10 +238,20 @@ dns_rr_filter() ->
       end
   end.
 
-dns_rrsig_filter(TypeCovered) ->
+rrsig_filter(TypeCovered) ->
   fun({_, _, _, _, RRData}) ->
       case RRData of
         #dns_rrdata_rrsig{type_covered = TypeCovered} ->
+          lager:info("RRData: ~p", [RRData]),
+          true;
+        _ -> false
+      end
+  end.
+
+dnskey_filter(Flags) ->
+  fun({_, _, _, _, RRData}) ->
+      case RRData of
+        #dns_rrdata_dnskey{flags = Flags} ->
           lager:info("RRData: ~p", [RRData]),
           true;
         _ -> false
