@@ -189,18 +189,18 @@ parse_address(Address) when is_list(Address) ->
 parse_address(Address) -> Address.
 
 
-fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
+fill_data(ExpectedName, ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
   lager:info("Expected RRData: ~p", [ExpectedRRData]),
   TypeCovered = ExpectedRRData#dns_rrdata_rrsig.type_covered,
-  RRSigSet = lists:filter(rrsig_filter(TypeCovered), ActualRecords),
+  RRSigSet = lists:filter(rrsig_filter(ExpectedName, TypeCovered), ActualRecords),
   update_rrsig(ExpectedRRData, RRSigSet);
 
-fill_data(ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_dnskey) ->
+fill_data(ExpectedName, ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_dnskey) ->
   Flags = ExpectedRRData#dns_rrdata_dnskey.flags,
-  DNSKeySet = lists:filter(dnskey_filter(Flags), ActualRecords),
+  DNSKeySet = lists:filter(dnskey_filter(ExpectedName, Flags), ActualRecords),
   update_dnskey(ExpectedRRData, DNSKeySet);
 
-fill_data(Data, _) -> Data.
+fill_data(_, Data, _) -> Data.
 
 
 
@@ -227,7 +227,7 @@ record_to_tuple_function() ->
 
 fill_data_function(ActualRecordsSorted) ->
   fun({Name, Class, Type, TTL, Data}) ->
-      {Name, Class, Type, TTL, fill_data(Data, ActualRecordsSorted)}
+      {Name, Class, Type, TTL, fill_data(Name, Data, ActualRecordsSorted)}
   end.
 
 dns_rr_filter() ->
@@ -238,20 +238,20 @@ dns_rr_filter() ->
       end
   end.
 
-rrsig_filter(TypeCovered) ->
-  fun({_, _, _, _, RRData}) ->
-      case RRData of
-        #dns_rrdata_rrsig{type_covered = TypeCovered} ->
+rrsig_filter(ExpectedName, TypeCovered) ->
+  fun({Name, _, _, _, RRData}) ->
+      case {Name, RRData} of
+        {ExpectedName, #dns_rrdata_rrsig{type_covered = TypeCovered}} ->
           lager:info("RRData: ~p", [RRData]),
           true;
         _ -> false
       end
   end.
 
-dnskey_filter(Flags) ->
-  fun({_, _, _, _, RRData}) ->
-      case RRData of
-        #dns_rrdata_dnskey{flags = Flags} ->
+dnskey_filter(ExpectedName, Flags) ->
+  fun({Name, _, _, _, RRData}) ->
+      case {Name, RRData} of
+        {ExpectedName, #dns_rrdata_dnskey{flags = Flags}} ->
           lager:info("RRData: ~p", [RRData]),
           true;
         _ -> false
