@@ -190,7 +190,7 @@ parse_address(Address) -> Address.
 
 
 fill_data(ExpectedName, ExpectedRRData, ActualRecords) when is_record(ExpectedRRData, dns_rrdata_rrsig) ->
-  lager:info("Expected RRData: ~p", [ExpectedRRData]),
+  %lager:info("Expected RRData: ~p", [ExpectedRRData]),
   TypeCovered = ExpectedRRData#dns_rrdata_rrsig.type_covered,
   RRSigSet = lists:filter(rrsig_filter(ExpectedName, TypeCovered), ActualRecords),
   update_rrsig(ExpectedRRData, RRSigSet);
@@ -242,7 +242,7 @@ rrsig_filter(ExpectedName, TypeCovered) ->
   fun({Name, _, _, _, RRData}) ->
       case {Name, RRData} of
         {ExpectedName, #dns_rrdata_rrsig{type_covered = TypeCovered}} ->
-          lager:info("RRData: ~p", [RRData]),
+          %lager:info("RRData: ~p", [RRData]),
           true;
         _ -> false
       end
@@ -252,7 +252,7 @@ dnskey_filter(ExpectedName, Flags) ->
   fun({Name, _, _, _, RRData}) ->
       case {Name, RRData} of
         {ExpectedName, #dns_rrdata_dnskey{flags = Flags}} ->
-          lager:info("RRData: ~p", [RRData]),
+          %lager:info("RRData: ~p", [RRData]),
           true;
         _ -> false
       end
