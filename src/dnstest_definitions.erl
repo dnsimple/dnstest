@@ -1152,6 +1152,23 @@ pdns_definitions() ->
           }}
       }},
 
+% 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+% 2	.	IN	OPT	32768
+% Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+% Reply to question for qname='example.com.', qtype=DS
+
+    {ds_at_apex_noerror, {
+        {question, {"example.com", ?DNS_TYPE_DS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, []},
+            {authority, [
+              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            ]},
+            {additional, []}
+          }}
+      }},
+
     % TODO: ds_at_secure_delegation
     % TODO: ds_at_unsecure_delegation
     % TODO: ds_at_unsecure_zone_cut
