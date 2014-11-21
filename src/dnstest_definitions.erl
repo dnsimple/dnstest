@@ -1065,8 +1065,20 @@ pdns_definitions() ->
           }}
       }},
 
+    % 2	.	IN	OPT	32768
+    % Rcode: 4, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=RRSIG
 
-    % TODO: direct_rrsig
+    {direct_rrsig, {
+        {question, {"example.com", ?DNS_TYPE_RRSIG}},
+        {header, #dns_message{rc=?DNS_RCODE_NOTIMP, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, []},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
 
     % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
@@ -1114,6 +1126,26 @@ pdns_definitions() ->
         {records, {
             {answers, [
                 {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	double.example.com.	IN	A	120	192.168.5.1
+    % 0	double.example.com.	IN	RRSIG	120	A 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='double.example.com.', qtype=A
+
+    {double_dnssec, {
+        {question, {"double.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}},
+                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
