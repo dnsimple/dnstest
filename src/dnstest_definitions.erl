@@ -1249,8 +1249,24 @@ pdns_definitions() ->
     % TODO: ent_rr_enclosed_in_ent
     % TODO: ent_soa
     % TODO: ent_wildcard_below_ent
-    % TODO: ent
 
+
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='c.test.com.', qtype=A
+
+    {ent, {
+       {question, {"c.test.com", ?DNS_TYPE_A}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {records, {
+          {answers, []},
+          {authority, [
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            ]},
+          {additional, []}
+         }}
+      }},
 
     % 4 TXT records with 0 to 3 backslashes before a semicolon.
 
