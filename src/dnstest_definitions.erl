@@ -1244,12 +1244,94 @@ pdns_definitions() ->
     % TODO: ds_at_unsecure_zone_cut
     % TODO: ds_inside_delegation
 
-    % TODO: ent_any
-    % TODO: ent_axfr
-    % TODO: ent_rr_enclosed_in_ent
-    % TODO: ent_soa
-    % TODO: ent_wildcard_below_ent
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768	
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='c.test.com.', qtype=ANY
 
+    {ent_any, {
+       {question, {"c.test.com", ?DNS_TYPE_ANY}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {records, {
+          {answers, []},
+          {authority, [
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            ]},
+          {additional, []}
+         }}
+      }},
+
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='sub.host.sub.example.com.', qtype=A
+
+    % The record name is host.*.sub.example.com, however erldns only supports wildcards in the left-most position.
+
+    %{ent_asterisk, {
+       %{question, {"sub.host.sub.example.com", ?DNS_TYPE_A}},
+       %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       %{records, {
+          %{answers, []},
+          %{authority, [
+              %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            %]},
+          %{additional, []}
+         %}}
+      %}},
+
+    % TODO: ent_axfr
+
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='b.c.test.com.', qtype=TXT
+
+    {ent_rr_enclosed_in_ent, {
+       {question, {"b.c.test.com", ?DNS_TYPE_TXT}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {records, {
+          {answers, []},
+          {authority, [
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            ]},
+          {additional, []}
+         }}
+      }},
+
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='c.test.com.', qtype=SOA
+
+    {ent_soa, {
+       {question, {"c.test.com", ?DNS_TYPE_SOA}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {records, {
+          {answers, []},
+          {authority, [
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
+            ]},
+          {additional, []}
+         }}
+      }},
+
+    % 0	something.a.b.c.test.com.	IN	A	3600	8.7.6.5
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='something.a.b.c.test.com.', qtype=A
+
+    {ent_wildcard_below_ent, {
+       {question, {"something.a.b.c.test.com", ?DNS_TYPE_A}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {records, {
+          {answers, [
+            {<<"something.a.b.c.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {8,7,6,5}}}
+          ]},
+          {authority, []},
+          {additional, []}
+         }}
+      }},
 
     % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768
