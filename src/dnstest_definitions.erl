@@ -1261,6 +1261,30 @@ pdns_definitions() ->
          }}
       }},
 
+    % 1	blah.test.com.	IN	NSEC	86400	b.c.test.com. NS RRSIG NSEC
+    % 1	blah.test.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] test.com. ...
+    % 1	test.com.	IN	RRSIG	3600	SOA 8 2 3600 [expiry] [inception] [keytag] test.com. ...
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='c.test.com.', qtype=ANY
+
+    {ent_any_dnssec, {
+       {question, {"c.test.com", ?DNS_TYPE_ANY}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       {options, [{dnssec, true}]},
+       {records, {
+          {answers, []},
+          {authority, [
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}},
+              {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"b.c.test.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+              {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}}
+            ]},
+          {additional, []}
+         }}
+      }},
+
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
