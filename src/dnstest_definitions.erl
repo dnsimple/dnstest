@@ -546,6 +546,67 @@ pdns_dnssec_definitions() ->
     % Reply to question for qname='nx.outpost.example.com.', qtype=A
 
     % TODO
+    
+    % Minimal zone (only NS records) Make sure existent hosts without proper type
+    % generates a correct NSEC(3) denial.
+
+    % 1	minimal.com.	IN	NSEC	86400	minimal.com. NS SOA RRSIG NSEC DNSKEY
+
+    %{minimal_noerror, {
+       %{question, {<<"minimal.com">>, ?DNS_TYPE_TXT}},
+       %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+       %{options, [{dnssec, true}]},
+       %{records, {
+          %{answers, [
+              %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}}
+            %]},
+          %{authority, []},
+          %{additional, []}
+         %}}
+      %}}
+
+    % Minimal zone (only NS records) Make sure non-existent hosts generates a correct
+    % NSEC(3) denial.
+
+    % 1	minimal.com.	IN	NSEC	86400	minimal.com. NS SOA RRSIG NSEC DNSKEY
+  
+     %{minimal_nxdomain, {
+       %{question, {<<"a.minimal.com">>, ?DNS_TYPE_A}},
+       %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+       %{options, [{dnssec, true}]},
+       %{records, {
+          %{answers, [
+              %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}}
+            %]},
+          %{authority, []},
+          %{additional, []}
+         %}}
+      %}}
+
+    % TODO: nsec-bitmap
+    % TODO: nsec-glue-at-delegation
+    % TODO: nsec-glur
+    % TODO: nsec-middle
+    % TODO: nsec-wildcard
+    % TODO: nsec-wraparound
+    % TODO: nsec-wrong-type-at-apex
+    % TODO: nsec-wrong-type
+    % TODO: nsecx-mode2-wildcard-nodata
+    % TODO: nsecx-mode3-wildcard
+    % TODO: nxdomain-below-nonempty-terminal
+    % TODO: nxdomain-for-unknown-record
+    
+    % TODO: second-level-nxdomain
+    % TODO: secure-delegation-ds-ns
+    % TODO: secure-delegation
+    % TODO: space-name
+    
+    % TODO: two-level-nxdomain
+    % TODO: underscore-sorting
+    
+    % TODO: uppercase-nsec
+
+    % TODO: verify-dnssec-zone
 
   ].
 
@@ -1985,6 +2046,11 @@ pdns_definitions() ->
             {additional, []}
           }}
       }},
+
+    % TODO: root-cname
+    % TODO: root-mx
+    % TODO: root-ns
+    % TODO: root-srv
 
     % 0	server1.test.com.	IN	RP	3600	ahu.ds9a.nl. counter.test.com.
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
