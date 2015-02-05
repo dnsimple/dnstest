@@ -8,7 +8,7 @@
 -export([definitions/0]).
 
 definitions() ->
-  pdns_definitions() ++ erldns_definitions().
+  pdns_definitions() ++ pdns_dnssec_definitions() ++ erldns_definitions().
 
 erldns_definitions() ->
   [
@@ -56,7 +56,496 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-          }}}}
+          }}}},
+
+    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
+    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxd.example.com.', qtype=ANY
+
+    {cname_to_nxdomain_any_dnssec, {
+        {question, {"nxd.example.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }}
+
+  ].
+
+pdns_dnssec_definitions() ->
+  [
+    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
+    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 1	nxd.example.com.	IN	NSEC	86400	outpost.example.com. CNAME RRSIG NSEC
+    % 1	nxd.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768	
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxdomain.example.com.', qtype=ANY
+
+    {any_nxdomain_dnssec, {
+       {question, {"nxdomain.example.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"outpost.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {additional, []}
+          }}}},
+
+    % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
+    % 0	www.something.wtest.com.	IN	RRSIG	3600	A 8 3 3600 [expiry] [inception] [keytag] wtest.com. ...
+    % 1	a.something.wtest.com.	IN	NSEC	86400	wtest.com. A RRSIG NSEC
+    % 1	a.something.wtest.com.	IN	RRSIG	86400	NSEC 8 4 86400 [expiry] [inception] [keytag] wtest.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='www.something.wtest.com.', qtype=ANY
+
+    {any_wildcard_dnssec, {
+        {question, {"www.something.wtest.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}},
+                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"wtest.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, [
+                {<<"a.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"wtest.com">>, types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                {<<"a.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 4, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"wtest.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
+    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
+    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 1	nxd.example.com.	IN	NSEC	86400	outpost.example.com. CNAME RRSIG NSEC
+    % 1	nxd.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxd.example.com.', qtype=A
+
+    {cname_to_nxdomain_dnssec, {
+        {question, {"nxd.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, [
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
+                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"outpost.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
+        %     	unauth.example.com.	IN	CNAME	120	no-idea.example.org.
+    % 0	unauth.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 1	.	IN	NS	518400	a.root-servers.net.
+    % 1	.	IN	NS	518400	b.root-servers.net.
+    % 1	.	IN	NS	518400	c.root-servers.net.
+    % 1	.	IN	NS	518400	d.root-servers.net.
+    % 1	.	IN	NS	518400	e.root-servers.net.
+    % 1	.	IN	NS	518400	f.root-servers.net.
+    % 1	.	IN	NS	518400	g.root-servers.net.
+    % 1	.	IN	NS	518400	h.root-servers.net.
+    % 1	.	IN	NS	518400	i.root-servers.net.
+    % 1	.	IN	NS	518400	j.root-servers.net.
+    % 1	.	IN	NS	518400	k.root-servers.net.
+    % 1	.	IN	NS	518400	l.root-servers.net.
+    % 1	.	IN	NS	518400	m.root-servers.net.
+    % 2	.	IN	OPT	32768
+    % 2	a.root-servers.net.	IN	A	3600000	198.41.0.4
+    % 2	b.root-servers.net.	IN	A	3600000	192.228.79.201
+    % 2	c.root-servers.net.	IN	A	3600000	192.33.4.12
+    % 2	d.root-servers.net.	IN	A	3600000	199.7.91.13
+    % 2	e.root-servers.net.	IN	A	3600000	192.203.230.10
+    % 2	f.root-servers.net.	IN	A	3600000	192.5.5.241
+    % 2	g.root-servers.net.	IN	A	3600000	192.112.36.4
+    % 2	h.root-servers.net.	IN	A	3600000	128.63.2.53
+    % 2	i.root-servers.net.	IN	A	3600000	192.36.148.17
+    % 2	j.root-servers.net.	IN	A	3600000	192.58.128.30
+    % 2	k.root-servers.net.	IN	A	3600000	193.0.14.129
+    % 2	l.root-servers.net.	IN	A	3600000	199.7.83.42
+    % 2	m.root-servers.net.	IN	A	3600000	202.12.27.33
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='unauth.example.com.', qtype=ANY
+
+    {cname_to_unauth_any_dnssec, {
+        {question, {"unauth.example.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
+                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, [
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
+              ]},
+            {additional, [
+                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
+                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
+                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
+                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
+                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
+                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
+                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
+                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
+                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
+                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
+                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
+                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
+                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
+              ]}
+          }}
+      }},
+
+        % 0	unauth.example.com.	IN	CNAME	120	no-idea.example.org.
+    % 0	unauth.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 1	.	IN	NS	518400	a.root-servers.net.
+    % 1	.	IN	NS	518400	b.root-servers.net.
+    % 1	.	IN	NS	518400	c.root-servers.net.
+    % 1	.	IN	NS	518400	d.root-servers.net.
+    % 1	.	IN	NS	518400	e.root-servers.net.
+    % 1	.	IN	NS	518400	f.root-servers.net.
+    % 1	.	IN	NS	518400	g.root-servers.net.
+    % 1	.	IN	NS	518400	h.root-servers.net.
+    % 1	.	IN	NS	518400	i.root-servers.net.
+    % 1	.	IN	NS	518400	j.root-servers.net.
+    % 1	.	IN	NS	518400	k.root-servers.net.
+    % 1	.	IN	NS	518400	l.root-servers.net.
+    % 1	.	IN	NS	518400	m.root-servers.net.
+    % 2	.	IN	OPT	32768
+    % 2	a.root-servers.net.	IN	A	3600000	198.41.0.4
+    % 2	b.root-servers.net.	IN	A	3600000	192.228.79.201
+    % 2	c.root-servers.net.	IN	A	3600000	192.33.4.12
+    % 2	d.root-servers.net.	IN	A	3600000	199.7.91.13
+    % 2	e.root-servers.net.	IN	A	3600000	192.203.230.10
+    % 2	f.root-servers.net.	IN	A	3600000	192.5.5.241
+    % 2	g.root-servers.net.	IN	A	3600000	192.112.36.4
+    % 2	h.root-servers.net.	IN	A	3600000	128.63.2.53
+    % 2	i.root-servers.net.	IN	A	3600000	192.36.148.17
+    % 2	j.root-servers.net.	IN	A	3600000	192.58.128.30
+    % 2	k.root-servers.net.	IN	A	3600000	193.0.14.129
+    % 2	l.root-servers.net.	IN	A	3600000	199.7.83.42
+    % 2	m.root-servers.net.	IN	A	3600000	202.12.27.33
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='unauth.example.com.', qtype=A
+
+    {cname_to_unauth_dnssec, {
+        {question, {"unauth.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
+                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, [
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
+                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
+              ]},
+            {additional, [
+                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
+                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
+                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
+                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
+                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
+                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
+                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
+                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
+                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
+                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
+                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
+                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
+                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
+              ]}
+          }}
+      }},
+
+    % 0	start.example.com.	IN	CNAME	120	x.y.z.w1.example.com.
+    % 0	start.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 0	x.y.z.w1.example.com.	IN	CNAME	120	x.y.z.w2.example.com.
+    % 0	x.y.z.w1.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 0	x.y.z.w2.example.com.	IN	CNAME	120	x.y.z.w3.example.com.
+    % 0	x.y.z.w2.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 0	x.y.z.w3.example.com.	IN	CNAME	120	x.y.z.w4.example.com.
+    % 0	x.y.z.w3.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 0	x.y.z.w4.example.com.	IN	CNAME	120	x.y.z.w5.example.com.
+    % 0	x.y.z.w4.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 0	x.y.z.w5.example.com.	IN	A	120	1.2.3.5
+    % 0	x.y.z.w5.example.com.	IN	RRSIG	120	A 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 1	*.w1.example.com.	IN	NSEC	86400	*.w2.example.com. CNAME RRSIG NSEC
+    % 1	*.w1.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	*.w2.example.com.	IN	NSEC	86400	*.w3.example.com. CNAME RRSIG NSEC
+    % 1	*.w2.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	*.w3.example.com.	IN	NSEC	86400	*.w4.example.com. CNAME RRSIG NSEC
+    % 1	*.w3.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	*.w4.example.com.	IN	NSEC	86400	*.w5.example.com. CNAME RRSIG NSEC
+    % 1	*.w4.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	*.w5.example.com.	IN	NSEC	86400	www.example.com. A RRSIG NSEC
+    % 1	*.w5.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768	
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='start.example.com.', qtype=A
+
+    %{cname_wildcard_chain_dnssec, {
+        %{question, {"start.example.com", ?DNS_TYPE_A}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{records, {
+            %{answers, [
+                %{<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example.com">>}},
+                %{<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"x.y.z.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w2.example.com">>}},
+                %{<<"x.y.z.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"x.y.z.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w3.example.com">>}},
+                %{<<"x.y.z.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"x.y.z.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w4.example.com">>}},
+                %{<<"x.y.z.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"x.y.z.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w5.example.com">>}},
+                %{<<"x.y.z.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"x.y.z.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1,2,3,5}}},
+                %{<<"x.y.z.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{authority, [
+                %{<<"*.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w2.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"*.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"*.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w3.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"*.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"*.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w4.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"*.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"*.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w5.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"*.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+                %{<<"*.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"www.example.com">>, types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"*.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{additional, []}
+          %}}
+      %}}
+    
+    % 0	example.com.	IN	DNSKEY	86400	256 3 8 ...
+    % 0	example.com.	IN	DNSKEY	86400	257 3 8 ...
+    % 0	example.com.	IN	RRSIG	86400	DNSKEY 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=DNSKEY
+
+    {direct_dnskey_dnssec, {
+        {question, {"example.com", ?DNS_TYPE_DNSKEY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+           {answers, [
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+            ]},
+           {authority, []},
+           {additional, []}
+          }}
+      }},
+
+    % 2	.	IN	OPT	32768
+    % Rcode: 4, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=RRSIG
+
+    {direct_rrsig, {
+        {question, {"example.com", ?DNS_TYPE_RRSIG}},
+        {header, #dns_message{rc=?DNS_RCODE_NOTIMP, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, []},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 0	double.example.com.	IN	A	120	192.168.5.1
+    % 0	double.example.com.	IN	RRSIG	120	A 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='double.example.com.', qtype=A
+
+    {double_dnssec, {
+        {question, {"double.example.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}},
+                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
+    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='example.com.', qtype=DS
+
+    {ds_at_apex_noerror_dnssec, {
+        {question, {"example.com", ?DNS_TYPE_DS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, []},
+            {authority, [
+              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
+              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+            ]},
+            {additional, []}
+          }}
+      }}
+
+    % 0	secure-delegated.dnssec-parent.com.	IN	DS	3600	54319 8 2 a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7
+    % 0	secure-delegated.dnssec-parent.com.	IN	RRSIG	3600	DS 8 3 3600 [expiry] [inception] [keytag] dnssec-parent.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='secure-delegated.dnssec-parent.com.', qtype=DS
+
+    %{ds_at_both_sides_dnssec, {
+        %{question, {"0-secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, [
+                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>}},
+                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"dnssec-parent.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{authority, []},
+            %{additional, []}
+          %}}
+      %}}
+
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 1	usa.example.com.	IN	NSEC	86400	*.w1.example.com. NS RRSIG NSEC
+    % 1	usa.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='usa.example.com.', qtype=DS
+
+    % TODO: ds_at_secure_delegation
+
+    %{ds_at_unsecure_delegation, {
+        %{question, {"usa.example.com", ?DNS_TYPE_DS}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, []},
+            %{authority, [
+              %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+              %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
+              %{<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w1.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+              %{<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+            %]},
+            %{additional, []}
+          %}}
+      %}}
+
+    % TODO: ds_at_unsecure_zone_cut
+
+    % TODO: ds_inside_delegation
+
+    % 1	blah.test.com.	IN	NSEC	86400	b.c.test.com. NS RRSIG NSEC
+    % 1	blah.test.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] test.com. ...
+    % 1	test.com.	IN	RRSIG	3600	SOA 8 2 3600 [expiry] [inception] [keytag] test.com. ...
+    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='c.test.com.', qtype=ANY
+    
+    % Currently broken in erl-dns because the TTL in the RRSIG is 3600 instead of 84600
+
+    %{ent_any_dnssec, {
+       %{question, {"c.test.com", ?DNS_TYPE_ANY}},
+       %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+       %{options, [{dnssec, true}]},
+       %{records, {
+          %{answers, []},
+          %{authority, [
+              %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+              %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}},
+              %{<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"b.c.test.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+              %{<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}}
+            %]},
+          %{additional, []}
+         %}}
+      %}}
+    
+    % Make sure a name that is two labels beneath an apex, with the first label
+    % existing but the second absent, generates a correct NSEC(3) denial.
+
+    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
+    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
+    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+    % 1	outpost.example.com.	IN	NSEC	86400	semi-external.example.com. A RRSIG NSEC
+    % 1	outpost.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nx.outpost.example.com.', qtype=A
+
+    % TODO
 
   ].
 
@@ -90,33 +579,6 @@ pdns_definitions() ->
             {answers, []},
             {authority, [
                 {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-              ]},
-            {additional, []}
-          }}}},
-
-    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
-    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-    % 1	nxd.example.com.	IN	NSEC	86400	outpost.example.com. CNAME RRSIG NSEC
-    % 1	nxd.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768	
-    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='nxdomain.example.com.', qtype=ANY
-
-    {any_nxdomain_dnssec, {
-       {question, {"nxdomain.example.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, [
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"outpost.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
               ]},
             {additional, []}
           }}}},
@@ -158,31 +620,6 @@ pdns_definitions() ->
                 {<<"smtp-servers.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,0,4}}}
               ]}
           }}}},
-
-    % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
-    % 0	www.something.wtest.com.	IN	RRSIG	3600	A 8 3 3600 [expiry] [inception] [keytag] wtest.com. ...
-    % 1	a.something.wtest.com.	IN	NSEC	86400	wtest.com. A RRSIG NSEC
-    % 1	a.something.wtest.com.	IN	RRSIG	86400	NSEC 8 4 86400 [expiry] [inception] [keytag] wtest.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='www.something.wtest.com.', qtype=ANY
-
-    {any_wildcard_dnssec, {
-        {question, {"www.something.wtest.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}},
-                {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"wtest.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, [
-                {<<"a.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"wtest.com">>, types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"a.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 4, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"wtest.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {additional, []}
-          }}
-      }},
 
     % 0	www.something.wtest.com.	IN	A	3600	4.3.2.1
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
@@ -527,26 +964,6 @@ pdns_definitions() ->
           }}
       }},
 
-    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
-    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='nxd.example.com.', qtype=ANY
-
-    {cname_to_nxdomain_any_dnssec, {
-        {question, {"nxd.example.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, []},
-            {additional, []}
-          }}
-      }},
-
     % CNAME to a local NXDOMAIN.
 
     % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
@@ -564,39 +981,6 @@ pdns_definitions() ->
               ]},
             {authority, [
                 {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-              ]},
-            {additional, []}
-          }}
-      }},
-
-    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
-    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
-    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-    % 1	nxd.example.com.	IN	NSEC	86400	outpost.example.com. CNAME RRSIG NSEC
-    % 1	nxd.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='nxd.example.com.', qtype=A
-
-    {cname_to_nxdomain_dnssec, {
-        {question, {"nxd.example.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, [
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"outpost.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
               ]},
             {additional, []}
           }}
@@ -660,80 +1044,6 @@ pdns_definitions() ->
         {records, {
             {answers, [
                 {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}}
-              ]},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
-          }}
-      }},
-
-    %     	unauth.example.com.	IN	CNAME	120	no-idea.example.org.
-    % 0	unauth.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 1	.	IN	NS	518400	a.root-servers.net.
-    % 1	.	IN	NS	518400	b.root-servers.net.
-    % 1	.	IN	NS	518400	c.root-servers.net.
-    % 1	.	IN	NS	518400	d.root-servers.net.
-    % 1	.	IN	NS	518400	e.root-servers.net.
-    % 1	.	IN	NS	518400	f.root-servers.net.
-    % 1	.	IN	NS	518400	g.root-servers.net.
-    % 1	.	IN	NS	518400	h.root-servers.net.
-    % 1	.	IN	NS	518400	i.root-servers.net.
-    % 1	.	IN	NS	518400	j.root-servers.net.
-    % 1	.	IN	NS	518400	k.root-servers.net.
-    % 1	.	IN	NS	518400	l.root-servers.net.
-    % 1	.	IN	NS	518400	m.root-servers.net.
-    % 2	.	IN	OPT	32768
-    % 2	a.root-servers.net.	IN	A	3600000	198.41.0.4
-    % 2	b.root-servers.net.	IN	A	3600000	192.228.79.201
-    % 2	c.root-servers.net.	IN	A	3600000	192.33.4.12
-    % 2	d.root-servers.net.	IN	A	3600000	199.7.91.13
-    % 2	e.root-servers.net.	IN	A	3600000	192.203.230.10
-    % 2	f.root-servers.net.	IN	A	3600000	192.5.5.241
-    % 2	g.root-servers.net.	IN	A	3600000	192.112.36.4
-    % 2	h.root-servers.net.	IN	A	3600000	128.63.2.53
-    % 2	i.root-servers.net.	IN	A	3600000	192.36.148.17
-    % 2	j.root-servers.net.	IN	A	3600000	192.58.128.30
-    % 2	k.root-servers.net.	IN	A	3600000	193.0.14.129
-    % 2	l.root-servers.net.	IN	A	3600000	199.7.83.42
-    % 2	m.root-servers.net.	IN	A	3600000	202.12.27.33
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='unauth.example.com.', qtype=ANY
-
-    {cname_to_unauth_any_dnssec, {
-        {question, {"unauth.example.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
-                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, [
                 {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
@@ -839,81 +1149,6 @@ pdns_definitions() ->
           }}
       }},
 
-    % 0	unauth.example.com.	IN	CNAME	120	no-idea.example.org.
-    % 0	unauth.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 1	.	IN	NS	518400	a.root-servers.net.
-    % 1	.	IN	NS	518400	b.root-servers.net.
-    % 1	.	IN	NS	518400	c.root-servers.net.
-    % 1	.	IN	NS	518400	d.root-servers.net.
-    % 1	.	IN	NS	518400	e.root-servers.net.
-    % 1	.	IN	NS	518400	f.root-servers.net.
-    % 1	.	IN	NS	518400	g.root-servers.net.
-    % 1	.	IN	NS	518400	h.root-servers.net.
-    % 1	.	IN	NS	518400	i.root-servers.net.
-    % 1	.	IN	NS	518400	j.root-servers.net.
-    % 1	.	IN	NS	518400	k.root-servers.net.
-    % 1	.	IN	NS	518400	l.root-servers.net.
-    % 1	.	IN	NS	518400	m.root-servers.net.
-    % 2	.	IN	OPT	32768
-    % 2	a.root-servers.net.	IN	A	3600000	198.41.0.4
-    % 2	b.root-servers.net.	IN	A	3600000	192.228.79.201
-    % 2	c.root-servers.net.	IN	A	3600000	192.33.4.12
-    % 2	d.root-servers.net.	IN	A	3600000	199.7.91.13
-    % 2	e.root-servers.net.	IN	A	3600000	192.203.230.10
-    % 2	f.root-servers.net.	IN	A	3600000	192.5.5.241
-    % 2	g.root-servers.net.	IN	A	3600000	192.112.36.4
-    % 2	h.root-servers.net.	IN	A	3600000	128.63.2.53
-    % 2	i.root-servers.net.	IN	A	3600000	192.36.148.17
-    % 2	j.root-servers.net.	IN	A	3600000	192.58.128.30
-    % 2	k.root-servers.net.	IN	A	3600000	193.0.14.129
-    % 2	l.root-servers.net.	IN	A	3600000	199.7.83.42
-    % 2	m.root-servers.net.	IN	A	3600000	202.12.27.33
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='unauth.example.com.', qtype=A
-
-    {cname_to_unauth_dnssec, {
-        {question, {"unauth.example.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
-                {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
-          }}
-      }},
-
-
     % A five-long CNAME chain involving wildcards at every step
 
     % 0	start.example.com.	IN	CNAME	120	x.y.z.w1.example.com.
@@ -942,67 +1177,6 @@ pdns_definitions() ->
             {additional, []}
           }}
       }},
-
-    % 0	start.example.com.	IN	CNAME	120	x.y.z.w1.example.com.
-    % 0	start.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 0	x.y.z.w1.example.com.	IN	CNAME	120	x.y.z.w2.example.com.
-    % 0	x.y.z.w1.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 0	x.y.z.w2.example.com.	IN	CNAME	120	x.y.z.w3.example.com.
-    % 0	x.y.z.w2.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 0	x.y.z.w3.example.com.	IN	CNAME	120	x.y.z.w4.example.com.
-    % 0	x.y.z.w3.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 0	x.y.z.w4.example.com.	IN	CNAME	120	x.y.z.w5.example.com.
-    % 0	x.y.z.w4.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 0	x.y.z.w5.example.com.	IN	A	120	1.2.3.5
-    % 0	x.y.z.w5.example.com.	IN	RRSIG	120	A 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 1	*.w1.example.com.	IN	NSEC	86400	*.w2.example.com. CNAME RRSIG NSEC
-    % 1	*.w1.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	*.w2.example.com.	IN	NSEC	86400	*.w3.example.com. CNAME RRSIG NSEC
-    % 1	*.w2.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	*.w3.example.com.	IN	NSEC	86400	*.w4.example.com. CNAME RRSIG NSEC
-    % 1	*.w3.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	*.w4.example.com.	IN	NSEC	86400	*.w5.example.com. CNAME RRSIG NSEC
-    % 1	*.w4.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	*.w5.example.com.	IN	NSEC	86400	www.example.com. A RRSIG NSEC
-    % 1	*.w5.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768	
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='start.example.com.', qtype=A
-
-    %{cname_wildcard_chain_dnssec, {
-        %{question, {"start.example.com", ?DNS_TYPE_A}},
-        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{records, {
-            %{answers, [
-                %{<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example.com">>}},
-                %{<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"x.y.z.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w2.example.com">>}},
-                %{<<"x.y.z.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"x.y.z.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w3.example.com">>}},
-                %{<<"x.y.z.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"x.y.z.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w4.example.com">>}},
-                %{<<"x.y.z.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"x.y.z.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w5.example.com">>}},
-                %{<<"x.y.z.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"x.y.z.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1,2,3,5}}},
-                %{<<"x.y.z.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              %]},
-            %{authority, [
-                %{<<"*.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w2.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                %{<<"*.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"*.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w3.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                %{<<"*.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"*.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w4.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                %{<<"*.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"*.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w5.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                %{<<"*.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                %{<<"*.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"www.example.com">>, types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                %{<<"*.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              %]},
-            %{additional, []}
-          %}}
-      %}},
-
 
     % If we CNAME to another locally-hosted domain, while following the chain,
     % we should make sure to update the left hand side too, even when hitting
@@ -1040,43 +1214,6 @@ pdns_definitions() ->
                 {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}         
               ]},
            {additional, []}
-          }}
-      }},
-
-    % 0	example.com.	IN	DNSKEY	86400	256 3 8 ...
-    % 0	example.com.	IN	DNSKEY	86400	257 3 8 ...
-    % 0	example.com.	IN	RRSIG	86400	DNSKEY 8 2 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='example.com.', qtype=DNSKEY
-
-    {direct_dnskey_dnssec, {
-        {question, {"example.com", ?DNS_TYPE_DNSKEY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-           {answers, [
-               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-               {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-            ]},
-           {authority, []},
-           {additional, []}
-          }}
-      }},
-
-    % 2	.	IN	OPT	32768
-    % Rcode: 4, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='example.com.', qtype=RRSIG
-
-    {direct_rrsig, {
-        {question, {"example.com", ?DNS_TYPE_RRSIG}},
-        {header, #dns_message{rc=?DNS_RCODE_NOTIMP, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, []},
-            {additional, []}
           }}
       }},
 
@@ -1130,27 +1267,7 @@ pdns_definitions() ->
             {authority, []},
             {additional, []}
           }}
-      }},
-
-    % 0	double.example.com.	IN	A	120	192.168.5.1
-    % 0	double.example.com.	IN	RRSIG	120	A 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='double.example.com.', qtype=A
-
-    {double_dnssec, {
-        {question, {"double.example.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}},
-                {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, []},
-            {additional, []}
-          }}
-      }},
+      }}, 
 
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768
@@ -1169,81 +1286,6 @@ pdns_definitions() ->
           }}
       }},
 
-    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
-    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='example.com.', qtype=DS
-
-    {ds_at_apex_noerror_dnssec, {
-        {question, {"example.com", ?DNS_TYPE_DS}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, [
-              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"double.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_MX, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}},
-              {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-            ]},
-            {additional, []}
-          }}
-      }},
-
-    % 0	secure-delegated.dnssec-parent.com.	IN	DS	3600	54319 8 2 a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7
-    % 0	secure-delegated.dnssec-parent.com.	IN	RRSIG	3600	DS 8 3 3600 [expiry] [inception] [keytag] dnssec-parent.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='secure-delegated.dnssec-parent.com.', qtype=DS
-
-    %{ds_at_both_sides_dnssec, {
-        %{question, {"0-secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
-        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
-        %{records, {
-            %{answers, [
-                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>}},
-                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"dnssec-parent.com">>, signature = ?TEST_REPLACE}}
-              %]},
-            %{authority, []},
-            %{additional, []}
-          %}}
-      %}},
-
-
-    % TODO: ds_at_secure_delegation
-
-    % TODO: ds_at_unsecure_delegation
-    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-    % 1	usa.example.com.	IN	NSEC	86400	*.w1.example.com. NS RRSIG NSEC
-    % 1	usa.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='usa.example.com.', qtype=DS
-
-    %{ds_at_unsecure_delegation, {
-        %{question, {"usa.example.com", ?DNS_TYPE_DS}},
-        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
-        %{records, {
-            %{answers, []},
-            %{authority, [
-              %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-              %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 100000, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-              %{<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w1.example.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-              %{<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-            %]},
-            %{additional, []}
-          %}}
-      %}},
-
-    % TODO: ds_at_unsecure_zone_cut
-    % TODO: ds_inside_delegation
-
     % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
     % 2	.	IN	OPT	32768	
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
@@ -1256,30 +1298,6 @@ pdns_definitions() ->
           {answers, []},
           {authority, [
               {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-            ]},
-          {additional, []}
-         }}
-      }},
-
-    % 1	blah.test.com.	IN	NSEC	86400	b.c.test.com. NS RRSIG NSEC
-    % 1	blah.test.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] test.com. ...
-    % 1	test.com.	IN	RRSIG	3600	SOA 8 2 3600 [expiry] [inception] [keytag] test.com. ...
-    % 1	test.com.	IN	SOA	3600	ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='c.test.com.', qtype=ANY
-
-    {ent_any_dnssec, {
-       {question, {"c.test.com", ?DNS_TYPE_ANY}},
-       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-       {options, [{dnssec, true}]},
-       {records, {
-          {answers, []},
-          {authority, [
-              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-              {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}},
-              {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"b.c.test.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-              {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"test.com">>, signature = ?TEST_REPLACE}}
             ]},
           {additional, []}
          }}
@@ -1391,6 +1409,7 @@ pdns_definitions() ->
             {additional, []}
           }}
       }},
+
     % A series of CNAME pointers can lead to an outside reference, which should be
     % passed in the Answer section. PowerDNS sends an unauthoritative NOERROR,
     % bind sends a SERVFAIL.
@@ -2021,21 +2040,6 @@ pdns_definitions() ->
             {additional, []}
           }}
       }},
-
-    % Make sure a name that is two labels beneath an apex, with the first label
-    % existing but the second absent, generates a correct NSEC(3) denial.
-
-    % 1	example.com.	IN	NSEC	86400	double.example.com. NS SOA MX RRSIG NSEC DNSKEY
-    % 1	example.com.	IN	RRSIG	86400	NSEC 8 2 86400 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
-    % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-    % 1	outpost.example.com.	IN	NSEC	86400	semi-external.example.com. A RRSIG NSEC
-    % 1	outpost.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='nx.outpost.example.com.', qtype=A
-
-    % TODO
 
     % UDP dns packets can only be 512 bytes long - when they are longer, they need
     % to get truncated, and have the 'TC' bit set, to inform the client that they
