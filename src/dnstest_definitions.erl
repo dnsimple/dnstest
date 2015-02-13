@@ -56,27 +56,7 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-          }}}},
-
-    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
-    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
-    % 2	.	IN	OPT	32768
-    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-    % Reply to question for qname='nxd.example.com.', qtype=ANY
-
-    {cname_to_nxdomain_any_dnssec, {
-        {question, {"nxd.example.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
-                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {authority, []},
-            {additional, []}
-          }}
-      }}
+          }}}}
 
   ].
 
@@ -163,6 +143,26 @@ pdns_dnssec_definitions() ->
                 {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"outpost.example.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
                 {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
               ]},
+            {additional, []}
+          }}
+      }},
+
+    % 0	nxd.example.com.	IN	CNAME	120	nxdomain.example.com.
+    % 0	nxd.example.com.	IN	RRSIG	120	CNAME 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='nxd.example.com.', qtype=ANY
+
+    {cname_to_nxdomain_any_dnssec, {
+        {question, {"nxd.example.com", ?DNS_TYPE_ANY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example.com">>}},
+                {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
             {additional, []}
           }}
       }},
