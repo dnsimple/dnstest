@@ -584,7 +584,17 @@ pdns_dnssec_definitions() ->
          %}}
       %}}
 
+    % This tests determines if multi-segment NSEC records work.
+
+    % 0	hightype.example.com.	IN	NSEC	86400	host-0.example.com. A RRSIG NSEC TYPE65534
+    % 0	hightype.example.com.	IN	RRSIG	86400	NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='hightype.example.com.', qtype=NSEC
+
     % TODO: nsec-bitmap
+
+
     % TODO: nsec-glue-at-delegation
     % TODO: nsec-glur
     % TODO: nsec-middle
