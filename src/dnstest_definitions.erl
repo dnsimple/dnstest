@@ -477,6 +477,29 @@ pdns_dnssec_definitions() ->
           }}
       }}
 
+    % This test tries to resolve a DS question at a secure delegation.
+    % It was written specifically to verify that we do not sign NS records
+    % at secure delegations.
+
+    % 0	dsdelegation.example.com.	IN	DS	120	28129 8 1 caf1eaaecdabe7616670788f9022454bf5fd9fda
+    % 0	dsdelegation.example.com.	IN	RRSIG	120	DS 8 3 120 [expiry] [inception] [keytag] example.com. ...
+    % 2	.	IN	OPT	32768
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='dsdelegation.example.com.', qtype=DS
+
+    %{ds_at_secure_delegation, {
+        %{question, {"dsdelegation.example.com", ?DNS_TYPE_DS}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, []},
+            %{authority, []},
+            %{additional, []}
+          %}}
+      %}}
+
+    % This test tries to resolve a DS question at an unsecure delegation.
+
     % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
     % 1	usa.example.com.	IN	NSEC	86400	*.w1.example.com. NS RRSIG NSEC
@@ -484,8 +507,6 @@ pdns_dnssec_definitions() ->
     % 2	.	IN	OPT	32768
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='usa.example.com.', qtype=DS
-
-    % TODO: ds_at_secure_delegation
 
     %{ds_at_unsecure_delegation, {
         %{question, {"usa.example.com", ?DNS_TYPE_DS}},
