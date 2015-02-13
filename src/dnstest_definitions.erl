@@ -6,6 +6,7 @@
 -include_lib("dns/include/dns.hrl").
 
 -export([definitions/0]).
+-export([pdns_definitions/0, erldns_definitions/0, pdns_dnssec_definitions/0]).
 
 definitions() ->
   pdns_definitions() ++ pdns_dnssec_definitions() ++ erldns_definitions().
