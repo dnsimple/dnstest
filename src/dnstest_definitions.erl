@@ -455,7 +455,7 @@ pdns_dnssec_definitions() ->
             ]},
             {additional, []}
           }}
-      }}
+      }},
 
     % 0	secure-delegated.dnssec-parent.com.	IN	DS	3600	54319 8 2 a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7
     % 0	secure-delegated.dnssec-parent.com.	IN	RRSIG	3600	DS 8 3 3600 [expiry] [inception] [keytag] dnssec-parent.com. ...
@@ -463,19 +463,19 @@ pdns_dnssec_definitions() ->
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='secure-delegated.dnssec-parent.com.', qtype=DS
 
-    %{ds_at_both_sides_dnssec, {
-        %{question, {"0-secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
-        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
-        %{records, {
-            %{answers, [
-                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>}},
-                %{<<"0-secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"dnssec-parent.com">>, signature = ?TEST_REPLACE}}
-              %]},
-            %{authority, []},
-            %{additional, []}
-          %}}
-      %}}
+    {ds_at_both_sides_dnssec, {
+        {question, {"secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = <<160,185,195,140,211,36,24,42,240,239,102,131,13,10,14,133,161,213,137,121,201,131,78,24,200,113,119,158,4,8,87,183>>}},
+                {<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"dnssec-parent.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }}
 
     % 1	example.com.	IN	RRSIG	86400	SOA 8 2 100000 [expiry] [inception] [keytag] example.com. ...
     % 1	example.com.	IN	SOA	86400	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
