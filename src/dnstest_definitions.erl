@@ -469,7 +469,7 @@ pdns_dnssec_definitions() ->
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = <<160,185,195,140,211,36,24,42,240,239,102,131,13,10,14,133,161,213,137,121,201,131,78,24,200,113,119,158,4,8,87,183>>}},
+                {<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = hex_to_bin(<<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>)}},
                 {<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"dnssec-parent.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
