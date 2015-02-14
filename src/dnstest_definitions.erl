@@ -475,7 +475,7 @@ pdns_dnssec_definitions() ->
             {authority, []},
             {additional, []}
           }}
-      }}
+      }},
 
     % This test tries to resolve a DS question at a secure delegation.
     % It was written specifically to verify that we do not sign NS records
@@ -487,16 +487,19 @@ pdns_dnssec_definitions() ->
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='dsdelegation.example.com.', qtype=DS
 
-    %{ds_at_secure_delegation, {
-        %{question, {"dsdelegation.example.com", ?DNS_TYPE_DS}},
-        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
-        %{records, {
-            %{answers, []},
-            %{authority, []},
-            %{additional, []}
-          %}}
-      %}}
+    {ds_at_secure_delegation, {
+        {question, {"dsdelegation.example.com", ?DNS_TYPE_DS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"dsdelegation.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 120, #dns_rrdata_ds{keytag = 28129, alg = 8, digest_type = 1, digest = hex_to_bin(<<"CAF1EAAECDABE7616670788F9022454BF5FD9FDA">>)}},
+                {<<"dsdelegation.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}        
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }}
 
     % This test tries to resolve a DS question at an unsecure delegation.
 
@@ -2408,3 +2411,11 @@ pdns_definitions() ->
 
   ].
 
+hex_to_bin(Bin) when is_binary(Bin) ->
+  Fun = fun(A, B) ->
+            case io_lib:fread("~16u", [A, B]) of
+              {ok, [V], []} -> V;
+              _ -> error(badarg)
+            end
+        end,
+  << <<(Fun(A,B))>> || <<A, B>> <= Bin >>.
