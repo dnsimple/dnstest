@@ -597,7 +597,7 @@ pdns_dnssec_definitions() ->
     % TODO
     
     % Minimal zone (only NS records) Make sure existent hosts without proper type
-    % generates a correct NSEC(3) denial.
+    % generates a correct NSEC denial.
 
     % 1	minimal.com.	IN	NSEC	86400	minimal.com. NS SOA RRSIG NSEC DNSKEY
 
@@ -615,7 +615,7 @@ pdns_dnssec_definitions() ->
       %}}
 
     % Minimal zone (only NS records) Make sure non-existent hosts generates a correct
-    % NSEC(3) denial.
+    % NSEC denial.
 
     % 1	minimal.com.	IN	NSEC	86400	minimal.com. NS SOA RRSIG NSEC DNSKEY
   
