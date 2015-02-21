@@ -2106,10 +2106,88 @@ pdns_definitions() ->
           }}
       }},
 
-    % TODO: root-cname
-    % TODO: root-mx
-    % TODO: root-ns
-    % TODO: root-srv
+    % This test makes sure an CNAME record pointing at the root works
+
+    % 0	toroot.test.com.	IN	CNAME	3600	.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='toroot.test.com.', qtype=CNAME
+
+    {root_cname, {
+        {question, {"toroot.test.com", ?DNS_TYPE_CNAME}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"toroot.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600, #dns_rrdata_cname{dname = <<"">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    % This test makes sure an MX record pointing at the root works
+
+    % 0	test.com.	IN	MX	3600	10 .
+    % 0	test.com.	IN	MX	3600	15 smtp-servers.test.com.
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='test.com.', qtype=MX
+
+    {root_mx, {
+        {question, {"test.com", ?DNS_TYPE_MX}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 3600, #dns_rrdata_mx{exchange = <<"">>, preference = 10}},
+                {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 3600, #dns_rrdata_mx{exchange = <<"smtp-servers.test.com">>, preference = 15}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+
+    % This test makes sure an NS record pointing at the root works
+
+    % 0	wtest.com.	IN	NS	3600	.
+    % 0	wtest.com.	IN	NS	3600	ns1.wtest.com.
+    % 2	ns1.wtest.com.	IN	A	3600	2.3.4.5
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='wtest.com.', qtype=NS
+
+    {root_ns, {
+        {question, {"wtest.com", ?DNS_TYPE_NS}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"">>}},
+                {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{dname = <<"ns1.wtest.com">>}}
+              ]},
+            {authority, []},
+            {additional, [
+                {<<"ns1.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {2,3,4,5}}}
+              ]}
+          }}
+      }},
+
+
+    % This test makes sure an SRV record pointing at the root works
+
+    % 0	_root._tcp.dc.test.com.	IN	SRV	3600	0 0 0 .
+    % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+    % Reply to question for qname='_root._tcp.dc.test.com.', qtype=SRV
+
+    {root_srv, {
+        {question, {"_root._tcp.dc.test.com", ?DNS_TYPE_SRV}},
+        {header,  #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"_root._tcp.dc.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SRV, 3600, #dns_rrdata_srv{priority=0, weight=0, port=0, target= <<"">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+
 
     % 0	server1.test.com.	IN	RP	3600	ahu.ds9a.nl. counter.test.com.
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
