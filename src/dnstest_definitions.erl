@@ -36,7 +36,8 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-          }}}},
+          }}
+      }},
 
     {ns_aaaa_record, {
         {question, {"ns1.example.com", ?DNS_TYPE_AAAA}},
@@ -47,7 +48,8 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-      }}}},
+          }}
+      }},
 
     {cname_case, {
         {question, {"WWW.example.com", ?DNS_TYPE_CNAME}},
@@ -58,7 +60,21 @@ erldns_definitions() ->
               ]},
             {authority, []},
             {additional, []}
-          }}}}
+          }}
+      }},
+
+    {cname_wildcard_cover, {
+       {question, {"www.cover.wtest.com", ?DNS_TYPE_A}},
+       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"www.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600, #dns_rrdata_cname{dname = <<"proxy.cover.wtest.com">>}},
+                {<<"proxy.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {1,2,3,4}}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }}
 
   ].
 
