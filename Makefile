@@ -1,10 +1,17 @@
 all: clean build
 
-build:	
+build:
 	./rebar get-deps
 	./rebar compile
 
-clean:
+fresh:
 	rm -Rf deps
 	./rebar clean
+
+clean:
+	./rebar clean
+
+test:
+	./rebar get-deps
+	./rebar eunit skip_deps=true
 
