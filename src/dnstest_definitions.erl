@@ -10,7 +10,7 @@
 -export([erldns_definitions/0, erldns_dnssec_definitions/0]).
 
 definitions() ->
-  pdns_definitions() ++ erldns_definitions() ++ erldns_dnssec_definitions().
+  pdns_definitions() ++ erldns_definitions().
 
 erldns_definitions() ->
   [
