@@ -6,7 +6,7 @@
 
 start(Type, Args) ->
   lager:info("~p:start(~p, ~p)", [?MODULE, Type, Args]),
-  random:seed(erlang:now()),
+  random:seed(erlang:timestamp()),
   dnstest_sup:start_link().
 
 stop(State) ->
