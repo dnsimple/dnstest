@@ -74,6 +74,18 @@ erldns_definitions() ->
             {authority, []},
             {additional, []}
           }}
+      }},
+
+    {caa_record, {
+        {question, {"caa.example.com", ?DNS_TYPE_CAA}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+            {answers, [
+                {<<"caa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CAA, 3600, #dns_rrdata_caa{flags = 0, tag = <<"issue">>, value = <<"example.net">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
       }}
 
   ].
