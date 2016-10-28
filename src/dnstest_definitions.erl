@@ -1324,36 +1324,8 @@ pdns_definitions() ->
             {answers, [
                 {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}}
               ]},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
+            {authority, []},
+            {additional, []}
           }}
       }},
 
@@ -1395,36 +1367,8 @@ pdns_definitions() ->
             {answers, [
                 {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}}
               ]},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
+            {authority, []},
+            {additional, []}
           }}
       }},
 
@@ -1730,36 +1674,8 @@ pdns_definitions() ->
             {answers, [
                 {<<"external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"somewhere.else.net">>}}
               ]},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
+            {authority, []},
+            {additional, []}
           }}
       }},
      
@@ -2583,39 +2499,11 @@ pdns_definitions() ->
 
    {unknown_domain, {
         {question, {"this.domain.is.not.in.the.server", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {header, #dns_message{rc=?DNS_RCODE_REFUSED, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
         {records, {
             {answers, []},
-            {authority, [
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"a.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"b.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"c.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"d.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"e.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"f.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"g.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"h.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"i.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"j.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"k.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"l.root-servers.net">>}},
-                {<<"">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 518400, #dns_rrdata_ns{dname = <<"m.root-servers.net">>}}
-              ]},
-            {additional, [
-                {<<"a.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,41,0,4}}},
-                {<<"b.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,228,79,201}}},
-                {<<"c.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,33,4,12}}},
-                {<<"d.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,8,10,90}}},
-                {<<"e.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,203,230,10}}},
-                {<<"f.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,5,5,241}}},
-                {<<"g.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,112,36,4}}},
-                {<<"h.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {128,63,2,53}}},
-                {<<"i.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,36,148,17}}},
-                {<<"j.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {192,58,128,30}}},
-                {<<"k.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {193,0,14,129}}},
-                {<<"l.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {198,32,64,12}}},
-                {<<"m.root-servers.net">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600000, #dns_rrdata_a{ip = {202,12,27,33}}}
-              ]}
+            {authority, []},
+            {additional, []}
           }}
       }},
 
