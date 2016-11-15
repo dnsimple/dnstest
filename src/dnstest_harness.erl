@@ -124,8 +124,8 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
 
   case ExpectedRecordsSorted =:= ActualRecordsSorted of
     false ->
-      lager:info("Expected ~p: ~p", [SectionType, ExpectedRecordsSorted]),
-      lager:info("Actual ~p: ~p", [SectionType, ActualRecordsSorted]),
+      lager:info("Expected ~p: ~w", [SectionType, ExpectedRecordsSorted]),
+      lager:info("Actual ~p: ~w", [SectionType, ActualRecordsSorted]),
       false;
     true -> true
   end.
