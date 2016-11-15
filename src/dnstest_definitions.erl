@@ -10,7 +10,7 @@
 -export([erldns_definitions/0, erldns_dnssec_definitions/0]).
 
 definitions() ->
-  pdns_definitions() ++ erldns_definitions().
+  pdns_definitions() ++ erldns_definitions() ++ erldns_dnssec_definitions().
 
 erldns_definitions() ->
   [
@@ -126,13 +126,13 @@ erldns_dnssec_definitions() ->
       }},
 
     {dnssec_cname, {
-        {question, {"www.example.com", ?DNS_TYPE_CNAME}},
+        {question, {"www.example-dnssec.com", ?DNS_TYPE_CNAME}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example.com">>}},
-                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+                {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example-dnssec.com">>}},
+                {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
@@ -140,15 +140,15 @@ erldns_dnssec_definitions() ->
       }},
 
     {dnssec_follow_cname, {
-        {question, {"www.example.com", ?DNS_TYPE_A}},
+        {question, {"www.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example.com">>}},
-                {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}},
-                {<<"outpost.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}},
-                {<<"outpost.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+                {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example-dnssec.com">>}},
+                {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}},
+                {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}},
+                {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
@@ -156,97 +156,97 @@ erldns_dnssec_definitions() ->
       }},
 
     {dnssec_dnskey, {
-        {question, {"example.com", ?DNS_TYPE_DNSKEY}},
+        {question, {"example-dnssec.com", ?DNS_TYPE_DNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-                {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example.com">>, signature = ?TEST_REPLACE}}
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
-          }}
-      }},
-
-    % Ensure the correct NSEC result when the zone is present but the qname is not.
-    {nsec_name, {
-        {question, {"a.minimal.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, [
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.a.minimal.com">>, types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {additional, []}
-          }}
-      }},
-
-    % Ensure the correct NSEC result when the qname matches but the qtype does not.
-    {nsec_type, {
-        {question, {"minimal.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, [
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {additional, []}
-          }}
-      }},
-
-    % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
-    {nsec_name_any, {
-        {question, {"a.minimal.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, []},
-            {authority, [
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.a.minimal.com">>, types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
-              ]},
-            {additional, []}
-          }}
-      }},
-
-     % Ensure the correct NSEC result when the qname matches but the qtype does not.
-    {nsec_type_any, {
-        {question, {"minimal.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
-        {records, {
-            {answers, [
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.example.com">>}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NS, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-                {<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
-               ]},
-            {authority, []},
-            {additional, [
-                {<<"ns1.example.com">>,1,1,120,{dns_rrdata_a,{192,168,1,1}}},
-                {<<"ns1.example.com">>,1,28,120,{dns_rrdata_aaaa,{8193,3512,34211,0,0,35374,880,29492}}},
-                {<<"ns2.example.com">>,1,1,120,{dns_rrdata_a,{192,168,1,2}}}
-              ]}
           }}
       }}
+
+    % Ensure the correct NSEC result when the zone is present but the qname is not.
+    %{nsec_name, {
+        %{question, {"a.minimal.com", ?DNS_TYPE_A}},
+        %{header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, []},
+            %{authority, [
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\000.a.minimal.com">>, types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{additional, []}
+          %}}
+      %}}
+
+    % Ensure the correct NSEC result when the qname matches but the qtype does not.
+    %{nsec_type, {
+        %{question, {"minimal.com", ?DNS_TYPE_A}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, []},
+            %{authority, [
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{additional, []}
+          %}}
+      %}},
+
+    % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
+    %{nsec_name_any, {
+        %{question, {"a.minimal.com", ?DNS_TYPE_ANY}},
+        %{header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, []},
+            %{authority, [
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.a.minimal.com">>, types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"a.minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
+              %]},
+            %{additional, []}
+          %}}
+      %}},
+
+     % Ensure the correct NSEC result when the qname matches but the qtype does not.
+    %{nsec_type_any, {
+        %{question, {"minimal.com", ?DNS_TYPE_ANY}},
+        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        %{options, [{dnssec, true}]},
+        %{records, {
+            %{answers, [
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.example.com">>}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 86400, #dns_rrdata_dnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NS, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\003.minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal.com">>, signature = ?TEST_REPLACE}}
+               %]},
+            %{authority, []},
+            %{additional, [
+                %{<<"ns1.example.com">>,1,1,120,{dns_rrdata_a,{192,168,1,1}}},
+                %{<<"ns1.example.com">>,1,28,120,{dns_rrdata_aaaa,{8193,3512,34211,0,0,35374,880,29492}}},
+                %{<<"ns2.example.com">>,1,1,120,{dns_rrdata_a,{192,168,1,2}}}
+              %]}
+          %}}
+      %}}
   ].
 
 pdns_dnssec_definitions() ->
