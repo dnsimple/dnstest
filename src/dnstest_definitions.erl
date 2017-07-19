@@ -173,7 +173,7 @@ erldns_dnssec_definitions() ->
     % Ensure the correct NSEC result when the zone is present but the qname is not.
     {nsec_name, {
         {question, {"a.minimal-dnssec.com", ?DNS_TYPE_A}},
-        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {options, [{dnssec, true}]},
         {records, {
             {answers, []},
@@ -207,7 +207,7 @@ erldns_dnssec_definitions() ->
     % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
     {nsec_name_any, {
         {question, {"a.minimal-dnssec.com", ?DNS_TYPE_ANY}},
-        {header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {options, [{dnssec, true}]},
         {records, {
             {answers, []},
