@@ -187,6 +187,23 @@ erldns_dnssec_definitions() ->
           }}
       }},
 
+    % Ensure the correct NSEC result when the zone is present but the qname is not.
+    {nsec_name_mixed_case, {
+        {question, {"a.Minimal-dnssec.com", ?DNS_TYPE_A}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, []},
+            {authority, [
+                {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
+                {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal-dnssec.com">>, signature = ?TEST_REPLACE}},
+                {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"\000.a.minimal-dnssec.com">>, types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
+                {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"minimal-dnssec.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {additional, []}
+          }}
+      }},
+
     % Ensure the correct NSEC result when the qname matches but the qtype does not.
     {nsec_type, {
         {question, {"minimal-dnssec.com", ?DNS_TYPE_A}},
