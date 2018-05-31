@@ -1367,11 +1367,9 @@ pdns_definitions() ->
           }}
       }},
 
-    % If we CNAME to another locally-hosted domain, while following the chain,
-    % we should make sure to update the left hand side too, even when hitting
-    % a wildcard.
+    % If we CNAME to another locally-hosted domain, return only the CNAME. Resolvers
+    % will take care of further resolution.
 
-    % 0	bla.something.wtest.com.	IN	A	3600	4.3.2.1
     % 0	semi-external.example.com.	IN	CNAME	120	bla.something.wtest.com.
     % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
     % Reply to question for qname='semi-external.example.com.', qtype=A
@@ -1381,8 +1379,7 @@ pdns_definitions() ->
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         {records, {
             {answers, [
-                {<<"semi-external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"bla.something.wtest.com">>}},
-                {<<"bla.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}}
+                {<<"semi-external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"bla.something.wtest.com">>}}
               ]},
             {authority, []},
             {additional, []}
