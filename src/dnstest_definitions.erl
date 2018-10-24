@@ -155,6 +155,32 @@ erldns_dnssec_definitions() ->
           }}
       }},
 
+    {dnssec_cds, {
+        {question, {"example-dnssec.com", ?DNS_TYPE_CDS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"5248DB0EAE4E829924F19D33B005FBC8C4606058">>}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    {dnssec_cdnskey, {
+        {question, {"example-dnssec.com", ?DNS_TYPE_CDNSKEY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120, #dns_rrdata_cdnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     {dnssec_dnskey, {
         {question, {"example-dnssec.com", ?DNS_TYPE_DNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
