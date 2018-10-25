@@ -174,7 +174,7 @@ erldns_dnssec_definitions() ->
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120, #dns_rrdata_cdnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}}
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120, #dns_rrdata_cdnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
