@@ -161,7 +161,8 @@ erldns_dnssec_definitions() ->
         {options, [{dnssec, true}]},
         {records, {
             {answers, [
-                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"5248DB0EAE4E829924F19D33B005FBC8C4606058">>}}
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{keytag = 54319, alg = 8, digest_type = 2, digest = <<"5248DB0EAE4E829924F19D33B005FBC8C4606058">>}},
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CDNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
               ]},
             {authority, []},
             {additional, []}
