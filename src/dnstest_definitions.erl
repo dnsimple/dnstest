@@ -155,6 +155,34 @@ erldns_dnssec_definitions() ->
           }}
       }},
 
+    {dnssec_cds, {
+        {question, {"example-dnssec.com", ?DNS_TYPE_CDS}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{keytag = 0, alg = 8, digest_type = 2, digest = <<67,21,167,173,9,174,11,235,166,204,49,4,187,205,136,0,14,215,150,136,127,28,77,82,10,58,96,141,113,91,114,202>>}},
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CDS, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = 1479123419, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
+    {dnssec_cdnskey, {
+        {question, {"example-dnssec.com", ?DNS_TYPE_CDNSKEY}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+        {options, [{dnssec, true}]},
+        {records, {
+            {answers, [
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120, #dns_rrdata_cdnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = [14035071367807743739426074910541039401557049548824177782635168692110322779944732953326230489581646087318994485815085,2857869626825671253822589949192942192668066005877554975092236153549535798152277417905867675318438913507841], key_tag = 49016}},
+                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CDNSKEY, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
+              ]},
+            {authority, []},
+            {additional, []}
+          }}
+      }},
+
     {dnssec_dnskey, {
         {question, {"example-dnssec.com", ?DNS_TYPE_DNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
