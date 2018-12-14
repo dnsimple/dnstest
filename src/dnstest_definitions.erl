@@ -14,6 +14,28 @@ definitions() ->
 
 erldns_definitions() ->
   [
+    {ns_zonecut, {
+        {question, {"child.zonecut.withzonecut.com", ?DNS_TYPE_MX}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+           {answers, []},
+           {authority, [
+                {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.cutwithzonecut.com">>}},
+                {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.cutwithzonecut.com">>}}
+             ]},
+           {additional, []}
+          }}}},
+    {ns_zonecut_child_cname, {
+        {question, {"cnamerecord.zonecut.withzonecut.com", ?DNS_TYPE_CNAME}},
+        {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
+        {records, {
+           {answers, []},
+           {authority, [
+                {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.cutwithzonecut.com">>}},
+                {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns2.cutwithzonecut.com">>}}
+             ]},
+           {additional, []}
+          }}}},
     {ns_recursion_breakout, {
         {question, {"rns.example.com", ?DNS_TYPE_NS}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
