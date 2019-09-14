@@ -3,8 +3,8 @@
 -export([start/0, stop/0, run/0, run/1]).
 
 start() ->
-  lager:start(),
-  application:start(dnstest),
+  application:ensure_all_started(dnstest),
+  % application:start(dnstest),
   case init:get_plain_arguments() of
     [] -> run([]);
     Names -> run(Names)

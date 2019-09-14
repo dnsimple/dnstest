@@ -6,6 +6,8 @@
              dnstest_harness]},
   {registered, [dnstest_harness]},
   {mod, { dnstest_app, []}},
-  {applications, [kernel, stdlib]}]}.
+  {applications, [kernel,
+                  stdlib,
+                  lager]}]}.
 
 

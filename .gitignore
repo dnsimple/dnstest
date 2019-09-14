@@ -1,4 +1,4 @@
-deps
-ebin
+_build
+rebar3
 log
 erl_crash.dump

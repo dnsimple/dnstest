@@ -1,17 +1,22 @@
+REBAR:=$(shell which rebar3 || echo ./rebar3)
+REBAR_URL:="https://s3.amazonaws.com/rebar3/rebar3"
+
 all: clean build
 
-build:
-	./rebar get-deps
-	./rebar compile
+$(REBAR):
+	wget $(REBAR_URL) && chmod +x rebar3
 
-fresh:
-	rm -Rf deps
-	./rebar clean
+build: $(REBAR)
+	$(REBAR) get-deps
+	$(REBAR) compile
 
-clean:
-	./rebar clean
+fresh: $(REBAR)
+	rm -Rf _build
 
-test:
-	./rebar get-deps
-	./rebar eunit skip_deps=true
+clean: $(REBAR)
+	$(REBAR) clean
+
+test: $(REBAR)
+	$(REBAR) get-deps
+	$(REBAR) eunit skip_deps=true
 
