@@ -4,7 +4,6 @@
 
 start() ->
   application:ensure_all_started(dnstest),
-  % application:start(dnstest),
   case init:get_plain_arguments() of
     [] -> run([]);
     Names -> run(Names)
