@@ -3,7 +3,7 @@
 -module(dnstest_definitions).
 
 -include("dnstest.hrl").
--include_lib("dns/include/dns.hrl").
+-include_lib("dns_erlang/include/dns.hrl").
 
 -export([definitions/0]).
 -export([pdns_definitions/0, pdns_dnssec_definitions/0]).

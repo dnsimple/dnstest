@@ -1,18 +1,12 @@
 {"1.1.0",
-[{<<"base32">>,
-  {git,"https://github.com/dnsimple/base32_erlang.git",
-       {ref,"8b1ebce8895662b05970f481c9ce1a9f44add50b"}},
-  1},
- {<<"dns">>,
-  {git,"git://github.com/dnsimple/dns_erlang.git",
-       {ref,"f637bf991af01a46d80f5250a1cc19a37cc4ccd6"}},
-  0},
+[{<<"base32">>,{pkg,<<"base32">>,<<"0.1.0">>},1},
+ {<<"dns_erlang">>,{pkg,<<"dns_erlang">>,<<"1.0.0">>},0},
  {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.9">>},1},
- {<<"lager">>,
-  {git,"git://github.com/erlang-lager/lager.git",
-       {ref,"f26a8ea0f4c2ed6506a54e0b9890edd8148b9500"}},
-  0}]}.
+ {<<"lager">>,{pkg,<<"lager">>,<<"3.8.0">>},0}]}.
 [
 {pkg_hash,[
- {<<"goldrush">>, <<"F06E5D5F1277DA5C413E84D5A2924174182FB108DABB39D5EC548B27424CD106">>}]}
+ {<<"base32">>, <<"044F6DC95709727CA2176F3E97A41DDAA76B5BC690D3536908618C0CB32616A2">>},
+ {<<"dns_erlang">>, <<"3849B0A65F16FDA40BA734CF12CA259966FB2CB6E7F6C17F486716EEB724CDC0">>},
+ {<<"goldrush">>, <<"F06E5D5F1277DA5C413E84D5A2924174182FB108DABB39D5EC548B27424CD106">>},
+ {<<"lager">>, <<"3402B9A7E473680CA179FC2F1D827CAB88DD37DD1E6113090C6F45EF05228A1C">>}]}
 ].
