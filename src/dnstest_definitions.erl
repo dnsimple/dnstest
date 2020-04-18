@@ -147,6 +147,34 @@ erldns_dnssec_definitions() ->
         }}
      }},
 
+   {dnssec_a, {
+      {question, {"outpost.example-dnssec.com", ?DNS_TYPE_A}},
+      {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+      {additional, [#dns_optrr{dnssec=true}]},
+      {records, {
+         {answers, [
+                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}},
+                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
+                   ]},
+         {authority, []},
+         {additional, []}
+        }}
+     }},
+
+   {dnssec_a_with_udp_payload_size, {
+      {question, {"outpost.example-dnssec.com", ?DNS_TYPE_A}},
+      {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
+      {additional, [#dns_optrr{udp_payload_size=1230, dnssec=true}]},
+      {records, {
+         {answers, [
+                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,2,1}}},
+                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = ?TEST_REPLACE, inception = ?TEST_REPLACE, key_tag = ?TEST_REPLACE, signers_name = <<"example-dnssec.com">>, signature = ?TEST_REPLACE}}
+                   ]},
+         {authority, []},
+         {additional, []}
+        }}
+     }},
+
    {dnssec_cname, {
       {question, {"www.example-dnssec.com", ?DNS_TYPE_CNAME}},
       {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
