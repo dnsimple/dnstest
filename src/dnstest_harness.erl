@@ -85,17 +85,17 @@ run([{Name, Conditions}|Rest], Names, TestResults) ->
   end.
 
 run_test(Name, {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {records, ExpectedRecords}}) ->
-  run_test(Name, {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {options, []}, {records, ExpectedRecords}});
+  run_test(Name, {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {additional, []}, {records, ExpectedRecords}});
 run_test(Name, Conditions) ->
   lager:info("Running test ~p", [Name]),
 
-  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {options, Options}, {records, ExpectedRecords}} = Conditions,
+  {{question, {Qname, Qtype}}, {header, ExpectedHeader}, {additional, Additional}, {records, ExpectedRecords}} = Conditions,
   {{answers, ExpectedAnswers}, {authority, ExpectedAuthority}, {additional, ExpectedAdditional}} = ExpectedRecords,
 
   lager:debug("Sending to host ~p and port ~p", [host(), port()]),
 
   % Run the test
-  {ok, Response} = measure(Name, send_request, [Qname, Qtype, Options]),
+  {ok, Response} = measure(Name, send_request, [Qname, Qtype, Additional]),
   lager:debug("Response: ~p", [Response]),
 
   % Check the results
@@ -108,12 +108,8 @@ run_test(Name, Conditions) ->
 
   [{Name, Results}].
 
-send_request(Qname, Qtype, Options) ->
-  Questions = [#dns_query{name=Qname, type=Qtype}],
-  Additional = case proplists:get_bool(dnssec, Options) of
-                 true -> [#dns_optrr{dnssec=true}];
-                 false -> []
-               end,
+send_request(Qname, Qtype, Additional) ->
+  Questions = [#dns_query{name=Qname, type=Qtype}], 
   Message = #dns_message{rd = false, qc=1, adc=1, questions=Questions, additional=Additional},
   send_udp_query(Message, host(), port()).
 

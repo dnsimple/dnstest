@@ -117,7 +117,7 @@ erldns_dnssec_definitions() ->
     {dnssec_soa, {
         {question, {"minimal-dnssec.com", ?DNS_TYPE_SOA}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -131,7 +131,7 @@ erldns_dnssec_definitions() ->
     {dnssec_ns, {
         {question, {"minimal-dnssec.com", ?DNS_TYPE_NS}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
@@ -150,7 +150,7 @@ erldns_dnssec_definitions() ->
     {dnssec_cname, {
         {question, {"www.example-dnssec.com", ?DNS_TYPE_CNAME}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example-dnssec.com">>}},
@@ -164,7 +164,7 @@ erldns_dnssec_definitions() ->
     {dnssec_follow_cname, {
         {question, {"www.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"outpost.example-dnssec.com">>}},
@@ -180,7 +180,7 @@ erldns_dnssec_definitions() ->
     {dnssec_cds, {
         {question, {"example-dnssec.com", ?DNS_TYPE_CDS}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{keytag = 0, alg = 8, digest_type = 2, digest = <<67,21,167,173,9,174,11,235,166,204,49,4,187,205,136,0,14,215,150,136,127,28,77,82,10,58,96,141,113,91,114,202>>}},
@@ -194,7 +194,7 @@ erldns_dnssec_definitions() ->
     {dnssec_cdnskey, {
         {question, {"example-dnssec.com", ?DNS_TYPE_CDNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120, #dns_rrdata_cdnskey{flags = 256, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = [14035071367807743739426074910541039401557049548824177782635168692110322779944732953326230489581646087318994485815085,2857869626825671253822589949192942192668066005877554975092236153549535798152277417905867675318438913507841], key_tag = 49016}},
@@ -208,7 +208,7 @@ erldns_dnssec_definitions() ->
     {dnssec_dnskey, {
         {question, {"example-dnssec.com", ?DNS_TYPE_DNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
@@ -224,7 +224,7 @@ erldns_dnssec_definitions() ->
     {nsec_name, {
         {question, {"a.minimal-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, []},
             {authority, [
@@ -241,7 +241,7 @@ erldns_dnssec_definitions() ->
     {nsec_name_mixed_case, {
         {question, {"a.Minimal-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, []},
             {authority, [
@@ -258,7 +258,7 @@ erldns_dnssec_definitions() ->
     {nsec_type, {
         {question, {"minimal-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, []},
             {authority, [
@@ -275,7 +275,7 @@ erldns_dnssec_definitions() ->
     {nsec_name_any, {
         {question, {"a.minimal-dnssec.com", ?DNS_TYPE_ANY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, []},
             {authority, [
@@ -292,7 +292,7 @@ erldns_dnssec_definitions() ->
      {nsec_type_any, {
         {question, {"minimal-dnssec.com", ?DNS_TYPE_ANY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{dname = <<"ns1.example.com">>}},
@@ -316,7 +316,7 @@ erldns_dnssec_definitions() ->
       {cname_to_nxdomain_dnssec, {
         {question, {"nxd.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example-dnssec.com">>}},
@@ -335,7 +335,7 @@ erldns_dnssec_definitions() ->
      {cname_wildcard_chain_dnssec, {
         {question, {"start.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example-dnssec.com">>}},
@@ -372,7 +372,7 @@ pdns_dnssec_definitions() ->
     %{any_nxdomain_dnssec, {
         %{question, {"nxdomain.example-dnssec.com", ?DNS_TYPE_ANY}},
         %{header, #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, []},
             %{authority, [
@@ -397,7 +397,7 @@ pdns_dnssec_definitions() ->
     %{any_wildcard_dnssec, {
         %{question, {"www.something.wtest-dnssec.com", ?DNS_TYPE_ANY}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, [
                 %{<<"www.something.wtest-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}},
@@ -426,7 +426,7 @@ pdns_dnssec_definitions() ->
     %{cname_to_nxdomain_dnssec, {
         %{question, {"nxd.example-dnssec.com", ?DNS_TYPE_A}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, [
                 %{<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example-dnssec.com">>}},
@@ -453,7 +453,7 @@ pdns_dnssec_definitions() ->
     {cname_to_nxdomain_any_dnssec, {
         {question, {"nxd.example-dnssec.com", ?DNS_TYPE_ANY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example-dnssec.com">>}},
@@ -473,7 +473,7 @@ pdns_dnssec_definitions() ->
     {cname_to_unauth_any_dnssec, {
         {question, {"unauth.example-dnssec.com", ?DNS_TYPE_ANY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
@@ -493,7 +493,7 @@ pdns_dnssec_definitions() ->
     {cname_to_unauth_dnssec, {
         {question, {"unauth.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"no-idea.example.org">>}},
@@ -533,7 +533,7 @@ pdns_dnssec_definitions() ->
     %{cname_wildcard_chain_dnssec, {
         %{question, {"start.example-dnssec.com", ?DNS_TYPE_A}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, [
                 %{<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example-dnssec.com">>}},
@@ -575,7 +575,7 @@ pdns_dnssec_definitions() ->
     {direct_dnskey_dnssec, {
         {question, {"example-dnssec.com", ?DNS_TYPE_DNSKEY}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
            {answers, [
                {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120, #dns_rrdata_dnskey{flags = 257, protocol = 3, alg = ?DNS_ALG_RSASHA256, public_key = ?TEST_REPLACE, key_tag = ?TEST_REPLACE}},
@@ -595,7 +595,7 @@ pdns_dnssec_definitions() ->
     {direct_rrsig, {
         {question, {"example-dnssec.com", ?DNS_TYPE_RRSIG}},
         {header, #dns_message{rc=?DNS_RCODE_REFUSED, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, []},
             {authority, []},
@@ -612,7 +612,7 @@ pdns_dnssec_definitions() ->
     {double_dnssec, {
         {question, {"double.example-dnssec.com", ?DNS_TYPE_A}},
         {header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        {options, [{dnssec, true}]},
+        {additional, [#dns_optrr{dnssec=true}]},
         {records, {
             {answers, [
                 {<<"double.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,5,1}}},
@@ -634,7 +634,7 @@ pdns_dnssec_definitions() ->
     %{ds_at_apex_noerror_dnssec, {
         %{question, {"example-dnssec.com", ?DNS_TYPE_DS}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, []},
             %{authority, [
@@ -656,7 +656,7 @@ pdns_dnssec_definitions() ->
     %{ds_at_both_sides_dnssec, {
         %{question, {"secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, [
                 %{<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = hex_to_bin(<<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>)}},
@@ -680,7 +680,7 @@ pdns_dnssec_definitions() ->
     %{ds_at_secure_delegation, {
         %{question, {"dsdelegation.example-dnssec.com", ?DNS_TYPE_DS}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, [
                 %{<<"dsdelegation.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 120, #dns_rrdata_ds{keytag = 28129, alg = 8, digest_type = 1, digest = hex_to_bin(<<"CAF1EAAECDABE7616670788F9022454BF5FD9FDA">>)}},
@@ -704,7 +704,7 @@ pdns_dnssec_definitions() ->
     %{ds_at_unsecure_delegation, {
         %{question, {"usa.example.com", ?DNS_TYPE_DS}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, []},
             %{authority, [
@@ -728,7 +728,7 @@ pdns_dnssec_definitions() ->
     %{ds_at_unsecure_zone_cut, {
         %{question, {"delegated.dnssec-parent.com", ?DNS_TYPE_DS}},
         %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %{options, [{dnssec, true}]},
+        %{additional, [#dns_optrr{dnssec=true}]},
         %{records, {
             %{answers, []},
             %{authority, [
@@ -758,7 +758,7 @@ pdns_dnssec_definitions() ->
     %{ent_any_dnssec, {
        %{question, {"c.test-dnssec.com", ?DNS_TYPE_ANY}},
        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-       %{options, [{dnssec, true}]},
+       %{additional, [#dns_optrr{dnssec=true}]},
        %{records, {
           %{answers, []},
           %{authority, [
@@ -779,7 +779,7 @@ pdns_dnssec_definitions() ->
     %{minimal_noerror, {
        %{question, {<<"minimal.com">>, ?DNS_TYPE_TXT}},
        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-       %{options, [{dnssec, true}]},
+       %{additional, [#dns_optrr{dnssec=true}]},
        %{records, {
           %{answers, [
               %{<<"mimimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -799,7 +799,7 @@ pdns_dnssec_definitions() ->
      %{minimal_nxdomain, {
        %{question, {<<"a.minimal.com">>, ?DNS_TYPE_A}},
        %{header, #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
-       %{options, [{dnssec, true}]},
+       %{additional, [#dns_optrr{dnssec=true}]},
        %{records, {
           %{answers, [
               %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}}
