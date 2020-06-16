@@ -6,7 +6,6 @@ Regression tests taken from the PowerDNS 3 regression test suite and converted t
 
 ### The entire suite
 
-
 ```bash
 run.sh
 ```
