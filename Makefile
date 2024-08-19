@@ -16,5 +16,5 @@ clean: $(REBAR)
 	$(REBAR) clean
 
 test: $(REBAR)
+	$(REBAR) dialyzer
 	$(REBAR) eunit skip_deps=true
-
