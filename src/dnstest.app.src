@@ -1,13 +1,16 @@
-{application, dnstest,
- [{description, "Conformance tests for DNS servers"},
-  {vsn, git},
-  {modules, [dnstest,
-             dnstest_app,
-             dnstest_harness]},
-  {registered, [dnstest_harness]},
-  {mod, { dnstest_app, []}},
-  {applications, [kernel,
-                  stdlib,
-                  lager]}]}.
-
-
+{application, dnstest, [
+    {description, "Conformance tests for DNS servers"},
+    {vsn, git},
+    {modules, [
+        dnstest,
+        dnstest_app,
+        dnstest_harness
+    ]},
+    {registered, [dnstest_harness]},
+    {mod, {dnstest_app, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        lager
+    ]}
+]}.
