@@ -16,5 +16,8 @@ clean: $(REBAR)
 	$(REBAR) clean
 
 test: $(REBAR)
+	$(REBAR) fmt --check
 	$(REBAR) eunit skip_deps=true
 
+format: $(REBAR)
+	$(REBAR) fmt
