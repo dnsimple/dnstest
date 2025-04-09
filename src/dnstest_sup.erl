@@ -1,5 +1,6 @@
 -module(dnstest_sup).
--behavior(supervisor).
+-behaviour(supervisor).
+-include_lib("kernel/include/logger.hrl").
 
 % API
 -export([start_link/0]).
@@ -10,13 +11,30 @@
 -define(SUPERVISOR, ?MODULE).
 
 %% Public API
+-spec start_link() -> supervisor:startlink_ret().
 start_link() ->
-    supervisor:start_link({local, ?SUPERVISOR}, ?MODULE, []).
+    supervisor:start_link({local, ?SUPERVISOR}, ?MODULE, noargs).
 
-init(_Args) ->
-    lager:info("Supervisor is starting procs"),
+-spec init(noargs) -> {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}}.
+init(_) ->
+    Strategy = #{strategy => one_for_one, intensity => 5, period => 10},
+    ?LOG_INFO("Supervisor is starting procs"),
     Procs = [
-        {dnstest_harness, {dnstest_harness, start_link, []}, permanent, 5000, worker, [dnstest_harness]},
-        {dnstest_metrics, {dnstest_metrics, start_link, []}, permanent, 5000, worker, [dnstest_metrics]}
+        #{
+            id => dnstest_harness,
+            start => {dnstest_harness, start_link, []},
+            restart => permanent,
+            shutdown => 5000,
+            type => worker,
+            modules => [dnstest_harness]
+        },
+        #{
+            id => dnstest_metrics,
+            start => {dnstest_metrics, start_link, []},
+            restart => permanent,
+            shutdown => 5000,
+            type => worker,
+            modules => [dnstest_metrics]
+        }
     ],
-    {ok, {{one_for_one, 5, 10}, Procs}}.
+    {ok, {Strategy, Procs}}.
