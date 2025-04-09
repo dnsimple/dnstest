@@ -1,4 +1,6 @@
-_build
+_build/
+_checkouts/
+doc/
 rebar3
 log
 erl_crash.dump
