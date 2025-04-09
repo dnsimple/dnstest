@@ -165,7 +165,7 @@ do_run_test(Name, #{
     end.
 
 measure(Name, FunctionName, Args) when is_list(Args) ->
-    {T, R} = timer:tc(?MODULE, FunctionName, Args),
+    {T, R} = timer:tc(?MODULE, FunctionName, Args, microsecond),
     dnstest_metrics:insert(Name, T),
     {T, R}.
 
