@@ -41,12 +41,12 @@ start_link() ->
     ?LOG_INFO("Starting ~p process", [?MODULE]),
     gen_server:start_link({local, ?SERVER}, ?MODULE, noargs, []).
 
--spec run([dnstest:definition()]) -> [{dnstest:name(), integer(), result()}].
+-spec run([dnstest:definition()]) -> [dnstest_harness:return()].
 run(Definitions) ->
     gen_server:call(?SERVER, {run, Definitions}, infinity).
 
 -spec run([dnstest:definition()], [dnstest:name()]) ->
-    [{dnstest:name(), integer(), result()}].
+    [dnstest_harness:return()].
 run(Definitions, Names) ->
     gen_server:call(?SERVER, {run, Definitions, Names}, infinity).
 

@@ -22,8 +22,8 @@
 start() ->
     {ok, _} = application:ensure_all_started(dnstest),
     Args = init:get_plain_arguments(),
-    _ = run(Args),
-    ok.
+    TestResults = run(Args),
+    dnstest_reporter:validate(TestResults).
 
 -spec stop() -> ok | {error, term()}.
 stop() ->
