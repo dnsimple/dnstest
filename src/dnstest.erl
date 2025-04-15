@@ -18,7 +18,7 @@
 }.
 -export_type([name/0, definition/0]).
 
--spec start() -> ok.
+-spec start() -> no_return().
 start() ->
     {ok, _} = application:ensure_all_started(dnstest),
     Args = init:get_plain_arguments(),
@@ -29,11 +29,11 @@ start() ->
 stop() ->
     application:stop(dnstest).
 
--spec run() -> [{name(), integer(), dnstest_harness:result()}].
+-spec run() -> [dnstest_harness:return()].
 run() ->
     run([]).
 
--spec run([string()]) -> [{name(), integer(), dnstest_harness:result()}].
+-spec run([string()]) -> [dnstest_harness:return()].
 run([]) ->
     dnstest_metrics:start(),
     ?LOG_INFO("Running all tests (#~p)", [dnstest_metrics:run_number()]),
