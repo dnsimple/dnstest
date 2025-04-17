@@ -120,6 +120,7 @@
                 "ttl": 120,
                 "data": {
                     "keytype": 28129,
+                    "keytag": 0,
                     "alg": 8,
                     "digest_type": 1,
                     "digest": "caf1eaaecdabe7616670788f9022454bf5fd9fda"
@@ -458,642 +459,637 @@
                     "preference": 25
                 }
             },
-            
-            
-            
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.1"}
-  },
 
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.2"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.3"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.4"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.5"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.6"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.7"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.8"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.9"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.10"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.11"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.12"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.13"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.14"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.15"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.16"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.17"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.18"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.19"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.20"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.21"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.22"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.23"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.24"}
-  },
-
-  {
-  "name": "toomuchinfo-a.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.25"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.26"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.27"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.28"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.29"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.30"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.31"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.32"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.33"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.34"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.35"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.36"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.37"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.38"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.39"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.40"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.41"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.42"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.43"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.44"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.45"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.46"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.47"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.48"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.49"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.50"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.51"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.52"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.53"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.54"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.55"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.56"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.57"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.58"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.59"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.60"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.61"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.62"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.63"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.64"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.65"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.66"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.67"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.68"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.69"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.70"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.71"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.72"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.73"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.74"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.75"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.76"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.77"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.78"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.79"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.80"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.81"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.82"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.83"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.84"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.85"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.86"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.87"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.88"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.89"}
-  },
-
-  {
-  "name": "toomuchinfo-b.example.com",
-  "type": "A",
-  "ttl": 120,
-  "data": {"ip": "192.168.99.90"}
-  },
 
 
             {
-                "comment": "Insert all of the hosts here"
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.1"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.2"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.3"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.4"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.5"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.6"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.7"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.8"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.9"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.10"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.11"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.12"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.13"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.14"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.15"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.16"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.17"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.18"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.19"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.20"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.21"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.22"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.23"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.24"}
+            },
+
+            {
+                "name": "toomuchinfo-a.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.25"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.26"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.27"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.28"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.29"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.30"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.31"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.32"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.33"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.34"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.35"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.36"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.37"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.38"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.39"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.40"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.41"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.42"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.43"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.44"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.45"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.46"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.47"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.48"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.49"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.50"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.51"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.52"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.53"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.54"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.55"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.56"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.57"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.58"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.59"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.60"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.61"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.62"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.63"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.64"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.65"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.66"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.67"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.68"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.69"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.70"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.71"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.72"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.73"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.74"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.75"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.76"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.77"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.78"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.79"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.80"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.81"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.82"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.83"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.84"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.85"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.86"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.87"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.88"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.89"}
+            },
+
+            {
+                "name": "toomuchinfo-b.example.com",
+                "type": "A",
+                "ttl": 120,
+                "data": {"ip": "192.168.99.90"}
             },
             {
                 "name": "double.example.com",
@@ -1177,7 +1173,7 @@
                 "type": "CNAME",
                 "ttl": 3600,
                 "data": {
-                    "ip": "server1.test.com"
+                    "dname": "server1.test.com"
                 }
             },
             {
@@ -1421,7 +1417,7 @@
                 "type": "CNAME",
                 "ttl": 3600,
                 "data": {
-                    "ip": "server.wtest.com"
+                    "dname": "server.wtest.com"
                 }
             },
             {
@@ -1430,7 +1426,7 @@
                 "ttl": 3600,
                 "data": {
                     "exchange": "smtp-servers.wtest.com",
-                    "server.wtest.com": 10
+                    "preference": 10
                 }
             },
             {
@@ -1516,4 +1512,3 @@
         ]
     }
 ]
-

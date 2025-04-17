@@ -1,1 +1,0 @@
--define(TEST_REPLACE, dnstest_replace).
