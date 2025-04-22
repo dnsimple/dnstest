@@ -18,15 +18,15 @@ erldns_definitions() ->
     [
         {ns_zonecut, #{
             question => {"child.zonecut.withzonecut.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
@@ -40,15 +40,15 @@ erldns_definitions() ->
 
         {ns_zonecut_child_cname, #{
             question => {"cnamerecord.zonecut.withzonecut.com", ?DNS_TYPE_CNAME},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
@@ -61,15 +61,15 @@ erldns_definitions() ->
         }},
         {ns_recursion_breakout, #{
             question => {"rns.example.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -86,15 +86,15 @@ erldns_definitions() ->
 
         {ns_a_record, #{
             question => {"ns1.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
                         ip = {192, 168, 1, 1}
@@ -107,15 +107,15 @@ erldns_definitions() ->
 
         {ns_aaaa_record, #{
             question => {"ns1.example.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{
                         ip = {8193, 3512, 34211, 0, 0, 35374, 880, 29492}
@@ -128,15 +128,15 @@ erldns_definitions() ->
 
         {cname_case, #{
             question => {"WWW.example.com", ?DNS_TYPE_CNAME},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"WWW.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{
                         dname = <<"outpost.example.com">>
@@ -149,15 +149,15 @@ erldns_definitions() ->
 
         {cname_wildcard_cover, #{
             question => {"www.cover.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
                         #dns_rrdata_cname{
@@ -174,15 +174,15 @@ erldns_definitions() ->
 
         {caa_record, #{
             question => {"caa.example.com", ?DNS_TYPE_CAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"caa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CAA, 3600, #dns_rrdata_caa{
                         flags = 0, tag = <<"issue">>, value = <<"example.net">>
@@ -199,16 +199,16 @@ erldns_dnssec_definitions() ->
     [
         {dnssec_soa, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_SOA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
@@ -239,16 +239,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_ns, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
                         dname = <<"ns1.example.com">>
@@ -282,16 +282,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_a, #{
             question => {"outpost.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
                         #dns_rrdata_a{ip = {192, 168, 2, 1}}},
@@ -315,16 +315,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_a_with_udp_payload_size, #{
             question => {"outpost.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{udp_payload_size = 1230, dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
                         #dns_rrdata_a{ip = {192, 168, 2, 1}}},
@@ -348,16 +348,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_cname, #{
             question => {"www.example-dnssec.com", ?DNS_TYPE_CNAME},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -383,16 +383,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_follow_cname, #{
             question => {"www.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -432,16 +432,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_cds, #{
             question => {"example-dnssec.com", ?DNS_TYPE_CDS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{
                         keytag = 0,
@@ -472,16 +472,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_cdnskey, #{
             question => {"example-dnssec.com", ?DNS_TYPE_CDNSKEY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120,
                         #dns_rrdata_cdnskey{
@@ -514,16 +514,16 @@ erldns_dnssec_definitions() ->
 
         {dnssec_dnskey, #{
             question => {"example-dnssec.com", ?DNS_TYPE_DNSKEY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
                         #dns_rrdata_dnskey{
@@ -562,16 +562,16 @@ erldns_dnssec_definitions() ->
         % Ensure the correct NSEC result when the zone is present but the qname is not.
         {nsec_name, #{
             question => {"a.minimal-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
@@ -620,16 +620,16 @@ erldns_dnssec_definitions() ->
         % Ensure the correct NSEC result when the zone is present but the qname is not.
         {nsec_name_mixed_case, #{
             question => {"a.Minimal-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
@@ -678,16 +678,16 @@ erldns_dnssec_definitions() ->
         % Ensure the correct NSEC result when the qname matches but the qtype does not.
         {nsec_type, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
@@ -742,16 +742,16 @@ erldns_dnssec_definitions() ->
         % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
         {nsec_name_any, #{
             question => {"a.minimal-dnssec.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
@@ -800,16 +800,16 @@ erldns_dnssec_definitions() ->
         % Ensure the correct NSEC result when the qname matches but the qtype does not.
         {nsec_type_any, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
                         dname = <<"ns1.example.com">>
@@ -893,16 +893,16 @@ erldns_dnssec_definitions() ->
         % Verify NSEC RR Type bitmap is correct
         {nsec_rr_type_bitmap_wildcard, #{
             question => {"nosuch.wildcard-aaaa.example-dnssec.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -949,16 +949,16 @@ erldns_dnssec_definitions() ->
         }},
         {cname_to_nxdomain_dnssec, #{
             question => {"nxd.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -1005,19 +1005,19 @@ erldns_dnssec_definitions() ->
         }},
 
         % Ensure wildcard chaining with DNSSEC works.
-        % In erldns the wildcard matched records are signed on the fly.
+        % In erldns the wildcard matched response are signed on the fly.
         {cname_wildcard_chain_dnssec, #{
             question => {"start.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -1137,7 +1137,7 @@ pdns_dnssec_definitions() ->
         %question => {"nxdomain.example-dnssec.com", ?DNS_TYPE_ANY}},
         %header => #dns_message{rc=?DNS_RCODE_NXDOMAIN, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -1162,7 +1162,7 @@ pdns_dnssec_definitions() ->
         %question => {"www.something.wtest-dnssec.com", ?DNS_TYPE_ANY}},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"www.something.wtest-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{ip = {4,3,2,1}}},
         %{<<"www.something.wtest-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"wtest-dnssec.com">>, signature = 0}}
@@ -1191,7 +1191,7 @@ pdns_dnssec_definitions() ->
         %question => {"nxd.example-dnssec.com", ?DNS_TYPE_A}},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"nxdomain.example-dnssec.com">>}},
         %{<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}}
@@ -1216,16 +1216,16 @@ pdns_dnssec_definitions() ->
 
         {cname_to_nxdomain_any_dnssec, #{
             question => {"nxd.example-dnssec.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -1257,16 +1257,16 @@ pdns_dnssec_definitions() ->
 
         {cname_to_unauth_any_dnssec, #{
             question => {"unauth.example-dnssec.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -1298,16 +1298,16 @@ pdns_dnssec_definitions() ->
 
         {cname_to_unauth_dnssec, #{
             question => {"unauth.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -1361,7 +1361,7 @@ pdns_dnssec_definitions() ->
         %question => {"start.example-dnssec.com", ?DNS_TYPE_A},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example-dnssec.com">>}},
         %{<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
@@ -1401,16 +1401,16 @@ pdns_dnssec_definitions() ->
 
         {direct_dnskey_dnssec, #{
             question => {"example-dnssec.com", ?DNS_TYPE_DNSKEY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
                         #dns_rrdata_dnskey{
@@ -1453,16 +1453,16 @@ pdns_dnssec_definitions() ->
 
         {direct_rrsig, #{
             question => {"example-dnssec.com", ?DNS_TYPE_RRSIG},
-            header => #dns_message{
-                rc = ?DNS_RCODE_REFUSED,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_REFUSED,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [],
                 additional => []
@@ -1477,16 +1477,16 @@ pdns_dnssec_definitions() ->
 
         {double_dnssec, #{
             question => {"double.example-dnssec.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
             additional => [#dns_optrr{dnssec = true}],
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"double.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
                         #dns_rrdata_a{ip = {192, 168, 5, 1}}},
@@ -1520,7 +1520,7 @@ pdns_dnssec_definitions() ->
         %question => {"example-dnssec.com", ?DNS_TYPE_DS},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example-dnssec.com">>, rname = <<"ahu.example-dnssec.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -1542,7 +1542,7 @@ pdns_dnssec_definitions() ->
         %question => {"secure-delegated.dnssec-parent.com", ?DNS_TYPE_DS},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 3600, #dns_rrdata_ds{keytag = 54319, alg = 8, digest_type = 2, digest = hex_to_bin(<<"a0b9c38cd324182af0ef66830d0a0e85a1d58979c9834e18c871779e040857b7">>)}},
         %{<<"secure-delegated.dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 3600, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"dnssec-parent.com">>, signature = 0}}
@@ -1553,7 +1553,7 @@ pdns_dnssec_definitions() ->
         %}},
 
         % This test tries to resolve a DS question at a secure delegation.
-        % It was written specifically to verify that we do not sign NS records
+        % It was written specifically to verify that we do not sign NS response
         % at secure delegations.
 
         % 0  dsdelegation.example.com.  IN  DS  120  28129 8 1 caf1eaaecdabe7616670788f9022454bf5fd9fda
@@ -1566,7 +1566,7 @@ pdns_dnssec_definitions() ->
         %question => {"dsdelegation.example-dnssec.com", ?DNS_TYPE_DS},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"dsdelegation.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DS, 120, #dns_rrdata_ds{keytag = 28129, alg = 8, digest_type = 1, digest = hex_to_bin(<<"CAF1EAAECDABE7616670788F9022454BF5FD9FDA">>)}},
         %{<<"dsdelegation.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_DS, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"example.com">>, signature = 0}}
@@ -1590,7 +1590,7 @@ pdns_dnssec_definitions() ->
         %question => {"usa.example.com", ?DNS_TYPE_DS},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -1614,7 +1614,7 @@ pdns_dnssec_definitions() ->
         %question => {"delegated.dnssec-parent.com", ?DNS_TYPE_DS},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"dnssec-parent.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -1643,7 +1643,7 @@ pdns_dnssec_definitions() ->
         %question => {"c.test-dnssec.com", ?DNS_TYPE_ANY},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"test-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test-dnssec.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
@@ -1655,7 +1655,7 @@ pdns_dnssec_definitions() ->
         %}}
         %}}
 
-        % Minimal zone (only NS records) Make sure existent hosts without proper type
+        % Minimal zone (only NS response) Make sure existent hosts without proper type
         % generates a correct NSEC denial.
 
         % 1  minimal.com.  IN  NSEC  86400  minimal.com. NS SOA RRSIG NSEC DNSKEY
@@ -1664,7 +1664,7 @@ pdns_dnssec_definitions() ->
         %question => {<<"minimal.com">>, ?DNS_TYPE_TXT},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"mimimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}},
         %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_SOA, alg = ?DNS_ALG_RSASHA256, labels = 2, original_ttl = 3600, expiration = 0, inception = 0, key_tag = 0, signers_name = <<"minimal.com">>, signature = 0}},
@@ -1675,7 +1675,7 @@ pdns_dnssec_definitions() ->
         %}}
         %}}
 
-        % Minimal zone (only NS records) Make sure non-existent hosts generates a correct
+        % Minimal zone (only NS response) Make sure non-existent hosts generates a correct
         % NSEC denial.
 
         % 1  minimal.com.  IN  NSEC  86400  minimal.com. NS SOA RRSIG NSEC DNSKEY
@@ -1684,7 +1684,7 @@ pdns_dnssec_definitions() ->
         %question => {<<"a.minimal.com">>, ?DNS_TYPE_A},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=false, oc=?DNS_OPCODE_QUERY}},
         %additional => [#dns_optrr{dnssec=true}]},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"minimal.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"minimal.com">>, types = [?DNS_TYPE_NS, ?DNS_TYPE_SOA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_DNSKEY]}}
         %]},
@@ -1693,7 +1693,7 @@ pdns_dnssec_definitions() ->
         %}}
         %}}
 
-        % This tests determines if multi-segment NSEC records work.
+        % This tests determines if multi-segment NSEC response work.
 
         % 0  hightype.example.com.  IN  NSEC  86400  host-0.example.com. A RRSIG NSEC TYPE65534
         % 0  hightype.example.com.  IN  RRSIG  86400  NSEC 8 3 86400 [expiry] [inception] [keytag] example.com. ...
@@ -1735,15 +1735,15 @@ pdns_definitions() ->
 
         {'8_bit_txt', #{
             question => {"aland.test.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"aland.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600, #dns_rrdata_txt{
                         txt = [<<"\\195\\133LAND ISLANDS">>]
@@ -1761,15 +1761,15 @@ pdns_definitions() ->
 
         {any_nxdomain, #{
             question => {"nxdomain.example.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NXDOMAIN,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NXDOMAIN,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -1803,15 +1803,15 @@ pdns_definitions() ->
 
         {any_query, #{
             question => {"example.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
                         preference = 10, exchange = <<"smtp-servers.example.com">>
@@ -1866,15 +1866,15 @@ pdns_definitions() ->
 
         {any_wildcard, #{
             question => {"www.something.wtest.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
                         ip = {4, 3, 2, 1}
@@ -1894,15 +1894,15 @@ pdns_definitions() ->
 
         {apex_level_a_but_no_a, #{
             question => {"test.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
@@ -1927,15 +1927,15 @@ pdns_definitions() ->
 
         {apex_level_a, #{
             question => {"wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
                         ip = {9, 9, 9, 9}
@@ -1956,15 +1956,15 @@ pdns_definitions() ->
 
         {apex_level_ns, #{
             question => {"test.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
                         dname = <<"ns1.test.com">>
@@ -1991,15 +1991,15 @@ pdns_definitions() ->
 
         {basic_a_resolution, #{
             question => {"outpost.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"outpost.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
                         ip = {192, 168, 2, 1}
@@ -2016,15 +2016,15 @@ pdns_definitions() ->
 
         {basic_aaaa_resolution, #{
             question => {"ipv6.example.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"ipv6.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120, #dns_rrdata_aaaa{
                         ip = {8193, 1704, 0, 1, 528, 19455, 65099, 19553}
@@ -2041,15 +2041,15 @@ pdns_definitions() ->
 
         {basic_hinfo, #{
             question => {"hwinfo.example.com", ?DNS_TYPE_HINFO},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"hwinfo.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_HINFO, 120,
                         #dns_rrdata_hinfo{cpu = <<"abc">>, os = <<"def">>}}
@@ -2069,7 +2069,7 @@ pdns_definitions() ->
         %{basic_loc, {
         %question => {"location.example.com", ?DNS_TYPE_LOC},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %records => #{
+        %response => #{
         %answers => [
         %{<<"location.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_LOC, 120, #dns_rrdata_loc{lat="51 56 0.123 N", lon="5 54 0.000 E", alt="4.00", size="1.00", horiz="10000.00", vert="10.00"}}
         %]},
@@ -2088,15 +2088,15 @@ pdns_definitions() ->
 
         {basic_ns_resolution, #{
             question => {"example.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
                         dname = <<"ns1.example.com">>
@@ -2126,15 +2126,15 @@ pdns_definitions() ->
 
         {basic_soa_resolution, #{
             question => {"example.com", ?DNS_TYPE_SOA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
@@ -2157,15 +2157,15 @@ pdns_definitions() ->
 
         {basic_srv_resolution, #{
             question => {"_ldap._tcp.dc.test.com", ?DNS_TYPE_SRV},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"_ldap._tcp.dc.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SRV, 3600,
                         #dns_rrdata_srv{
@@ -2186,15 +2186,15 @@ pdns_definitions() ->
 
         {basic_txt_resolution, #{
             question => {"text.example.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"text.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120, #dns_rrdata_txt{
                         txt = [<<"Hi, this is some text">>]
@@ -2215,15 +2215,15 @@ pdns_definitions() ->
 
         {cname_and_wildcard_at_root, #{
             question => {"secure.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
@@ -2251,15 +2251,15 @@ pdns_definitions() ->
 
         {cname_and_wildcard_but_no_correct_type, #{
             question => {"yo.test.test.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"yo.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
                         #dns_rrdata_cname{dname = <<"server1.test.com">>}}
@@ -2290,15 +2290,15 @@ pdns_definitions() ->
 
         {cname_and_wildcard, #{
             question => {"www.test.test.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
@@ -2326,15 +2326,15 @@ pdns_definitions() ->
 
         {cname_but_no_correct_type, #{
             question => {"www.example.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{
                         dname = <<"outpost.example.com">>
@@ -2363,15 +2363,15 @@ pdns_definitions() ->
 
         {cname_loop_breakout, #{
             question => {"loop1.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_SERVFAIL,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_SERVFAIL,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"loop1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"loop2.example.com">>}},
@@ -2394,15 +2394,15 @@ pdns_definitions() ->
 
         {cname_to_nxdomain_any, #{
             question => {"nxd.example.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{
                         dname = <<"nxdomain.example.com">>
@@ -2423,15 +2423,15 @@ pdns_definitions() ->
 
         {cname_to_nxdomain, #{
             question => {"nxd.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"nxd.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{
                         dname = <<"nxdomain.example.com">>
@@ -2460,15 +2460,15 @@ pdns_definitions() ->
 
         {cname_to_referral, #{
             question => {"server1.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"server1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -2520,15 +2520,15 @@ pdns_definitions() ->
 
         {cname_to_unauth_any, #{
             question => {"unauth.example.com", ?DNS_TYPE_ANY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"no-idea.example.org">>}}
@@ -2571,15 +2571,15 @@ pdns_definitions() ->
 
         {cname_to_unauth, #{
             question => {"unauth.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"unauth.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"no-idea.example.org">>}}
@@ -2603,15 +2603,15 @@ pdns_definitions() ->
 
         {cname_wildcard_chain, #{
             question => {"start.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"x.y.z.w1.example.com">>}},
@@ -2641,15 +2641,15 @@ pdns_definitions() ->
 
         {cross_domain_cname_to_wildcard, #{
             question => {"semi-external.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"semi-external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
@@ -2668,15 +2668,15 @@ pdns_definitions() ->
 
         {direct_dnskey, #{
             question => {"example.com", ?DNS_TYPE_DNSKEY},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -2699,15 +2699,15 @@ pdns_definitions() ->
 
         {direct_wildcard, #{
             question => {"www.something.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
                         ip = {4, 3, 2, 1}
@@ -2726,15 +2726,15 @@ pdns_definitions() ->
 
         {double_srv, #{
             question => {"_double._tcp.dc.test.com", ?DNS_TYPE_SRV},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"_double._tcp.dc.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SRV, 3600,
                         #dns_rrdata_srv{
@@ -2757,15 +2757,15 @@ pdns_definitions() ->
 
         {double, #{
             question => {"double.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"double.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
                         ip = {192, 168, 5, 1}
@@ -2783,15 +2783,15 @@ pdns_definitions() ->
 
         {ds_at_apex_noerror, #{
             question => {"example.com", ?DNS_TYPE_DS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -2816,7 +2816,7 @@ pdns_definitions() ->
         %{ent_any, {
         %question => {"c.test.com", ?DNS_TYPE_ANY},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
@@ -2835,7 +2835,7 @@ pdns_definitions() ->
         %{ent_asterisk, {
         %question => {"sub.host.sub.example.com", ?DNS_TYPE_A},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
@@ -2853,15 +2853,15 @@ pdns_definitions() ->
 
         {ent_rr_enclosed_in_ent, #{
             question => {"b.c.test.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
@@ -2886,7 +2886,7 @@ pdns_definitions() ->
         %{ent_soa, {
         %question => {"c.test.com", ?DNS_TYPE_SOA},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
@@ -2902,15 +2902,15 @@ pdns_definitions() ->
 
         {ent_wildcard_below_ent, #{
             question => {"something.a.b.c.test.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"something.a.b.c.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
                         #dns_rrdata_a{ip = {8, 7, 6, 5}}}
@@ -2928,7 +2928,7 @@ pdns_definitions() ->
         %{ent, {
         %question => {"c.test.com", ?DNS_TYPE_A},
         %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %records => #{
+        %response => #{
         %answers => []},
         %authority => [
         %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
@@ -2937,7 +2937,7 @@ pdns_definitions() ->
         %}}
         %}},
 
-        % 4 TXT records with 0 to 3 backslashes before a semicolon.
+        % 4 TXT response with 0 to 3 backslashes before a semicolon.
 
         % 0  text0.example.com.  IN  TXT  120  "k=rsa; p=one"
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
@@ -2945,15 +2945,15 @@ pdns_definitions() ->
 
         {escaped_txt_1, #{
             question => {"text0.example.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"text0.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120, #dns_rrdata_txt{
                         txt = [<<"k=rsa; p=one">>]
@@ -3000,15 +3000,15 @@ pdns_definitions() ->
 
         {external_cname_pointer, #{
             question => {"external.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"somewhere.else.net">>}}
@@ -3028,15 +3028,15 @@ pdns_definitions() ->
 
         {five_levels_wildcard_one_below_apex, #{
             question => {"www.a.b.c.d.e.something.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.a.b.c.d.e.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
                         #dns_rrdata_a{ip = {4, 3, 2, 1}}}
@@ -3056,15 +3056,15 @@ pdns_definitions() ->
 
         {five_levels_wildcard, #{
             question => {"www.a.b.c.d.e.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.a.b.c.d.e.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
                         ip = {6, 7, 8, 9}
@@ -3086,15 +3086,15 @@ pdns_definitions() ->
 
         {glue_record, #{
             question => {"usa-ns2.usa.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -3115,9 +3115,9 @@ pdns_definitions() ->
             }
         }},
 
-        % When something.example.com is delegated to NS records that reside *within*
+        % When something.example.com is delegated to NS response that reside *within*
         % something.example.com, glue is needed. The IP addresses of the relevant NS
-        % records should then be provided in the additional section.
+        % response should then be provided in the additional section.
 
         % 1  usa.example.com.  IN  NS  120  usa-ns1.usa.example.com.
         % 1  usa.example.com.  IN  NS  120  usa-ns2.usa.example.com.
@@ -3128,15 +3128,15 @@ pdns_definitions() ->
 
         {glue_referral, #{
             question => {"www.usa.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -3166,15 +3166,15 @@ pdns_definitions() ->
 
         {internal_referral, #{
             question => {"www.italy.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"italy.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -3197,15 +3197,15 @@ pdns_definitions() ->
 
         {internal_referral_glue, #{
             question => {"italy-ns1.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"italy-ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
                         ip = {192, 168, 5, 1}
@@ -3229,15 +3229,15 @@ pdns_definitions() ->
                     "test.com",
                     ?DNS_TYPE_TXT
                 },
-            header => #dns_message{
-                rc = ?DNS_RCODE_NXDOMAIN,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NXDOMAIN,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
@@ -3263,15 +3263,15 @@ pdns_definitions() ->
 
         {multi_step_cname_resolution, #{
             question => {"start1.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"start1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"start2.example.com">>}},
@@ -3294,15 +3294,15 @@ pdns_definitions() ->
 
         {multi_txt_escape_resolution, #{
             question => {"escapedtext.example.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"escapedtext.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120,
                         #dns_rrdata_txt{
@@ -3320,15 +3320,15 @@ pdns_definitions() ->
 
         {multi_txt_resolution, #{
             question => {"multitext.example.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"multitext.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 120,
                         #dns_rrdata_txt{
@@ -3340,9 +3340,9 @@ pdns_definitions() ->
             }
         }},
 
-        % Example.com has two MX records, one of which is out-of-bailiwick and should
+        % Example.com has two MX response, one of which is out-of-bailiwick and should
         % not receive additional processing. The other is internal to the zone and has
-        % three A records, which should all be in the additional section. For
+        % three A response, which should all be in the additional section. For
         % additional difficulty, the question contains an odd CaSe.
 
         % 0  exAmplE.com.  IN  MX  120  10 smtp-servers.exAmplE.com.
@@ -3355,15 +3355,15 @@ pdns_definitions() ->
 
         {mx_case_sensitivity_with_ap, #{
             question => {"exAmplE.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"exAmplE.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
                         exchange = <<"smtp-servers.exAmplE.com">>, preference = 10
@@ -3387,7 +3387,7 @@ pdns_definitions() ->
             }
         }},
 
-        % MX records cannot point to CNAMEs, according to the RFC. Yet when this
+        % MX response cannot point to CNAMEs, according to the RFC. Yet when this
         % happens, a nameserver should not fall over, but let the mailserver process
         % the CNAME further (all do, even qmail).
 
@@ -3397,15 +3397,15 @@ pdns_definitions() ->
 
         {mx_to_cname, #{
             question => {"mail.example.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"mail.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
                         exchange = <<"smtp1.example.com">>, preference = 25
@@ -3426,15 +3426,15 @@ pdns_definitions() ->
 
         {mx_with_simple_additional_processing, #{
             question => {"example.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
                         exchange = <<"smtp-servers.example.com">>, preference = 10
@@ -3464,15 +3464,15 @@ pdns_definitions() ->
 
         {naptr, #{
             question => {"enum.test.com", ?DNS_TYPE_NAPTR},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"enum.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NAPTR, 3600, #dns_rrdata_naptr{
                         order = 100,
@@ -3494,15 +3494,15 @@ pdns_definitions() ->
 
         {non_existing_record_other_types_exist_ns, #{
             question => {"ns2.example.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -3525,15 +3525,15 @@ pdns_definitions() ->
 
         {non_existing_record_other_types_exist, #{
             question => {"outpost.example.com", ?DNS_TYPE_AAAA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -3561,15 +3561,15 @@ pdns_definitions() ->
 
         {ns_at_delegation, #{
             question => {"usa.example.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"usa.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -3597,15 +3597,15 @@ pdns_definitions() ->
 
         {ns_with_identical_glue, #{
             question => {"blah.test.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"blah.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
@@ -3626,15 +3626,15 @@ pdns_definitions() ->
 
         {nx_domain_for_unknown_record, #{
             question => {"no-such-host.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NXDOMAIN,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NXDOMAIN,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
@@ -3660,15 +3660,15 @@ pdns_definitions() ->
 
         {obscured_wildcard, #{
             question => {"www.a.something.wtest.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NXDOMAIN,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NXDOMAIN,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
@@ -3692,15 +3692,15 @@ pdns_definitions() ->
 
         {one_step_cname_resolution, #{
             question => {"www.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"www.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{
                         dname = <<"outpost.example.com">>
@@ -3721,15 +3721,15 @@ pdns_definitions() ->
 
         {out_of_baliwick_referral, #{
             question => {"www.france.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -3776,15 +3776,15 @@ pdns_definitions() ->
 
         {pretty_big_packet, #{
             question => {"toomuchinfo-a.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
                         #dns_rrdata_a{ip = {192, 168, 99, 1}}},
@@ -3850,15 +3850,15 @@ pdns_definitions() ->
 
         {root_cname, #{
             question => {"toroot.test.com", ?DNS_TYPE_CNAME},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"toroot.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600, #dns_rrdata_cname{
                         dname = <<"">>
@@ -3878,15 +3878,15 @@ pdns_definitions() ->
 
         {root_mx, #{
             question => {"test.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 3600, #dns_rrdata_mx{
                         exchange = <<"">>, preference = 10
@@ -3910,15 +3910,15 @@ pdns_definitions() ->
 
         {root_ns, #{
             question => {"wtest.com", ?DNS_TYPE_NS},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
                         dname = <<"">>
@@ -3944,15 +3944,15 @@ pdns_definitions() ->
 
         {root_srv, #{
             question => {"_root._tcp.dc.test.com", ?DNS_TYPE_SRV},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"_root._tcp.dc.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SRV, 3600,
                         #dns_rrdata_srv{
@@ -3971,15 +3971,15 @@ pdns_definitions() ->
         % NOTE: The RP record in not supported by erldns at the moment.
         % {rp, #{
         %     question => {"server1.test.com", ?DNS_TYPE_RP},
-        %     header => #dns_message{
-        %         rc = ?DNS_RCODE_NOERROR,
-        %         rd = false,
-        %         qr = true,
-        %         tc = false,
-        %         aa = true,
-        %         oc = ?DNS_OPCODE_QUERY
-        %     },
-        %     records => #{
+        %     response => #{
+        %         header => #dns_message{
+        %             rc = ?DNS_RCODE_NOERROR,
+        %             rd = false,
+        %             qr = true,
+        %             tc = false,
+        %             aa = true,
+        %             oc = ?DNS_OPCODE_QUERY
+        %         },
         %         answers => [
         %             {<<"server1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RP, 3600, #dns_rrdata_rp{
         %                 mbox = <<"ahu.ds9a.nl">>, txt = <<"counter.test.com">>
@@ -4000,15 +4000,15 @@ pdns_definitions() ->
 
         {same_level_referral_soa, #{
             question => {"france.example.com", ?DNS_TYPE_SOA},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -4029,15 +4029,15 @@ pdns_definitions() ->
 
         {same_level_referral, #{
             question => {"france.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"france.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
@@ -4087,15 +4087,15 @@ pdns_definitions() ->
 
         {too_big_for_udp_query_no_truncate_additional, #{
             question => {"together-too-much.example.com", ?DNS_TYPE_MX},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"together-too-much.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120,
                         #dns_rrdata_mx{
@@ -4108,9 +4108,8 @@ pdns_definitions() ->
                 ],
                 authority => [],
                 additional => [
-                    % In our case we just don't send any additionals if the packet is too large, since it is a performance
-                    % enhancement only.
-
+                    % In our case we just don't send any additionals if the packet is too large,
+                    % since it is a performance enhancement only.
                     %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,1}}},
                     %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,2}}},
                     %{<<"toomuchinfo-a.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {192,168,99,3}}},
@@ -4172,75 +4171,16 @@ pdns_definitions() ->
 
         {too_big_for_udp_query, #{
             question => {"toomuchinfo-b.example.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = true,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
-                answers => [
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 26}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 27}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 28}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 29}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 30}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 31}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 32}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 33}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 34}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 35}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 36}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 37}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 38}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 39}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 40}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 41}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 42}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 43}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 44}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 45}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 46}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 47}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 48}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 49}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 50}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 51}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 52}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 53}}},
-                    {<<"toomuchinfo-b.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 99, 54}}}
-                ],
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = true,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
                 authority => [],
                 additional => []
             }
@@ -4280,15 +4220,15 @@ pdns_definitions() ->
 
         {unknown_domain, #{
             question => {"this.domain.is.not.in.the.server", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_REFUSED,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_REFUSED,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [],
                 additional => []
@@ -4304,15 +4244,15 @@ pdns_definitions() ->
 
         {very_long_text, #{
             question => {"very-long-txt.test.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [
                     {<<"very-long-txt.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600,
                         #dns_rrdata_txt{
@@ -4337,15 +4277,15 @@ pdns_definitions() ->
 
         {wildcard_overlaps_delegation, #{
             question => {"www.sub.test.test.com", ?DNS_TYPE_A},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = false,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = false,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"sub.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
@@ -4362,15 +4302,15 @@ pdns_definitions() ->
 
         {wrong_type_wildcard, #{
             question => {"www.something.wtest.com", ?DNS_TYPE_TXT},
-            header => #dns_message{
-                rc = ?DNS_RCODE_NOERROR,
-                rd = false,
-                qr = true,
-                tc = false,
-                aa = true,
-                oc = ?DNS_OPCODE_QUERY
-            },
-            records => #{
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
                 answers => [],
                 authority => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
