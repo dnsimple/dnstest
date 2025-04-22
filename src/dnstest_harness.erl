@@ -116,8 +116,8 @@ run_test({Name, Cond}) when is_map(Cond) ->
 
 do_run_test(Name, #{
     question := {Qname, Qtype},
-    header := ExpectedHeader,
-    records := #{
+    response := #{
+        header := ExpectedHeader,
         answers := ExpectedAnswers,
         authority := ExpectedAuthority,
         additional := ExpectedAdditional
