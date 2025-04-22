@@ -169,13 +169,13 @@ measure(Name, FunctionName, Args) when is_list(Args) ->
     dnstest_metrics:insert(Name, T),
     {T, R}.
 
--spec send_request(binary(), char(), [[dns:rr()] | dns:optrr() | dns:rr()]) ->
+-spec send_request(binary(), char(), dns:additional()) ->
     {ok, {dns:decode_error(), dns:message() | undefined, binary()} | dns:message()}
     | {error, {atom(), {server, {_, _}}}}.
 send_request(Qname, Qtype, Additional) ->
     Questions = [#dns_query{name = Qname, type = Qtype}],
     Message = #dns_message{
-        rd = false, qc = 1, adc = 1, questions = Questions, additional = Additional
+        rd = false, qc = 1, adc = length(Additional), questions = Questions, additional = Additional
     },
     send_udp_query(Message, host(), port()).
 
