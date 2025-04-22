@@ -7,13 +7,18 @@
 -export([start/0, stop/0, run/0, run/1]).
 
 -type name() :: atom() | string().
+-type response() :: {dns:dname(), dns:class(), dns:type(), dns:ttl(), dns:rrdata()}.
 -type definition() :: {
     atom(),
     #{
-        question := _,
-        header := _,
-        records := #{answers := _, authority := _, additional := _},
-        additional => _
+        question := {string() | binary(), dns:type()},
+        additional => [dns:optrr()],
+        response := #{
+            header := dns:message(),
+            answers := [response()],
+            authority := [response()],
+            additional := [response()]
+        }
     }
 }.
 -export_type([name/0, definition/0]).
