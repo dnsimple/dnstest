@@ -626,13 +626,13 @@ erldns_dnssec_definitions() ->
                     rc = ?DNS_RCODE_NOERROR,
                     rd = false,
                     qr = true,
-                    tc = false,
+                    tc = true,
                     aa = true,
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [],
                 authority => [
-                    {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -641,34 +641,36 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
+                            original_ttl = 3600,
+                            expiration = 20250701022432,
+                            inception = 20250402022432,
+                            key_tag = 27123,
                             signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
+                            signature =
+                                <<"ZwhobjkUbO2gLHv8nnYMJbM80+wTxYagnP26e5WIDg9L9rtd4FfWfuXE e7YA6LXP3g4Fo/VRujbk3KVgVLj3sRbc2WRnlP+yef8l6rG4q5IjuocB WBliUTV1mUjaOL2EGmuix65cxP7UK2WCUcTFVvEB8u22vnc4tr5nrnc5 Ljw=">>
                         }},
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
-                            next_dname = <<"\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                            next_dname = <<"\\000.a.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_AAAA]
                         }},
-                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
+                            original_ttl = 300,
+                            expiration = 20250701022432,
+                            inception = 20250402022432,
+                            key_tag = 27123,
                             signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
+                            signature =
+                                <<"b/ki+sptUkfNm2RzJi40PS01nslxNZUQokKq666sqOW3ARslmkUvTW7X j8f3OK2k9FbE17Z2E81Bp2LMzihATFZiPBdnKl9dggzK9q+RLAm+Ok17 7QLWrLWSGiubc0hS9Lt8LNBGIXLYUSMmEQkF/YeLbMkx2MtzVs9qLkJ+ Vfo=">>
                         }}
                 ],
                 additional => []

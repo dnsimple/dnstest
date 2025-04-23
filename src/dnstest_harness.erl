@@ -114,16 +114,20 @@ run_test({Name, Cond}) when is_map(Cond) ->
             #{name => Name, result => {error, {C, E, S}}}
     end.
 
-do_run_test(Name, #{
-    question := {Qname, Qtype},
-    response := #{
-        header := ExpectedHeader,
-        answers := ExpectedAnswers,
-        authority := ExpectedAuthority,
-        additional := ExpectedAdditional
-    } = Condition
-}) ->
-    Additional = maps:get(additional, Condition, []),
+do_run_test(
+    Name,
+    #{
+        question := {Qname, Qtype},
+        response := #{
+            header := ExpectedHeader,
+            answers := ExpectedAnswers,
+            authority := ExpectedAuthority,
+            additional := ExpectedAdditional
+        }
+    } = TestDefinitionMap
+) ->
+    Additional = maps:get(additional, TestDefinitionMap, []),
+    % Log the additional section directory to STDOUT not using the logger
     ?LOG_INFO("Running test ~p", [Name]),
     % Run the test
     {Time, Result} = measure(Name, send_request, [Qname, Qtype, Additional]),
@@ -132,8 +136,23 @@ do_run_test(Name, #{
             ?LOG_DEBUG("Response: ~p", [Response]),
             % Check the results
             QHeader = test_header(ExpectedHeader, Response),
+            % Log the header directory to STDOUT not using the logger
+            % io:format("id: ~p rc: ~p rd: ~p qr: ~p tc: ~p~n", [
+            %     Response#dns_message.id,
+            %     Response#dns_message.rc,
+            %     Response#dns_message.rd,
+            %     Response#dns_message.qr,
+            %     Response#dns_message.tc
+            % ]),
+            % io:format("(~p) Header: ~p~n", [Name, Response]),
+
             QAnswers = test_records(ExpectedAnswers, Response#dns_message.answers, answers),
             QAuthority = test_records(ExpectedAuthority, Response#dns_message.authority, authority),
+            % Log the authority section directory to STDOUT not using the logger
+            % io:format("(~p) Authority: ~p~n", [Name, Response#dns_message.authority]),
+            % % Log the authoritative expected value to STDOUT not using the logger
+            % io:format("(~p) Expected Authority: ~p~n", [Name, ExpectedAuthority]),
+
             QAdditional = test_records(
                 ExpectedAdditional, Response#dns_message.additional, additional
             ),
@@ -188,14 +207,121 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
         lists:map(fill_data_function(ActualRecordsSorted), ExpectedRecords)
     ),
 
-    case ExpectedRecordsSorted =:= ActualRecordsSorted of
-        false ->
-            ?LOG_INFO("Expected ~p: ~w", [SectionType, ExpectedRecordsSorted]),
-            ?LOG_INFO("Actual ~p: ~w", [SectionType, ActualRecordsSorted]),
-            false;
+    case length(ExpectedRecordsSorted) =/= length(ActualRecordsSorted) of
         true ->
-            true
+            ?LOG_INFO("Record count mismatch in ~p section.", [SectionType]),
+            ?LOG_INFO("Expected (~p): ~p", [length(ExpectedRecordsSorted), ExpectedRecordsSorted]),
+            ?LOG_INFO("Actual   (~p): ~p", [length(ActualRecordsSorted), ActualRecordsSorted]),
+            false;
+        false ->
+            ZippedRecords = lists:zip(ExpectedRecordsSorted, ActualRecordsSorted),
+            lists:foldl(
+                fun({Expected, Actual}, Acc) ->
+                    case Expected =:= Actual of
+                        true ->
+                            % Continue if they match
+                            Acc;
+                        false ->
+                            % Log detailed differences
+                            compare_record_fields(Expected, Actual, SectionType),
+                            % Mismatch found, overall result is false
+                            false
+                    end
+                end,
+                % Initial accumulator value (true means no mismatch found yet)
+                true,
+                ZippedRecords
+            )
     end.
+
+% Helper to compare fields of mismatched record tuples
+compare_record_fields(
+    {NameE, ClassE, TypeE, TTLE, DataE}, {NameA, ClassA, TypeA, TTLA, DataA}, SectionType
+) ->
+    ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
+    ?LOG_INFO("  Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
+    ?LOG_INFO("  Full Actual:   ~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
+    if
+        NameE =/= NameA ->
+            ?LOG_INFO("    Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
+        true ->
+            ok
+    end,
+    if
+        ClassE =/= ClassA ->
+            ?LOG_INFO("    Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
+        true ->
+            ok
+    end,
+    if
+        TypeE =/= TypeA ->
+            ?LOG_INFO("    Field 'Type' mismatch: Expected ~p, Actual ~p", [TypeE, TypeA]);
+        true ->
+            ok
+    end,
+    if
+        TTLE =/= TTLA ->
+            ?LOG_INFO("    Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
+        true ->
+            ok
+    end,
+    if
+        DataE =/= DataA ->
+            ?LOG_INFO("    Field 'Data' mismatch: Expected ~p, Actual ~p", [DataE, DataA]),
+            % Add specific formatting for known binary-containing types
+            % Check TypeE first, assuming Type mismatch was already caught if they differ.
+            case TypeE of
+                ?DNS_TYPE_RRSIG when
+                    is_record(DataE, dns_rrdata_rrsig), is_record(DataA, dns_rrdata_rrsig)
+                ->
+                    SigE = binary_to_list(base16:encode(DataE#dns_rrdata_rrsig.signature)),
+                    SigA = binary_to_list(base16:encode(DataA#dns_rrdata_rrsig.signature)),
+                    if
+                        SigE =/= SigA ->
+                            ?LOG_INFO("      RRSIG Signature Hex: Expected ~s, Actual ~s", [
+                                SigE, SigA
+                            ]);
+                        true ->
+                            ok
+                    end;
+                ?DNS_TYPE_NSEC when
+                    is_record(DataE, dns_rrdata_nsec), is_record(DataA, dns_rrdata_nsec)
+                ->
+                    MapE = binary_to_list(base16:encode(DataE#dns_rrdata_nsec.types)),
+                    MapA = binary_to_list(base16:encode(DataA#dns_rrdata_nsec.types)),
+                    if
+                        MapE =/= MapA ->
+                            ?LOG_INFO("      NSEC Type Bit Maps Hex: Expected ~s, Actual ~s", [
+                                MapE, MapA
+                            ]);
+                        true ->
+                            ok
+                    end;
+                ?DNS_TYPE_TXT when
+                    is_record(DataE, dns_rrdata_txt), is_record(DataA, dns_rrdata_txt)
+                ->
+                    TxtE = lists:map(
+                        fun(Bin) -> binary_to_list(base16:encode(Bin)) end, DataE#dns_rrdata_txt.txt
+                    ),
+                    TxtA = lists:map(
+                        fun(Bin) -> binary_to_list(base16:encode(Bin)) end, DataA#dns_rrdata_txt.txt
+                    ),
+                    if
+                        TxtE =/= TxtA ->
+                            ?LOG_INFO("      TXT Text Hex List: Expected ~p, Actual ~p", [
+                                TxtE, TxtA
+                            ]);
+                        true ->
+                            ok
+                    end;
+                _ ->
+                    % No special hex formatting needed for other types' data fields
+                    ok
+            end;
+        true ->
+            ok
+    end,
+    ok.
 
 % Test expected header values against actual header values.
 test_header(ExpectedHeader, Response) ->
