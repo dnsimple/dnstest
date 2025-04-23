@@ -36,7 +36,7 @@
 
 % Helper function to convert padding to string
 padding_to_string(Pad) when is_integer(Pad) ->
-    lists:duplicate(Pad, $ );
+    lists:duplicate(Pad, $\s);
 padding_to_string(Pad) when is_list(Pad) ->
     Pad.
 
@@ -247,9 +247,13 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
     end.
 
 % Helper to compare fields of mismatched record tuples
--spec compare_record_fields(dns:rr(), dns:rr(), section()) -> ok.
+-spec compare_record_fields(
+    {dns:dname(), dns:class(), dns:type(), dns:ttl(), dns:rrdata()},
+    {dns:dname(), dns:class(), dns:type(), dns:ttl(), dns:rrdata()},
+    section()
+) -> ok.
 compare_record_fields(
-    {NameE, TypeE, ClassE, TTLE, DataE}, {NameA, TypeA, ClassA, TTLA, DataA}, SectionType
+    {NameE, ClassE, TypeE, TTLE, DataE}, {NameA, ClassA, TypeA, TTLA, DataA}, SectionType
 ) ->
     ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
     ?LOG_INFO_PAD(2, "Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
@@ -268,7 +272,11 @@ compare_record_fields(
     end,
     if
         TypeE =/= TypeA ->
-            ?LOG_INFO_PAD(4, "Field 'Type' mismatch: Expected ~p, Actual ~p", [TypeE, TypeA]);
+            ?LOG_INFO_PAD(
+                4,
+                "Field 'Type' mismatch: Expected ~p (~s), Actual ~p (~s)",
+                [TypeE, dns:type_name(TypeE), TypeA, dns:type_name(TypeA)]
+            );
         true ->
             ok
     end,
