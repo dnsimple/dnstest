@@ -5,3 +5,4 @@ doc/
 rebar3
 log
 erl_crash.dump
+rebarconfig.json
