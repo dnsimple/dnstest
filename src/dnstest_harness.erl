@@ -36,9 +36,7 @@
 
 % Helper function to convert padding to string
 padding_to_string(Pad) when is_integer(Pad) ->
-    lists:duplicate(Pad, $\s);
-padding_to_string(Pad) when is_list(Pad) ->
-    Pad.
+    lists:duplicate(Pad, $\s).
 
 % Public API
 
@@ -223,7 +221,7 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
         true ->
             ?LOG_INFO("Record count mismatch in ~p section.", [SectionType]),
             ?LOG_INFO("Expected (~p): ~p", [length(ExpectedRecordsSorted), ExpectedRecordsSorted]),
-            ?LOG_INFO("Actual   (~p): ~p", [length(ActualRecordsSorted), ActualRecordsSorted]),
+            ?LOG_INFO("Actual\s\s\s(~p): ~p", [length(ActualRecordsSorted), ActualRecordsSorted]),
             false;
         false ->
             ZippedRecords = lists:zip(ExpectedRecordsSorted, ActualRecordsSorted),
@@ -258,20 +256,20 @@ compare_record_fields(
     ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
     ?LOG_INFO_PAD(2, "Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
     ?LOG_INFO_PAD(2, "Full Actual:\s\s\s~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
-    if
-        NameE =/= NameA ->
+    case NameE =:= NameA of
+        false ->
             ?LOG_INFO_PAD(4, "Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
         true ->
             ok
     end,
-    if
-        ClassE =/= ClassA ->
+    case ClassE =:= ClassA of
+        false ->
             ?LOG_INFO_PAD(4, "Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
         true ->
             ok
     end,
-    if
-        TypeE =/= TypeA ->
+    case TypeE =:= TypeA of
+        false ->
             ?LOG_INFO_PAD(
                 4,
                 "Field 'Type' mismatch: Expected ~p (~s), Actual ~p (~s)",
@@ -280,14 +278,14 @@ compare_record_fields(
         true ->
             ok
     end,
-    if
-        TTLE =/= TTLA ->
+    case TTLE =:= TTLA of
+        false ->
             ?LOG_INFO_PAD(4, "Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
         true ->
             ok
     end,
-    if
-        DataE =/= DataA ->
+    case DataE =:= DataA of
+        false ->
             ?LOG_INFO_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [DataE, DataA]),
             % Add specific formatting for known binary-containing types
             % Check TypeE first, assuming Type mismatch was already caught if they differ.
@@ -295,10 +293,10 @@ compare_record_fields(
                 ?DNS_TYPE_RRSIG when
                     is_record(DataE, dns_rrdata_rrsig), is_record(DataA, dns_rrdata_rrsig)
                 ->
-                    SigE = binary_to_list(base16:encode(DataE#dns_rrdata_rrsig.signature)),
-                    SigA = binary_to_list(base16:encode(DataA#dns_rrdata_rrsig.signature)),
-                    if
-                        SigE =/= SigA ->
+                    SigE = binary_to_list(DataE#dns_rrdata_rrsig.signature),
+                    SigA = binary_to_list(DataA#dns_rrdata_rrsig.signature),
+                    case SigE =:= SigA of
+                        false ->
                             ?LOG_INFO_PAD(6, "RRSIG Signature Hex: Expected ~s, Actual ~s", [
                                 SigE, SigA
                             ]);
@@ -308,11 +306,11 @@ compare_record_fields(
                 ?DNS_TYPE_NSEC when
                     is_record(DataE, dns_rrdata_nsec), is_record(DataA, dns_rrdata_nsec)
                 ->
-                    MapE = binary_to_list(base16:encode(DataE#dns_rrdata_nsec.types)),
-                    MapA = binary_to_list(base16:encode(DataA#dns_rrdata_nsec.types)),
-                    if
-                        MapE =/= MapA ->
-                            ?LOG_INFO_PAD(6, "NSEC Type Bit Maps Hex: Expected ~s, Actual ~s", [
+                    MapE = DataE#dns_rrdata_nsec.types,
+                    MapA = DataA#dns_rrdata_nsec.types,
+                    case MapE =:= MapA of
+                        false ->
+                            ?LOG_INFO_PAD(6, "NSEC Type Bit Maps: Expected ~p, Actual ~p", [
                                 MapE, MapA
                             ]);
                         true ->
@@ -322,13 +320,13 @@ compare_record_fields(
                     is_record(DataE, dns_rrdata_txt), is_record(DataA, dns_rrdata_txt)
                 ->
                     TxtE = lists:map(
-                        fun(Bin) -> binary_to_list(base16:encode(Bin)) end, DataE#dns_rrdata_txt.txt
+                        fun(Bin) -> binary_to_list(Bin) end, DataE#dns_rrdata_txt.txt
                     ),
                     TxtA = lists:map(
-                        fun(Bin) -> binary_to_list(base16:encode(Bin)) end, DataA#dns_rrdata_txt.txt
+                        fun(Bin) -> binary_to_list(Bin) end, DataA#dns_rrdata_txt.txt
                     ),
-                    if
-                        TxtE =/= TxtA ->
+                    case TxtE =:= TxtA of
+                        false ->
                             ?LOG_INFO_PAD(6, "TXT Text Hex List: Expected ~p, Actual ~p", [
                                 TxtE, TxtA
                             ]);
@@ -358,7 +356,7 @@ test_header(ExpectedHeader, Response) ->
     case ExpectedHeader =:= ActualHeader of
         false ->
             ?LOG_INFO("Expected header: ~p", [ExpectedHeader]),
-            ?LOG_INFO("Actual header: ~p", [ActualHeader]),
+            ?LOG_INFO("Actual header:\s\s\s~p", [ActualHeader]),
             false;
         true ->
             true

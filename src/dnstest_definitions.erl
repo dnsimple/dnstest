@@ -6,6 +6,10 @@
 -export([pdns_definitions/0, pdns_dnssec_definitions/0]).
 -export([erldns_definitions/0, erldns_dnssec_definitions/0]).
 
+-elvis([
+    {elvis_text_style, line_length, #{ignore => [dnstest_definitions]}}
+]).
+
 -spec definitions() -> [dnstest:definition()].
 definitions() ->
     pdns_definitions() ++
@@ -658,7 +662,7 @@ erldns_dnssec_definitions() ->
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_AAAA]
                         }},
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
