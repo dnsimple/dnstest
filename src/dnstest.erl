@@ -13,6 +13,7 @@
     #{
         question := {string() | binary(), dns:type()},
         additional => [dns:optrr()],
+        transport => udp | tcp,
         response := #{
             header := dns:message(),
             answers := [response()],
