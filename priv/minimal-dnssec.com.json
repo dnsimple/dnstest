@@ -1,0 +1,358 @@
+[
+  {
+    "name": "minimal-dnssec.com",
+    "records": [
+      {
+        "name": "minimal-dnssec.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns1.dnsimple.com"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns2.dnsimple-edge.net"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns3.dnsimple.com"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns4.dnsimple-edge.org"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "SOA",
+        "data": {
+          "mname": "ns1.dnsimple.com",
+          "rname": "admin.dnsimple.com",
+          "serial": 1743560045,
+          "refresh": 86400,
+          "retry": 7200,
+          "expire": 604800,
+          "minimum": 300
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "CAA",
+        "data": {
+          "flags": 0,
+          "tag": "issue",
+          "value": "letsencrypt.org"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"v=spf1 include:mailgun.org ~all\"",
+          "txts": ["v=spf1 include:mailgun.org ~all"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "smtp._domainkey.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgsJXQkDrOJUgdK/f6AnQf7yAPFodCigBDsTLZn7WMLBw+/e790k3zDAugMG2b2P50zhGviYA37ZFlJuyuEtAkIpp9N+x7EdH+jgYMb5XlffM38vSAEPUzrZoA9mkMzeWyUsABOrcdG/eIOo/9mScS2D2BHQravGmoNnarXp0O6QIDAQAB\"",
+          "txts": [
+            "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgsJXQkDrOJUgdK/f6AnQf7yAPFodCigBDsTLZn7WMLBw+/e790k3zDAugMG2b2P50zhGviYA37ZFlJuyuEtAkIpp9N+x7EdH+jgYMb5XlffM38vSAEPUzrZoA9mkMzeWyUsABOrcdG/eIOo/9mScS2D2BHQravGmoNnarXp0O6QIDAQAB"
+          ]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "CAA",
+        "data": {
+          "flags": 0,
+          "tag": "issue",
+          "value": "comodoca.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "*.staging.minimal-dnssec.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "staging-redirector01.ams.dnsimple.net"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "heroku.test-9247-wildcard.minimal-dnssec.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "pure-monkey-akf4ln1gqi46bzgi6brqt34m.herokudns.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "netlify-test.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"ALIAS for dnsimple-test.netlifyglobalcdn.com\"",
+          "txts": ["ALIAS for dnsimple-test.netlifyglobalcdn.com"]
+        },
+        "ttl": 60,
+        "context": []
+      },
+      {
+        "name": "alias-test.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"ALIAS for some.domain.that.does.not.exist\"",
+          "txts": ["ALIAS for some.domain.that.does.not.exist"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "MX",
+        "data": {
+          "preference": 10,
+          "exchange": "mxa.mailgun.org"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "MX",
+        "data": {
+          "preference": 10,
+          "exchange": "mxb.mailgun.org"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "alias-test-2.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"ALIAS for dnsimple.com\"",
+          "txts": ["ALIAS for dnsimple.com"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "*.l3.minimal-dnssec.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "dnsimple.com"
+        },
+        "ttl": 60,
+        "context": []
+      },
+      {
+        "name": "_acme-challenge.www.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"xQDLO0FVyPXpjtcVoVL12EjqC-35c_lc59bTuGk_BuE\"",
+          "txts": ["xQDLO0FVyPXpjtcVoVL12EjqC-35c_lc59bTuGk_BuE"]
+        },
+        "ttl": 1,
+        "context": []
+      },
+      {
+        "name": "_acme-challenge.www.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"lhaibPxgWPDM1NKFH_wQX--SkHuwYNfvVO1y42kPqkA\"",
+          "txts": ["lhaibPxgWPDM1NKFH_wQX--SkHuwYNfvVO1y42kPqkA"]
+        },
+        "ttl": 1,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.8"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.9"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.10"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.11"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.15"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-test.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.20"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "site24x7-cname-test.minimal-dnssec.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "site24x7-test.minimal-dnssec.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "DNSKEY",
+        "data": {
+          "flags": 257,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiySC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZKDcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8="
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "DNSKEY",
+        "data": {
+          "flags": 256,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAdIqMYlTELLVzA8yP7FHshb0e+Kojr2IIjtCgpk4hspMtSJyavOmqT7fRu2FgzY5mo++FVLdkMd1+8Yj8I5bbnCWayA5kQgwY7HtFur1He19i0ps5IZ2i+2XopOlmi2Zdob/RK4sYAw3G3t3ji8t6RMwLdsljNp+KDJU59cVMRH9"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "CDNSKEY",
+        "data": {
+          "flags": 257,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiySC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZKDcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8="
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "CDS",
+        "data": {
+          "keytag": 7709,
+          "alg": 8,
+          "digest_type": 2,
+          "digest": "264E1FE0259DEABCFDDE6F3FC8BF2C04E6EC584E99824F9D37D730A722E3E191"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "minimal-dnssec.com",
+        "type": "SPF",
+        "data": {
+          "spf": "v=spf1 include:mailgun.org ~all",
+          "txts": ["v=spf1 include:mailgun.org ~all"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "spfl.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.superduperlongdomain.superduperlongtld ~all\"",
+          "txts": [
+            "v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.sup",
+            "erduperlongdomain.superduperlongtld ~all"
+          ]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "spfl.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.superduperlongdomain.superduperlontld ~all\"",
+          "txts": [
+            "v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.sup",
+            "erduperlongdomain.superduperlontld ~all"
+          ]
+        },
+        "ttl": 3600,
+        "context": []
+      }
+    ],
+    "keys": [
+      {
+        "ksk": "-----BEGIN RSA PRIVATE KEY-----\nMIIC7QIBAAKBoQC5NEUWlzWKNGf/AduEHpR2vwnnTEcTuvKkjx44rCREy80hDuxN\n+mWaS1mYIbDwG8ZKn9YqQJooVAp0+oE7P2mc9NVyInsImmIJolBFD2zoskgvpg8u\nS5zgf9Pmeh7AVKycQvY0/1SFaRGKnkb8lhTLvua8tJyJuGYmSg3DGGe2Vw0N76sK\n2SgAhoUxDJgiL28w9ElL+BtfYzCcUesaL3r/AgMBAAECgaEAgxZXLGU8lSUA0wNK\nj9phNSeE5/0adgGlywot1ukpBrTF7Xc1lP/9uFdLBB4csebG1H0Lxn5RXugVOrUw\nkXIR2/GDvrRfJzi22aDUdf00FgMeBHEygv7+M8ig25tBR/PKogNAMKGa840dewl2\nkS18I+tgBGkg50QeijH7ySINL81/f353BhoeJvAEOOg9Ga+VLSQBizm2xhwowuXz\nYeTQmQJRAONI4pX/ja+Qlk0cC2+nw6XYx1NpeEBTysp41G4iW1ssBj2z9a01zYSs\nVkp2hG0ySI5ezuILyz/pPOTCi+PbDUPpBoKXnAGACwCHs7rOIyhlAlEA0JpdpX9U\neRDOSas76WgFJN05JPp15rUFLkXR5UnMAs0Bcqt2AgSL0hrVP+bUPNHB4wx+wCyV\nYsueWxJrUwryg91TsBfAcCpI0wAW8ZaDFZMCUEctkChBe/G7ahaD7eDtvQu3M9Uf\ndpVOqHd4F67V+541z06LiSjRbKdcAToYm6hG0wojDs8jumctd/B8LKsS8riNxYgo\nSqb9nnRwCw05eTExAlEAzrcp9caoPxCYXAiD5lheQJm49xv7mhPofmJSDZWDxYLB\n3JBs8LLwm9RbXmewClUSfZz0PhvwLWb6FeW61SAUEvhQ5j+jQ4OjhvSfx+gPHmEC\nUA/7P+b3TDuCGorK9FIkY7fAdqvUQsiZjfoW90YkSMKRbugBRcyoxs+Dh66ZFi/3\nG1ccYA/jAKXy59mNHPccj0wsilDFRdNDfhGGMDI0cXFo\n-----END RSA PRIVATE KEY-----\n",
+        "ksk_keytag": 7709,
+        "ksk_alg": 8,
+        "zsk": "-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQDSKjGJUxCy1cwPMj+xR7IW9HviqI69iCI7QoKZOIbKTLUicmrz\npqk+30bthYM2OZqPvhVS3ZDHdfvGI/COW25wlmsgOZEIMGOx7Rbq9R3tfYtKbOSG\ndovtl6KTpZotmXaG/0SuLGAMNxt7d44vLekTMC3bJYzafigyVOfXFTER/QIDAQAB\nAoGBAIHO+9/FBZhgA3UTZVG7Zd1VzrsVv2yDjBksIHxA9Mg5Dtwi7bpmozypLicB\nAyVX+QZ1srgHECiS0Br3Edrr0E7tl7Ux3NsWqxqPdOm41iUnudFAoZuaCbxljjY4\n1TiAFeU9OL7hjoKeW/vQVQva5K8DYkvmqhNUGsK3FAPtW1FlAkEA63voSLhJP5bS\nWYUvuraOhBX+eiBkv17IN3nQQ1OuOwFFn+Gum9c3ZV0v2PhwZqe7ibQdGgrXn9AQ\nmBbejgkbxwJBAOR5lQlnSfA5O10BvuKZOAsG9RNJUbzpCyWkrQ14ccnxWRtZsDZM\nIUFWaXFV8EKBZscLJ4iyZfF/+c6iKjWDvBsCQHWHOQ6aU4yWNNQTIhg5JvYLmB/R\n7RaKMrllZalEqY+vedVrKN+E0ZQYp1nN3SOPEY2PxHqL8MRFbxLJTzhqmV8CQQCh\numrEQEg3ctvRp2Wu01S3gZJDt7fTaIeKevpAucyabWxtDtzMYrF7paZ4IqQy/5R4\nOy4d9mJxQ+zZ1zLXtMuXAkEAgr9cRDno7Q5OI1zZzEIHHcBCoLiEsGZ3p2JDhHLB\n4K853K3Oe7KKROTbJcS+WgxKgPne3kr2WelJWrIavHdAkg==\n-----END RSA PRIVATE KEY-----\n",
+        "zsk_keytag": 27123,
+        "zsk_alg": 8,
+        "inception": "2025-04-02T02:24:32.482798Z",
+        "until": "2025-07-01T02:24:32.479991Z"
+      }
+    ]
+  }
+]

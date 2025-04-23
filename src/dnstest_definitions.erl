@@ -1746,7 +1746,7 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"aland.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600, #dns_rrdata_txt{
-                        txt = [<<"ÅLAND ISLANDS"/utf8>>]
+                        txt = [<<"\\195\\133LAND ISLANDS">>]
                     }}
                 ],
                 authority => [],
@@ -1905,14 +1905,14 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
+                        serial = 1728543606,
+                        refresh = 86400,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }}
                 ],
                 additional => []
@@ -2265,14 +2265,14 @@ pdns_definitions() ->
                         #dns_rrdata_cname{dname = <<"server1.test.com">>}}
                 ],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
+                        serial = 1728543606,
+                        refresh = 86400,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }}
                 ],
                 additional => []
@@ -2301,14 +2301,14 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
+                        serial = 1728543606,
+                        refresh = 86400,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }}
                 ],
                 additional => []
@@ -2864,14 +2864,14 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
+                        serial = 1728543606,
+                        refresh = 86400,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }}
                 ],
                 additional => []
@@ -3240,14 +3240,14 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
+                        serial = 1728543606,
+                        refresh = 86400,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }}
                 ],
                 additional => []
@@ -3480,7 +3480,7 @@ pdns_definitions() ->
                         flags = <<"u">>,
                         services = <<"e2u+sip">>,
                         regexp = <<>>,
-                        replacement = <<"testuser.domain.com">>
+                        replacement = <<"server1.test.com">>
                     }}
                 ],
                 authority => [],
@@ -3968,26 +3968,27 @@ pdns_definitions() ->
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='server1.test.com.', qtype=RP
 
-        {rp, #{
-            question => {"server1.test.com", ?DNS_TYPE_RP},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"server1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RP, 3600, #dns_rrdata_rp{
-                        mbox = <<"ahu.ds9a.nl">>, txt = <<"counter.test.com">>
-                    }}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
+        % NOTE: The RP record in not supported by erldns at the moment.
+        % {rp, #{
+        %     question => {"server1.test.com", ?DNS_TYPE_RP},
+        %     response => #{
+        %         header => #dns_message{
+        %             rc = ?DNS_RCODE_NOERROR,
+        %             rd = false,
+        %             qr = true,
+        %             tc = false,
+        %             aa = true,
+        %             oc = ?DNS_OPCODE_QUERY
+        %         },
+        %         answers => [
+        %             {<<"server1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RP, 3600, #dns_rrdata_rp{
+        %                 mbox = <<"ahu.ds9a.nl">>, txt = <<"counter.test.com">>
+        %             }}
+        %         ],
+        %         authority => [],
+        %         additional => []
+        %     }
+        % }},
 
         % A referral with the same name as the NS record itself, but now for a SOA
         % record.

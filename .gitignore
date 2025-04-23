@@ -1,5 +1,6 @@
 _build/
 _checkouts/
+.eunit/
 doc/
 rebar3
 log

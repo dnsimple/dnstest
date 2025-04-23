@@ -1,0 +1,445 @@
+[
+  {
+    "name": "test.com",
+    "records": [
+      {
+        "name": "test.com",
+        "type": "SOA",
+        "data": {
+          "mname": "ns1.test.com",
+          "rname": "ahu.example.com",
+          "serial": 1728543606,
+          "refresh": 86400,
+          "retry": 7200,
+          "expire": 604800,
+          "minimum": 300
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "test.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns1.dnsimple.com"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "test.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns2.dnsimple-edge.net"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "test.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns3.dnsimple.com"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "test.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns4.dnsimple-edge.org"
+        },
+        "ttl": 3600,
+        "context": ["anycast"]
+      },
+      {
+        "name": "txt.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"welp\" \"derpier\"",
+          "txts": ["welp", "derpier"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "MX",
+        "data": {
+          "preference": 15,
+          "exchange": "smtp-servers.test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "ns1.test.com",
+        "type": "A",
+        "data": {
+          "ip": "1.1.1.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "ns2.test.com",
+        "type": "A",
+        "data": {
+          "ip": "2.2.2.2"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "www.test.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "server1.test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "server1.test.com",
+        "type": "A",
+        "data": {
+          "ip": "1.2.3.4"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "*.test.test.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "server1.test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "www.test.test.com",
+        "type": "A",
+        "data": {
+          "ip": "4.3.2.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "sub.test.test.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns-test.example.net.test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "enum.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "u",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "ensm.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "s",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "_double._tcp.dc.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "enam.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "a",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "naptr.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "u",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "naptr.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "s",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "_double._tcp.dc.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "naptr.test.com",
+        "type": "NAPTR",
+        "data": {
+          "order": 100,
+          "preference": 50,
+          "flags": "a",
+          "services": "e2u+sip",
+          "regexp": "",
+          "replacement": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "counter.test.com",
+        "type": "A",
+        "data": {
+          "ip": "1.1.1.5"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_ldap._tcp.dc.test.com",
+        "type": "SRV",
+        "data": {
+          "priority": 0,
+          "weight": 100,
+          "port": 389,
+          "target": "server2.example.net."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_double._tcp.dc.test.com",
+        "type": "SRV",
+        "data": {
+          "priority": 0,
+          "weight": 100,
+          "port": 389,
+          "target": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_double._tcp.dc.test.com",
+        "type": "SRV",
+        "data": {
+          "priority": 1,
+          "weight": 100,
+          "port": 389,
+          "target": "server1.test.com."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_root._tcp.dc.test.com",
+        "type": "SRV",
+        "data": {
+          "priority": 0,
+          "weight": 0,
+          "port": 0,
+          "target": "."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "blah.test.com",
+        "type": "NS",
+        "data": {
+          "dname": "blah.test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "blah.test.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.6.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "very-long-txt.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long!\"",
+          "txts": [
+            "A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you",
+            " won't believe how long!"
+          ]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "within-server.test.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "outpost.example.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_underscore.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"underscores are terrible\"",
+          "txts": ["underscores are terrible"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "b.c.test.com",
+        "type": "A",
+        "data": {
+          "ip": "5.6.7.8"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "*.a.b.c.test.com",
+        "type": "A",
+        "data": {
+          "ip": "8.7.6.5"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "aland.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"\\\\195\\\\133LAND ISLANDS\"",
+          "txts": ["\\195\\133LAND ISLANDS"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "hightxt.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"v=spf1 mx ip4:78.46.192.210 –all\"",
+          "txts": ["v=spf1 mx ip4:78.46.192.210 –all"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "interrupted-rrset.test.com",
+        "type": "A",
+        "data": {
+          "ip": "1.1.1.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "interrupted-rrset.test.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"check AXFR signpipe\"",
+          "txts": ["check AXFR signpipe"]
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "interrupted-rrset.test.com",
+        "type": "A",
+        "data": {
+          "ip": "2.2.2.2"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "10.order.test.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "15.order.test.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "100.order.test.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.0.1"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "MX",
+        "data": {
+          "preference": 10,
+          "exchange": "test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "toroot.test.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      }
+    ],
+    "keys": []
+  }
+]
