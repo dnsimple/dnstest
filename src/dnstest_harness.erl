@@ -257,7 +257,7 @@ compare_record_fields(
 ) ->
     ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
     ?LOG_INFO_PAD(2, "Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
-    ?LOG_INFO_PAD(2, "Full Actual:   ~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
+    ?LOG_INFO_PAD(2, "Full Actual:\s\s\s~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
     if
         NameE =/= NameA ->
             ?LOG_INFO_PAD(4, "Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
