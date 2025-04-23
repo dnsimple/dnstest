@@ -11,7 +11,7 @@
 -export([init/1, handle_call/3, handle_cast/2]).
 
 % Internal API
--export([send_request/3]).
+-export([send_request/3, send_request/4]).
 
 -opaque request() ::
     {run, [dnstest:definition()]}
@@ -32,6 +32,13 @@
 -define(SERVER, ?MODULE).
 -define(DEFAULT_IPV4_ADDRESS, {127, 0, 0, 1}).
 -define(DEFAULT_PORT, 53).
+-define(LOG_INFO_PAD(Pad, Fmt, Args), ?LOG_INFO("|~s" ++ Fmt, [padding_to_string(Pad) | Args])).
+
+% Helper function to convert padding to string
+padding_to_string(Pad) when is_integer(Pad) ->
+    lists:duplicate(Pad, $ );
+padding_to_string(Pad) when is_list(Pad) ->
+    Pad.
 
 % Public API
 
@@ -107,6 +114,7 @@ select_targets([{Name, _Conditions} = Target | Rest], Names, Targets) ->
 
 -spec run_test(dnstest:definition()) -> return().
 run_test({Name, Cond}) when is_map(Cond) ->
+    ?LOG_INFO("--------------------------------------------------------"),
     try do_run_test(Name, Cond) of
         Result -> Result
     catch
@@ -127,31 +135,22 @@ do_run_test(
     } = TestDefinitionMap
 ) ->
     Additional = maps:get(additional, TestDefinitionMap, []),
+    % Default to UDP
+    Transport = maps:get(transport, TestDefinitionMap, udp),
     % Log the additional section directory to STDOUT not using the logger
-    ?LOG_INFO("Running test ~p", [Name]),
+    ?LOG_INFO("Running test ~p via ~p", [Name, Transport]),
     % Run the test
-    {Time, Result} = measure(Name, send_request, [Qname, Qtype, Additional]),
+
+    % Pass Transport
+    {Time, Result} = measure(Name, send_request, [Qname, Qtype, Additional, Transport]),
     case Result of
         {ok, Response} ->
             ?LOG_DEBUG("Response: ~p", [Response]),
             % Check the results
             QHeader = test_header(ExpectedHeader, Response),
-            % Log the header directory to STDOUT not using the logger
-            % io:format("id: ~p rc: ~p rd: ~p qr: ~p tc: ~p~n", [
-            %     Response#dns_message.id,
-            %     Response#dns_message.rc,
-            %     Response#dns_message.rd,
-            %     Response#dns_message.qr,
-            %     Response#dns_message.tc
-            % ]),
-            % io:format("(~p) Header: ~p~n", [Name, Response]),
 
             QAnswers = test_records(ExpectedAnswers, Response#dns_message.answers, answers),
             QAuthority = test_records(ExpectedAuthority, Response#dns_message.authority, authority),
-            % Log the authority section directory to STDOUT not using the logger
-            % io:format("(~p) Authority: ~p~n", [Name, Response#dns_message.authority]),
-            % % Log the authoritative expected value to STDOUT not using the logger
-            % io:format("(~p) Expected Authority: ~p~n", [Name, ExpectedAuthority]),
 
             QAdditional = test_records(
                 ExpectedAdditional, Response#dns_message.additional, additional
@@ -198,6 +197,19 @@ send_request(Qname, Qtype, Additional) ->
     },
     send_udp_query(Message, host(), port()).
 
+-spec send_request(binary(), char(), dns:additional(), udp | tcp) ->
+    {ok, {dns:decode_error(), dns:message() | undefined, binary()} | dns:message()}
+    | {error, {atom(), {server, {_, _}}}}.
+send_request(Qname, Qtype, Additional, Transport) ->
+    Questions = [#dns_query{name = Qname, type = Qtype}],
+    Message = #dns_message{
+        rd = false, qc = 1, adc = length(Additional), questions = Questions, additional = Additional
+    },
+    case Transport of
+        udp -> send_udp_query(Message, host(), port());
+        tcp -> send_tcp_query(Message, host(), port())
+    end.
+
 % Test expected answers against actual answers.
 test_records(ExpectedRecords, ActualRecords, SectionType) ->
     ActualRecordsSorted = lists:sort(
@@ -235,39 +247,40 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
     end.
 
 % Helper to compare fields of mismatched record tuples
+-spec compare_record_fields(dns:rr(), dns:rr(), section()) -> ok.
 compare_record_fields(
-    {NameE, ClassE, TypeE, TTLE, DataE}, {NameA, ClassA, TypeA, TTLA, DataA}, SectionType
+    {NameE, TypeE, ClassE, TTLE, DataE}, {NameA, TypeA, ClassA, TTLA, DataA}, SectionType
 ) ->
     ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
-    ?LOG_INFO("  Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
-    ?LOG_INFO("  Full Actual:   ~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
+    ?LOG_INFO_PAD(2, "Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
+    ?LOG_INFO_PAD(2, "Full Actual:   ~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
     if
         NameE =/= NameA ->
-            ?LOG_INFO("    Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
+            ?LOG_INFO_PAD(4, "Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
         true ->
             ok
     end,
     if
         ClassE =/= ClassA ->
-            ?LOG_INFO("    Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
+            ?LOG_INFO_PAD(4, "Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
         true ->
             ok
     end,
     if
         TypeE =/= TypeA ->
-            ?LOG_INFO("    Field 'Type' mismatch: Expected ~p, Actual ~p", [TypeE, TypeA]);
+            ?LOG_INFO_PAD(4, "Field 'Type' mismatch: Expected ~p, Actual ~p", [TypeE, TypeA]);
         true ->
             ok
     end,
     if
         TTLE =/= TTLA ->
-            ?LOG_INFO("    Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
+            ?LOG_INFO_PAD(4, "Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
         true ->
             ok
     end,
     if
         DataE =/= DataA ->
-            ?LOG_INFO("    Field 'Data' mismatch: Expected ~p, Actual ~p", [DataE, DataA]),
+            ?LOG_INFO_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [DataE, DataA]),
             % Add specific formatting for known binary-containing types
             % Check TypeE first, assuming Type mismatch was already caught if they differ.
             case TypeE of
@@ -278,7 +291,7 @@ compare_record_fields(
                     SigA = binary_to_list(base16:encode(DataA#dns_rrdata_rrsig.signature)),
                     if
                         SigE =/= SigA ->
-                            ?LOG_INFO("      RRSIG Signature Hex: Expected ~s, Actual ~s", [
+                            ?LOG_INFO_PAD(6, "RRSIG Signature Hex: Expected ~s, Actual ~s", [
                                 SigE, SigA
                             ]);
                         true ->
@@ -291,7 +304,7 @@ compare_record_fields(
                     MapA = binary_to_list(base16:encode(DataA#dns_rrdata_nsec.types)),
                     if
                         MapE =/= MapA ->
-                            ?LOG_INFO("      NSEC Type Bit Maps Hex: Expected ~s, Actual ~s", [
+                            ?LOG_INFO_PAD(6, "NSEC Type Bit Maps Hex: Expected ~s, Actual ~s", [
                                 MapE, MapA
                             ]);
                         true ->
@@ -308,7 +321,7 @@ compare_record_fields(
                     ),
                     if
                         TxtE =/= TxtA ->
-                            ?LOG_INFO("      TXT Text Hex List: Expected ~p, Actual ~p", [
+                            ?LOG_INFO_PAD(6, "TXT Text Hex List: Expected ~p, Actual ~p", [
                                 TxtE, TxtA
                             ]);
                         true ->
@@ -346,16 +359,60 @@ test_header(ExpectedHeader, Response) ->
 % Send the message to the given host:port via UDP.
 send_udp_query(Message, Host, Port) ->
     Packet = dns:encode_message(Message),
-    ?LOG_DEBUG("Sending UDP query to host ~p and port ~p", [host(), port()]),
-    {ok, Socket} = gen_udp:open(0, [binary, {active, false}]),
-    ok = gen_udp:send(Socket, Host, Port, Packet),
-    QueryResponse =
-        case gen_udp:recv(Socket, 65535, 6000) of
-            {ok, {Host, _Port, Reply}} when is_binary(Reply) -> {ok, dns:decode_message(Reply)};
-            {error, Error} -> {error, {Error, {server, {Host, Port}}}}
-        end,
-    gen_udp:close(Socket),
-    QueryResponse.
+    ?LOG_DEBUG("Sending UDP query to host ~p and port ~p", [Host, Port]),
+    case gen_udp:open(0, [binary, {active, false}]) of
+        {ok, Socket} ->
+            try
+                ok = gen_udp:send(Socket, Host, Port, Packet),
+                % Increased buffer size for potential large UDP responses
+                case gen_udp:recv(Socket, 65535, 6000) of
+                    {ok, {_RHost, _RPort, Reply}} when is_binary(Reply) ->
+                        {ok, dns:decode_message(Reply)};
+                    {error, timeout} ->
+                        ?LOG_WARNING("UDP query timed out for ~p", [Message#dns_message.questions]),
+                        {error, {timeout, {server, {Host, Port}}}};
+                    {error, Error} ->
+                        ?LOG_ERROR("UDP recv error: ~p", [Error]),
+                        {error, {Error, {server, {Host, Port}}}}
+                end
+            after
+                gen_udp:close(Socket)
+            end;
+        {error, Reason} ->
+            ?LOG_ERROR("Failed to open UDP socket: ~p", [Reason]),
+            {error, {socket_error, Reason}}
+    end.
+
+% Send the message to the given host:port via TCP.
+send_tcp_query(Message, Host, Port) ->
+    Packet = dns:encode_message(Message),
+    ?LOG_DEBUG("Sending TCP query to host ~p and port ~p", [Host, Port]),
+    case gen_tcp:connect(Host, Port, [binary, {packet, 2}, {active, false}], 6000) of
+        {ok, Socket} ->
+            try
+                ok = gen_tcp:send(Socket, Packet),
+                case gen_tcp:recv(Socket, 0, 6000) of
+                    {ok, Reply} when is_binary(Reply) ->
+                        {ok, dns:decode_message(Reply)};
+                    {error, timeout} ->
+                        ?LOG_WARNING("TCP query timed out for ~p", [Message#dns_message.questions]),
+                        {error, {timeout, {server, {Host, Port}}}};
+                    {error, closed} ->
+                        ?LOG_WARNING("TCP connection closed unexpectedly for ~p", [
+                            Message#dns_message.questions
+                        ]),
+                        {error, {closed, {server, {Host, Port}}}};
+                    {error, Error} ->
+                        ?LOG_ERROR("TCP recv error: ~p", [Error]),
+                        {error, {Error, {server, {Host, Port}}}}
+                end
+            after
+                gen_tcp:close(Socket)
+            end;
+        {error, Reason} ->
+            ?LOG_ERROR("Failed to connect TCP socket: ~p", [Reason]),
+            {error, {connect_error, Reason}}
+    end.
 
 host() ->
     case application:get_env(dnstest, inet4) of

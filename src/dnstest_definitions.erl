@@ -621,12 +621,13 @@ erldns_dnssec_definitions() ->
         {nsec_name_mixed_case, #{
             question => {"a.Minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
                     rd = false,
                     qr = true,
-                    tc = true,
+                    tc = false,
                     aa = true,
                     oc = ?DNS_OPCODE_QUERY
                 },
@@ -656,15 +657,15 @@ erldns_dnssec_definitions() ->
                         }},
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
-                            next_dname = <<"\\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_AAAA]
+                            next_dname = <<"\000.a.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 300,
+                            original_ttl = 86400,
                             expiration = 20250701022432,
                             inception = 20250402022432,
                             key_tag = 27123,
