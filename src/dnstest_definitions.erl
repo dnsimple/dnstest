@@ -662,7 +662,7 @@ erldns_dnssec_definitions() ->
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_AAAA]
+                            types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
                     {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
