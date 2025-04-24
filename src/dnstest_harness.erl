@@ -11,7 +11,7 @@
 -export([init/1, handle_call/3, handle_cast/2]).
 
 % Internal API
--export([send_request/3, send_request/4]).
+-export([send_request/4]).
 
 -opaque request() ::
     {run, [dnstest:definition()]}
@@ -184,16 +184,6 @@ measure(Name, FunctionName, Args) when is_list(Args) ->
     {T, R} = timer:tc(?MODULE, FunctionName, Args, microsecond),
     dnstest_metrics:insert(Name, T),
     {T, R}.
-
--spec send_request(binary(), char(), dns:additional()) ->
-    {ok, {dns:decode_error(), dns:message() | undefined, binary()} | dns:message()}
-    | {error, {atom(), {server, {_, _}}}}.
-send_request(Qname, Qtype, Additional) ->
-    Questions = [#dns_query{name = Qname, type = Qtype}],
-    Message = #dns_message{
-        rd = false, qc = 1, adc = length(Additional), questions = Questions, additional = Additional
-    },
-    send_udp_query(Message, host(), port()).
 
 -spec send_request(binary(), char(), dns:additional(), udp | tcp) ->
     {ok, {dns:decode_error(), dns:message() | undefined, binary()} | dns:message()}
