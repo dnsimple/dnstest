@@ -379,7 +379,7 @@ send_udp_query(Message, Host, Port) ->
 send_tcp_query(Message, Host, Port) ->
     Packet = dns:encode_message(Message),
     ?LOG_DEBUG("Sending TCP query to host ~p and port ~p", [Host, Port]),
-    case gen_tcp:connect(Host, Port, [binary, {packet, 2}, {active, false}], 6000) of
+    case gen_tcp:connect(Host, Port, [binary, {packet, 2}, {active, false}], 1000) of
         {ok, Socket} ->
             try
                 ok = gen_tcp:send(Socket, Packet),
