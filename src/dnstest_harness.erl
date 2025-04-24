@@ -32,11 +32,7 @@
 -define(SERVER, ?MODULE).
 -define(DEFAULT_IPV4_ADDRESS, {127, 0, 0, 1}).
 -define(DEFAULT_PORT, 53).
--define(LOG_INFO_PAD(Pad, Fmt, Args), ?LOG_INFO("|~s" ++ Fmt, [padding_to_string(Pad) | Args])).
-
-% Helper function to convert padding to string
-padding_to_string(Pad) when is_integer(Pad) ->
-    lists:duplicate(Pad, $\s).
+-define(LOG_INFO_PAD(Pad, Fmt, Args), ?LOG_INFO("|~s" ++ Fmt, [lists:duplicate(Pad, $\s) | Args])).
 
 % Public API
 
