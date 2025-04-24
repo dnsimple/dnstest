@@ -99,6 +99,23 @@
         }
       },
       {
+        "name": "abc.example.com",
+        "type": "MX",
+        "ttl": 120,
+        "data": {
+          "exchange": "mail.example.com",
+          "preference": 10
+        }
+      },
+      {
+        "name": "abc.example.com",
+        "type": "NS",
+        "ttl": 120,
+        "data": {
+          "dname": "ns1.example.org"
+        }
+      },
+      {
         "name": "unauth.example.com",
         "type": "CNAME",
         "ttl": 120,

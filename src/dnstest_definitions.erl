@@ -1793,23 +1793,26 @@ pdns_definitions() ->
             }
         }},
 
-        % 0  example.com.  IN  MX  120  10 smtp-servers.example.com.
-        % 0  example.com.  IN  MX  120  15 smtp-servers.test.com.
-        % 0  example.com.  IN  NS  120  ns1.example.com.
-        % 0  example.com.  IN  NS  120  ns2.example.com.
-        % 0  example.com.  IN  SOA  100000  ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-        % 2  .  IN  OPT  0
-        % 2  ns1.example.com.  IN  A  120  192.168.1.1
-        % 2 ns1.example.com.        IN      AAAA    120     2001:0db8:85a3:0000:0000:8a2e:0370:7334
-        % 2  ns2.example.com.  IN  A  120  192.168.1.2
-        % 2  smtp-servers.example.com.  IN  A  120  192.168.0.2
-        % 2  smtp-servers.example.com.  IN  A  120  192.168.0.3
-        % 2  smtp-servers.example.com.  IN  A  120  192.168.0.4
+        % ;; ANSWER SECTION:
+        % example.com.		120	IN	NS	ns1.example.com.
+        % example.com.		120	IN	NS	ns2.example.com.
+        % example.com.		100000	IN	SOA	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+        % example.com.		120	IN	MX	10 smtp-servers.example.com.
+        % example.com.		120	IN	MX	15 smtp-servers.test.com.
+
+        % ;; ADDITIONAL SECTION:
+        % ns1.example.com.	120	IN	A	192.168.1.1
+        % ns1.example.com.	120	IN	AAAA	2001:db8:85a3::8a2e:370:7334
+        % ns2.example.com.	120	IN	A	192.168.1.2
+        % smtp-servers.example.com. 120	IN	A	192.168.0.2
+        % smtp-servers.example.com. 120	IN	A	192.168.0.3
+        % smtp-servers.example.com. 120	IN	A	192.168.0.4
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='example.com.', qtype=ANY
 
         {any_query, #{
             question => {"example.com", ?DNS_TYPE_ANY},
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -1821,10 +1824,12 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
-                        preference = 10, exchange = <<"smtp-servers.example.com">>
+                        preference = 10,
+                        exchange = <<"smtp-servers.example.com">>
                     }},
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
-                        preference = 15, exchange = <<"smtp-servers.test.com">>
+                        preference = 15,
+                        exchange = <<"smtp-servers.test.com">>
                     }},
                     {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
                         dname = <<"ns1.example.com">>
@@ -1844,7 +1849,6 @@ pdns_definitions() ->
                 ],
                 authority => [],
                 additional => [
-                    %{<<".">>, ?DNS_CLASS_IN, ?DNS_TYPE_OPT, 0},
                     {<<"ns1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
                         ip = {192, 168, 1, 1}
                     }},
