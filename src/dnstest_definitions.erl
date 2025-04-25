@@ -21,7 +21,7 @@ definitions() ->
 erldns_definitions() ->
     [
         {ns_zonecut, #{
-            question => {"child.zonecut.withzonecut.com", ?DNS_TYPE_MX},
+            question => {"child.zonecut.example.com", ?DNS_TYPE_MX},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -33,17 +33,19 @@ erldns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
-                        #dns_rrdata_ns{dname = <<"ns1.cutwithzonecut.com">>}},
-                    {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
-                        #dns_rrdata_ns{dname = <<"ns2.cutwithzonecut.com">>}}
+                    {<<"zonecut.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns1.cutwithzonecut.com">>
+                    }},
+                    {<<"zonecut.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns2.cutwithzonecut.com">>
+                    }}
                 ],
                 additional => []
             }
         }},
 
         {ns_zonecut_child_cname, #{
-            question => {"cnamerecord.zonecut.withzonecut.com", ?DNS_TYPE_CNAME},
+            question => {"cname.zonecut.example.com", ?DNS_TYPE_CNAME},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -55,10 +57,12 @@ erldns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
-                        #dns_rrdata_ns{dname = <<"ns1.cutwithzonecut.com">>}},
-                    {<<"zonecut.withzonecut.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120,
-                        #dns_rrdata_ns{dname = <<"ns2.cutwithzonecut.com">>}}
+                    {<<"zonecut.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns1.cutwithzonecut.com">>
+                    }},
+                    {<<"zonecut.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns2.cutwithzonecut.com">>
+                    }}
                 ],
                 additional => []
             }
@@ -82,7 +86,7 @@ erldns_definitions() ->
                 ],
                 additional => [
                     {<<"rns.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
-                        ip = {1, 2, 3, 4}
+                        ip = {192, 168, 7, 3}
                     }}
                 ]
             }
@@ -204,6 +208,7 @@ erldns_dnssec_definitions() ->
         {dnssec_soa, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_SOA},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -214,7 +219,7 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -223,12 +228,12 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
@@ -244,6 +249,7 @@ erldns_dnssec_definitions() ->
         {dnssec_ns, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_NS},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -254,18 +260,18 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
                         dname = <<"ns1.example.com">>
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
                         dname = <<"ns2.example.com">>
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NS,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
@@ -285,8 +291,9 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_a, #{
-            question => {"outpost.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"real-a.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -297,18 +304,18 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 2, 1}}},
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
+                        #dns_rrdata_a{ip = {192, 168, 1, 10}}},
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_A,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -318,7 +325,7 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_a_with_udp_payload_size, #{
-            question => {"outpost.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"real-a.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{udp_payload_size = 1230, dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -330,18 +337,18 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 2, 1}}},
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
+                        #dns_rrdata_a{ip = {192, 168, 1, 10}}},
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_A,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -351,7 +358,7 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_cname, #{
-            question => {"www.example-dnssec.com", ?DNS_TYPE_CNAME},
+            question => {"www.minimal-dnssec.com", ?DNS_TYPE_CNAME},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -363,20 +370,20 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"www.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
                         #dns_rrdata_cname{
-                            dname = <<"outpost.example-dnssec.com">>
+                            dname = <<"real-a.minimal-dnssec.com">>
                         }},
-                    {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"www.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -386,8 +393,9 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_follow_cname, #{
-            question => {"www.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"www.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -398,34 +406,34 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"www.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
                         #dns_rrdata_cname{
-                            dname = <<"outpost.example-dnssec.com">>
+                            dname = <<"real-a.minimal-dnssec.com">>
                         }},
-                    {<<"www.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"www.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {192, 168, 2, 1}}},
-                    {<<"outpost.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
+                        #dns_rrdata_a{ip = {192, 168, 1, 10}}},
+                    {<<"real-a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_A,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -435,7 +443,7 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_cds, #{
-            question => {"example-dnssec.com", ?DNS_TYPE_CDS},
+            question => {"minimal-dnssec.com", ?DNS_TYPE_CDS},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -447,25 +455,25 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 120, #dns_rrdata_cds{
-                        keytag = 0,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDS, 3600, #dns_rrdata_cds{
+                        keytag = 7709,
                         alg = 8,
                         digest_type = 2,
                         digest =
-                            <<67, 21, 167, 173, 9, 174, 11, 235, 166, 204, 49, 4, 187, 205, 136, 0,
-                                14, 215, 150, 136, 127, 28, 77, 82, 10, 58, 96, 141, 113, 91, 114,
-                                202>>
+                            <<38, 78, 31, 224, 37, 157, 234, 188, 253, 222, 111, 63, 200, 191, 44,
+                                4, 230, 236, 88, 78, 153, 130, 79, 157, 55, 215, 48, 167, 34, 227,
+                                225, 145>>
                     }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CDS,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 1479123419,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -475,7 +483,7 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_cdnskey, #{
-            question => {"example-dnssec.com", ?DNS_TYPE_CDNSKEY},
+            question => {"minimal-dnssec.com", ?DNS_TYPE_CDNSKEY},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -487,27 +495,27 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CDNSKEY, 3600,
                         #dns_rrdata_cdnskey{
-                            flags = 256,
+                            flags = 257,
                             protocol = 3,
                             alg = ?DNS_ALG_RSASHA256,
-                            public_key =
-                                <<"MFswDQYJKoZIhvcNAQEBBQADSgAwRwJBAK8YnU+YqBxD/",
-                                    "EDwVeHZsJillAJ80PCnLU+/rlGrlzgw+eabF8jTCaEwnpE",
-                                    "74YHCLegKAAn+efeZrT/EBBrzlacCAgIB">>,
-                            key_tag = 49016
+                            public_key = [
+                                65537,
+                                15059316713381372792275644334141935314803758862584257546870685478540371458918789200658332004862025352272728485388383998473482292097383780966296499655106981035141199479945546229111376814887227425965140988124605444319782994454509082467369732584483244448613249489775522897139820573096035864215931055449707191213195502803777221381192536005861928617582326748645966424833881770581305290881791
+                            ],
+                            key_tag = 7709
                         }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CDNSKEY,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -517,8 +525,9 @@ erldns_dnssec_definitions() ->
         }},
 
         {dnssec_dnskey, #{
-            question => {"example-dnssec.com", ?DNS_TYPE_DNSKEY},
+            question => {"minimal-dnssec.com", ?DNS_TYPE_DNSKEY},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -529,7 +538,7 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 3600,
                         #dns_rrdata_dnskey{
                             flags = 257,
                             protocol = 3,
@@ -537,7 +546,7 @@ erldns_dnssec_definitions() ->
                             public_key = <<>>,
                             key_tag = 0
                         }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 3600,
                         #dns_rrdata_dnskey{
                             flags = 256,
                             protocol = 3,
@@ -545,16 +554,16 @@ erldns_dnssec_definitions() ->
                             public_key = <<>>,
                             key_tag = 0
                         }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_DNSKEY,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -567,6 +576,7 @@ erldns_dnssec_definitions() ->
         {nsec_name, #{
             question => {"a.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -578,7 +588,7 @@ erldns_dnssec_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -587,22 +597,23 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
+                            original_ttl = 3600,
+                            expiration = 20250701022432,
+                            inception = 20250402022432,
+                            key_tag = 27123,
                             signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
+                            signature =
+                                <<"YHRxn+lwC/bQ9Nur148Z29WPm6nqSPxXsHQ+oNtBGy9SNDvVtG08EtMc pPJCHOna0JY3+NtjIGCvO3LmJlfRH+2GD22arRMDZMx0mZAbpVziyzMl //3UEpGZNScS9s77iTYeFQJtVfI8mpyVAltZPisMeCEDiwzNzzD5a+iK 5O8=">>
                         }},
                     {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                            types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
                     {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
@@ -610,11 +621,12 @@ erldns_dnssec_definitions() ->
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
                             original_ttl = 86400,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
+                            expiration = 20250701022432,
+                            inception = 20250402022432,
+                            key_tag = 27123,
                             signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
+                            signature =
+                                <<"a4jqiLpodikx5CeT/jCMCjct/8tEku++xaOz6F0kFZpgJ3K2gQvv2ZlV la/nAr4tedWODPxRDFxdiZBUCaZa3oHId0kVzIHhUdnljmfzUmssn5MB 5UVgPRYTtGIJP2a48SLwQNRtdOVS/5YF0ixhXeCItPn1wJ14f47aRPFX Fo4=">>
                         }}
                 ],
                 additional => []
@@ -686,6 +698,7 @@ erldns_dnssec_definitions() ->
         {nsec_type, #{
             question => {"minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -697,7 +710,7 @@ erldns_dnssec_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -706,12 +719,12 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
@@ -724,9 +737,15 @@ erldns_dnssec_definitions() ->
                             types = [
                                 ?DNS_TYPE_NS,
                                 ?DNS_TYPE_SOA,
+                                ?DNS_TYPE_MX,
+                                ?DNS_TYPE_TXT,
                                 ?DNS_TYPE_RRSIG,
                                 ?DNS_TYPE_NSEC,
-                                ?DNS_TYPE_DNSKEY
+                                ?DNS_TYPE_DNSKEY,
+                                ?DNS_TYPE_CDS,
+                                ?DNS_TYPE_CDNSKEY,
+                                ?DNS_TYPE_SPF,
+                                ?DNS_TYPE_CAA
                             ]
                         }},
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
@@ -748,8 +767,9 @@ erldns_dnssec_definitions() ->
 
         % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
         {nsec_name_any, #{
-            question => {"a.minimal-dnssec.com", ?DNS_TYPE_ANY},
+            question => {"ab.minimal-dnssec.com", ?DNS_TYPE_ANY},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -761,7 +781,7 @@ erldns_dnssec_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -770,28 +790,99 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
+                            expiration = 1751336672,
+                            inception = 1743560672,
+                            key_tag = 27123,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.ab.minimal-dnssec.com">>,
+                            types = [
+                                ?DNS_TYPE_NS,
+                                ?DNS_TYPE_SOA,
+                                ?DNS_TYPE_MX,
+                                ?DNS_TYPE_TXT,
+                                ?DNS_TYPE_RRSIG,
+                                ?DNS_TYPE_NSEC,
+                                ?DNS_TYPE_DNSKEY,
+                                ?DNS_TYPE_CDS,
+                                ?DNS_TYPE_CDNSKEY,
+                                ?DNS_TYPE_SPF,
+                                ?DNS_TYPE_CAA
+                            ]
+                        }},
+                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 1751336672,
+                            inception = 1743560672,
+                            key_tag = 27123,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
+        % Verify NSEC RR Type bitmap is correct
+        {nsec_rr_type_bitmap_wildcard, #{
+            question => {"nosuch.something.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
-                        #dns_rrdata_nsec{
-                            next_dname = <<"\000.a.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                    {<<"nosuch.something.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC,
+                        86400, #dns_rrdata_nsec{
+                            next_dname = <<"\000.nosuch.something.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
-                        #dns_rrdata_rrsig{
+                    {<<"nosuch.something.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG,
+                        86400, #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
-                            labels = 3,
+                            labels = 4,
                             original_ttl = 86400,
                             expiration = 0,
                             inception = 0,
@@ -804,10 +895,10 @@ erldns_dnssec_definitions() ->
             }
         }},
 
-        % Ensure the correct NSEC result when the qname matches but the qtype does not.
-        {nsec_type_any, #{
-            question => {"minimal-dnssec.com", ?DNS_TYPE_ANY},
+        {cname_to_nxdomain_dnssec, #{
+            question => {"nxd.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -818,13 +909,25 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
-                        dname = <<"ns1.example.com">>
-                    }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 120, #dns_rrdata_ns{
-                        dname = <<"ns2.example.com">>
-                    }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 120, #dns_rrdata_soa{
+                    {<<"nxd.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
+                        #dns_rrdata_cname{
+                            dname = <<"nxdomain.minimal-dnssec.com">>
+                        }},
+                    {<<"nxd.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_CNAME,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -833,177 +936,16 @@ erldns_dnssec_definitions() ->
                         expire = 604800,
                         minimum = 86400
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
-                        #dns_rrdata_dnskey{
-                            flags = 256,
-                            protocol = 3,
-                            alg = ?DNS_ALG_RSASHA256,
-                            public_key = <<>>,
-                            key_tag = 0
-                        }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
-                        #dns_rrdata_dnskey{
-                            flags = 257,
-                            protocol = 3,
-                            alg = ?DNS_ALG_RSASHA256,
-                            public_key = <<>>,
-                            key_tag = 0
-                        }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_DNSKEY,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_NS,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }}
-                ],
-                authority => [],
-                additional => [
-                    {<<"ns1.example.com">>, 1, 1, 120, #dns_rrdata_a{ip = {192, 168, 1, 1}}},
-                    {<<"ns1.example.com">>, 1, 28, 120, #dns_rrdata_aaaa{
-                        ip = {8193, 3512, 34211, 0, 0, 35374, 880, 29492}
-                    }},
-                    {<<"ns2.example.com">>, 1, 1, 120, #dns_rrdata_a{ip = {192, 168, 1, 2}}}
-                ]
-            }
-        }},
-
-        % Verify NSEC RR Type bitmap is correct
-        {nsec_rr_type_bitmap_wildcard, #{
-            question => {"nosuch.wildcard-aaaa.example-dnssec.com", ?DNS_TYPE_AAAA},
-            additional => [#dns_optrr{dnssec = true}],
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
-                            mname = <<"ns1.example.com">>,
-                            rname = <<"ahu.example.com">>,
-                            serial = 2000081501,
-                            refresh = 28800,
-                            retry = 7200,
-                            expire = 604800,
-                            minimum = 86400
-                        }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_SOA,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"nosuch.wildcard-aaaa.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC,
-                        86400, #dns_rrdata_nsec{
-                            next_dname = <<"\000.nosuch.wildcard-aaaa.example-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_A]
-                        }},
-                    {<<"nosuch.wildcard-aaaa.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG,
-                        86400, #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_NSEC,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
-                            signature = <<>>
-                        }}
-                ],
-                additional => []
-            }
-        }},
-        {cname_to_nxdomain_dnssec, #{
-            question => {"nxd.example-dnssec.com", ?DNS_TYPE_A},
-            additional => [#dns_optrr{dnssec = true}],
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"nxdomain.example-dnssec.com">>
-                        }},
-                    {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 3,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
-                            signature = <<>>
-                        }}
-                ],
-                authority => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
-                            mname = <<"ns1.example-dnssec.com">>,
-                            rname = <<"ahu.example-dnssec.com">>,
-                            serial = 2000081501,
-                            refresh = 28800,
-                            retry = 7200,
-                            expire = 604800,
-                            minimum = 86400
-                        }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_SOA,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 100000,
-                            expiration = 0,
-                            inception = 0,
-                            key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1014,8 +956,9 @@ erldns_dnssec_definitions() ->
         % Ensure wildcard chaining with DNSSEC works.
         % In erldns the wildcard matched response are signed on the fly.
         {cname_wildcard_chain_dnssec, #{
-            question => {"start.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"start.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -1026,11 +969,11 @@ erldns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"start.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
-                            dname = <<"x.y.z.w1.example-dnssec.com">>
+                            dname = <<"x.y.z.w1.minimal-dnssec.com">>
                         }},
-                    {<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"start.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1039,14 +982,14 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"x.y.z.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"x.y.z.w1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
-                            dname = <<"x.y.z.w2.example-dnssec.com">>
+                            dname = <<"x.y.z.w2.minimal-dnssec.com">>
                         }},
-                    {<<"x.y.z.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"x.y.z.w1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1055,14 +998,14 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"x.y.z.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"x.y.z.w2.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
-                            dname = <<"x.y.z.w3.example-dnssec.com">>
+                            dname = <<"x.y.z.w3.minimal-dnssec.com">>
                         }},
-                    {<<"x.y.z.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"x.y.z.w2.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1071,14 +1014,14 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"x.y.z.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"x.y.z.w3.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
-                            dname = <<"x.y.z.w4.example-dnssec.com">>
+                            dname = <<"x.y.z.w4.minimal-dnssec.com">>
                         }},
-                    {<<"x.y.z.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"x.y.z.w3.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1087,14 +1030,14 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"x.y.z.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"x.y.z.w4.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
-                            dname = <<"x.y.z.w5.example-dnssec.com">>
+                            dname = <<"x.y.z.w5.minimal-dnssec.com">>
                         }},
-                    {<<"x.y.z.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"x.y.z.w4.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1103,12 +1046,12 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"x.y.z.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
+                    {<<"x.y.z.w5.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
                         #dns_rrdata_a{ip = {1, 2, 3, 5}}},
-                    {<<"x.y.z.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"x.y.z.w5.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_A,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1117,7 +1060,7 @@ erldns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1222,7 +1165,7 @@ pdns_dnssec_definitions() ->
         % Reply to question for qname='nxd.example.com.', qtype=ANY
 
         {cname_to_nxdomain_any_dnssec, #{
-            question => {"nxd.example-dnssec.com", ?DNS_TYPE_ANY},
+            question => {"nxd.minimal-dnssec.com", ?DNS_TYPE_ANY},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -1234,20 +1177,20 @@ pdns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"nxd.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
                         #dns_rrdata_cname{
-                            dname = <<"nxdomain.example-dnssec.com">>
+                            dname = <<"nxdomain.minimal-dnssec.com">>
                         }},
-                    {<<"nxd.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"nxd.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1263,7 +1206,7 @@ pdns_dnssec_definitions() ->
         % Reply to question for qname='unauth.example.com.', qtype=ANY
 
         {cname_to_unauth_any_dnssec, #{
-            question => {"unauth.example-dnssec.com", ?DNS_TYPE_ANY},
+            question => {"unauth.minimal-dnssec.com", ?DNS_TYPE_ANY},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -1275,11 +1218,11 @@ pdns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"unauth.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
                             dname = <<"no-idea.example.org">>
                         }},
-                    {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"unauth.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1288,7 +1231,7 @@ pdns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1304,7 +1247,7 @@ pdns_dnssec_definitions() ->
         % Reply to question for qname='unauth.example.com.', qtype=A
 
         {cname_to_unauth_dnssec, #{
-            question => {"unauth.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"unauth.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -1316,11 +1259,11 @@ pdns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
+                    {<<"unauth.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{
                             dname = <<"no-idea.example.org">>
                         }},
-                    {<<"unauth.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"unauth.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_CNAME,
                             alg = ?DNS_ALG_RSASHA256,
@@ -1329,7 +1272,7 @@ pdns_dnssec_definitions() ->
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1399,16 +1342,17 @@ pdns_dnssec_definitions() ->
         %}}
         %}},
 
-        % 0  example.com.  IN  DNSKEY  86400  256 3 8 ...
-        % 0  example.com.  IN  DNSKEY  86400  257 3 8 ...
-        % 0  example.com.  IN  RRSIG  86400  DNSKEY 8 2 86400 [expiry] [inception] [keytag] example.com. ...
+        % minimal-dnssec.com.	3600	IN	RRSIG	DNSKEY 8 2 3600 20250701022432 20250402022432 7709 minimal-dnssec.com. ftamO2KppO1zevAzJGhQwXiuJTkwm0hCLG0NWNyMXQjZnC+fKqUtV6xV vTGSHbxPOk+g4S7zNrJnhyn3xKLe8EAsNq9pFc1g4/evxjKMNBroIRm1 p4F0bhCIGSOWruP07W5i3ir0YOk3qCeVhybwpB8itlSU06CIBKeoU4ro GgUjfk0WlOxoIOmo+3QW2ziwOPX2M7DJPcLuwnOnz3aPrg==
+        % minimal-dnssec.com.	3600	IN	DNSKEY	256 3 8 AwEAAdIqMYlTELLVzA8yP7FHshb0e+Kojr2IIjtCgpk4hspMtSJyavOm qT7fRu2FgzY5mo++FVLdkMd1+8Yj8I5bbnCWayA5kQgwY7HtFur1He19 i0ps5IZ2i+2XopOlmi2Zdob/RK4sYAw3G3t3ji8t6RMwLdsljNp+KDJU 59cVMRH9
+        % minimal-dnssec.com.	3600	IN	DNSKEY	257 3 8 AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36 ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiy SC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZK DcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8=
         % 2  .  IN  OPT  32768
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='example.com.', qtype=DNSKEY
 
         {direct_dnskey_dnssec, #{
-            question => {"example-dnssec.com", ?DNS_TYPE_DNSKEY},
+            question => {"minimal-dnssec.com", ?DNS_TYPE_DNSKEY},
             additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -1419,7 +1363,7 @@ pdns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 3600,
                         #dns_rrdata_dnskey{
                             flags = 257,
                             protocol = 3,
@@ -1427,7 +1371,7 @@ pdns_dnssec_definitions() ->
                             public_key = <<>>,
                             key_tag = 0
                         }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_DNSKEY, 3600,
                         #dns_rrdata_dnskey{
                             flags = 256,
                             protocol = 3,
@@ -1435,16 +1379,16 @@ pdns_dnssec_definitions() ->
                             public_key = <<>>,
                             key_tag = 0
                         }},
-                    {<<"example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_DNSKEY,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1482,8 +1426,9 @@ pdns_dnssec_definitions() ->
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='double.example.com.', qtype=A
 
+        % Verify that we deduplicate records correctly for RRSIG generation.
         {double_dnssec, #{
-            question => {"double.example-dnssec.com", ?DNS_TYPE_A},
+            question => {"double.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -1495,18 +1440,18 @@ pdns_dnssec_definitions() ->
                     oc = ?DNS_OPCODE_QUERY
                 },
                 answers => [
-                    {<<"double.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
+                    {<<"double.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
                         #dns_rrdata_a{ip = {192, 168, 5, 1}}},
-                    {<<"double.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
+                    {<<"double.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_A,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 120,
+                            original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
                             key_tag = 0,
-                            signers_name = <<"example-dnssec.com">>,
+                            signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
                 ],
@@ -1959,10 +1904,20 @@ pdns_definitions() ->
 
         % Test for NS query for test.com IN NS blah.test.com at APEX level. Should
         % return AA.
+        % ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 44220
+        % ;; flags: qr aa rd; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+        % ;; WARNING: recursion requested but not available
 
-        % 0  test.com.  IN  NS  3600  ns1.test.com.
-        % 0  test.com.  IN  NS  3600  ns2.test.com.
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+        % ;; OPT PSEUDOSECTION:
+        % ; EDNS: version: 0, flags:; udp: 4096
+        % ;; QUESTION SECTION:
+        % ;test.com.			IN	NS
+
+        % ;; ANSWER SECTION:
+        % test.com.		3600	IN	NS	ns1.dnsimple.com.
+        % test.com.		3600	IN	NS	ns2.dnsimple-edge.net.
+        % test.com.		3600	IN	NS	ns3.dnsimple.com.
+        % test.com.		3600	IN	NS	ns4.dnsimple-edge.org.
         % Reply to question for qname='test.com.', qtype=NS
 
         {apex_level_ns, #{
@@ -1978,21 +1933,20 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
-                        dname = <<"ns1.test.com">>
+                        dname = <<"ns1.dnsimple.com">>
                     }},
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
-                        dname = <<"ns2.test.com">>
+                        dname = <<"ns2.dnsimple-edge.net">>
+                    }},
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns3.dnsimple.com">>
+                    }},
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
+                        dname = <<"ns4.dnsimple-edge.org">>
                     }}
                 ],
                 authority => [],
-                additional => [
-                    {<<"ns1.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {1, 1, 1, 1}
-                    }},
-                    {<<"ns2.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {2, 2, 2, 2}
-                    }}
-                ]
+                additional => []
             }
         }},
 
@@ -3872,7 +3826,7 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"toroot.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600, #dns_rrdata_cname{
-                        dname = <<"">>
+                        dname = <<"test.com">>
                     }}
                 ],
                 authority => [],
@@ -3900,7 +3854,7 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 3600, #dns_rrdata_mx{
-                        exchange = <<"">>, preference = 10
+                        exchange = <<"test.com">>, preference = 10
                     }},
                     {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 3600, #dns_rrdata_mx{
                         exchange = <<"smtp-servers.test.com">>, preference = 15
@@ -3932,16 +3886,19 @@ pdns_definitions() ->
                 },
                 answers => [
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
-                        dname = <<"">>
+                        dname = <<"ns1.wtest.com">>
                     }},
                     {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
-                        dname = <<"ns1.wtest.com">>
+                        dname = <<"ns2.wtest.com">>
                     }}
                 ],
                 authority => [],
                 additional => [
                     {<<"ns1.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
                         ip = {2, 3, 4, 5}
+                    }},
+                    {<<"ns2.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
+                        ip = {5, 6, 7, 8}
                     }}
                 ]
             }
@@ -4327,11 +4284,7 @@ pdns_definitions() ->
                     {<<"very-long-txt.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TXT, 3600,
                         #dns_rrdata_txt{
                             txt = [
-                                <<"A very long TXT record! boy you won't believe how long.",
-                                    "A very long TXT record! boy you won't believe how long.",
-                                    "A very long TXT record! boy you won't believe how long.",
-                                    "A very long TXT record! boy you won't believe how long.",
-                                    "A very long TXT record! boy you">>,
+                                <<"A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you">>,
                                 <<" won't believe how long!">>
                             ]
                         }}

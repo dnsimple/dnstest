@@ -1194,6 +1194,78 @@
         "data": { "ip": "192.168.99.90" }
       },
       {
+        "name": "recursive1.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "recursive2.example.com"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "recursive2.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "recursive3.example.com"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "recursive3.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "recursive1.example.com"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "recursive1.example.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.7.1"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "recursive2.example.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.7.2"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "recursive3.example.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.7.3"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "rns.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "rns.example.com"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "rns.example.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.7.3"
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
         "name": "double.example.com",
         "type": "A",
         "ttl": 120,
