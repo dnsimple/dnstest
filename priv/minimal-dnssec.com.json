@@ -6,7 +6,7 @@
         "name": "minimal-dnssec.com",
         "type": "NS",
         "data": {
-          "dname": "ns1.dnsimple.com"
+          "dname": "ns1.example.com"
         },
         "ttl": 3600,
         "context": ["anycast"]
@@ -15,25 +15,7 @@
         "name": "minimal-dnssec.com",
         "type": "NS",
         "data": {
-          "dname": "ns2.dnsimple-edge.net"
-        },
-        "ttl": 3600,
-        "context": ["anycast"]
-      },
-      {
-        "name": "minimal-dnssec.com",
-        "type": "NS",
-        "data": {
-          "dname": "ns3.dnsimple.com"
-        },
-        "ttl": 3600,
-        "context": ["anycast"]
-      },
-      {
-        "name": "minimal-dnssec.com",
-        "type": "NS",
-        "data": {
-          "dname": "ns4.dnsimple-edge.org"
+          "dname": "ns2.example.com"
         },
         "ttl": 3600,
         "context": ["anycast"]
@@ -61,6 +43,80 @@
         },
         "ttl": 3600,
         "context": []
+      },
+      {
+        "name": "real-a.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "192.168.1.10"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "nxd.minimal-dnssec.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "nxdomain.minimal-dnssec.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "start.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "x.y.z.w1.minimal-dnssec.com"
+        }
+      },
+      {
+        "name": "*.w1.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "x.y.z.w2.minimal-dnssec.com"
+        }
+      },
+      {
+        "name": "*.w2.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "x.y.z.w3.minimal-dnssec.com"
+        }
+      },
+      {
+        "name": "*.w3.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "x.y.z.w4.minimal-dnssec.com"
+        }
+      },
+      {
+        "name": "*.w4.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "x.y.z.w5.minimal-dnssec.com"
+        }
+      },
+      {
+        "name": "*.w5.minimal-dnssec.com",
+        "type": "A",
+        "ttl": 120,
+        "data": {
+          "ip": "1.2.3.5"
+        }
+      },
+      {
+        "name": "unauth.minimal-dnssec.com",
+        "type": "CNAME",
+        "ttl": 120,
+        "data": {
+          "dname": "no-idea.example.org"
+        }
       },
       {
         "name": "minimal-dnssec.com",
@@ -116,23 +172,29 @@
         "context": []
       },
       {
-        "name": "heroku.test-9247-wildcard.minimal-dnssec.com",
+        "name": "www.minimal-dnssec.com",
         "type": "CNAME",
         "data": {
-          "dname": "pure-monkey-akf4ln1gqi46bzgi6brqt34m.herokudns.com"
+          "dname": "real-a.minimal-dnssec.com"
         },
         "ttl": 3600,
         "context": []
       },
       {
-        "name": "netlify-test.minimal-dnssec.com",
-        "type": "TXT",
+        "name": "double.minimal-dnssec.com",
+        "type": "A",
+        "ttl": 3600,
         "data": {
-          "txt": "\"ALIAS for dnsimple-test.netlifyglobalcdn.com\"",
-          "txts": ["ALIAS for dnsimple-test.netlifyglobalcdn.com"]
-        },
-        "ttl": 60,
-        "context": []
+          "ip": "192.168.5.1"
+        }
+      },
+      {
+        "name": "double.minimal-dnssec.com",
+        "type": "A",
+        "ttl": 3600,
+        "data": {
+          "ip": "192.168.5.1"
+        }
       },
       {
         "name": "alias-test.minimal-dnssec.com",
@@ -184,84 +246,10 @@
         "context": []
       },
       {
-        "name": "_acme-challenge.www.minimal-dnssec.com",
-        "type": "TXT",
-        "data": {
-          "txt": "\"xQDLO0FVyPXpjtcVoVL12EjqC-35c_lc59bTuGk_BuE\"",
-          "txts": ["xQDLO0FVyPXpjtcVoVL12EjqC-35c_lc59bTuGk_BuE"]
-        },
-        "ttl": 1,
-        "context": []
-      },
-      {
-        "name": "_acme-challenge.www.minimal-dnssec.com",
-        "type": "TXT",
-        "data": {
-          "txt": "\"lhaibPxgWPDM1NKFH_wQX--SkHuwYNfvVO1y42kPqkA\"",
-          "txts": ["lhaibPxgWPDM1NKFH_wQX--SkHuwYNfvVO1y42kPqkA"]
-        },
-        "ttl": 1,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
+        "name": "*.something.minimal-dnssec.com",
         "type": "A",
         "data": {
-          "ip": "192.168.0.8"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
-        "type": "A",
-        "data": {
-          "ip": "192.168.0.9"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
-        "type": "A",
-        "data": {
-          "ip": "192.168.0.10"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
-        "type": "A",
-        "data": {
-          "ip": "192.168.0.11"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
-        "type": "A",
-        "data": {
-          "ip": "192.168.0.15"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-test.minimal-dnssec.com",
-        "type": "A",
-        "data": {
-          "ip": "192.168.0.20"
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
-        "name": "site24x7-cname-test.minimal-dnssec.com",
-        "type": "CNAME",
-        "data": {
-          "dname": "site24x7-test.minimal-dnssec.com"
+          "ip": "3.4.5.6"
         },
         "ttl": 3600,
         "context": []

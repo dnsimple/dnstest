@@ -83,6 +83,22 @@
         }
       },
       {
+        "name": "www.cover.wtest.com",
+        "type": "CNAME",
+        "ttl": 3600,
+        "data": {
+          "dname": "proxy.cover.wtest.com"
+        }
+      },
+      {
+        "name": "*.cover.wtest.com",
+        "type": "A",
+        "ttl": 3600,
+        "data": {
+          "ip": "1.2.3.4"
+        }
+      },
+      {
         "name": "secure.wtest.com",
         "type": "MX",
         "ttl": 3600,

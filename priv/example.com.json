@@ -91,6 +91,53 @@
         }
       },
       {
+        "name": "caa.example.com",
+        "type": "CAA",
+        "data": {
+          "flags": 0,
+          "tag": "issue",
+          "value": "example.net"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "zonecut.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns1.cutwithzonecut.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "zonecut.example.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns2.cutwithzonecut.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "a.zonecut.example.com",
+        "type": "A",
+        "data": {
+          "ip": "9.3.3.3"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "cname.zonecut.example.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "a.minimal-dnssec.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
         "name": "www.example.com",
         "type": "CNAME",
         "ttl": 120,
@@ -449,6 +496,46 @@
         "data": {
           "txt": "\"begin\" \"the \\\"middle\\\" p\\\\art\" \"the end\""
         }
+      },
+      {
+        "name": "text0.example.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"k=rsa; p=one\"",
+          "txts": ["k=rsa; p=one"]
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "text1.example.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"k=rsa\\; p=one\"",
+          "txts": ["k=rsa\\; p=one"]
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "text2.example.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"k=rsa\\\\; p=one\"",
+          "txts": ["k=rsa\\\\; p=one"]
+        },
+        "ttl": 120,
+        "context": []
+      },
+      {
+        "name": "text3.example.com",
+        "type": "TXT",
+        "data": {
+          "txt": "\"k=rsa\\\\\\; p=one\"",
+          "txts": ["k=rsa\\\\\\; p=one"]
+        },
+        "ttl": 120,
+        "context": []
       },
       {
         "name": "ipv6.example.com",
