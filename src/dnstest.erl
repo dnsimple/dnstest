@@ -14,7 +14,7 @@
         question := {string() | binary(), dns:type()},
         additional => [dns:optrr()],
         transport => udp | tcp,
-        ignore => [string() | binary()],
+        ignore => [atom()],
         response := #{
             header := dns:message(),
             answers := [response()],
