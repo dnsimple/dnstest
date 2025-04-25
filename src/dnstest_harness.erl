@@ -148,22 +148,29 @@ do_run_test(
             % Check the results
             QHeader = test_header(ExpectedHeader, Response),
 
-            QAnswers = case lists:member(answers, IgnoreSections) of
-                true -> true;
-                false -> test_records(ExpectedAnswers, Response#dns_message.answers, answers)
-            end,
+            QAnswers =
+                case lists:member(answers, IgnoreSections) of
+                    true -> true;
+                    false -> test_records(ExpectedAnswers, Response#dns_message.answers, answers)
+                end,
 
-            QAuthority = case lists:member(authority, IgnoreSections) of
-                true -> true;
-                false -> test_records(ExpectedAuthority, Response#dns_message.authority, authority)
-            end,
+            QAuthority =
+                case lists:member(authority, IgnoreSections) of
+                    true ->
+                        true;
+                    false ->
+                        test_records(ExpectedAuthority, Response#dns_message.authority, authority)
+                end,
 
-            QAdditional = case lists:member(additional, IgnoreSections) of
-                true -> true;
-                false -> test_records(
-                    ExpectedAdditional, Response#dns_message.additional, additional
-                )
-            end,
+            QAdditional =
+                case lists:member(additional, IgnoreSections) of
+                    true ->
+                        true;
+                    false ->
+                        test_records(
+                            ExpectedAdditional, Response#dns_message.additional, additional
+                        )
+                end,
 
             Pass = QHeader andalso QAnswers andalso QAuthority andalso QAdditional,
             case Pass of
