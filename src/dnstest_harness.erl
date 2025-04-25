@@ -419,7 +419,7 @@ send_udp_query(Message, Host, Port) ->
             try
                 ok = gen_udp:send(Socket, Host, Port, Packet),
                 % Increased buffer size for potential large UDP responses
-                case gen_udp:recv(Socket, 65535, 6000) of
+                case gen_udp:recv(Socket, 65535, 1000) of
                     {ok, {_RHost, _RPort, Reply}} when is_binary(Reply) ->
                         {ok, dns:decode_message(Reply)};
                     {error, timeout} ->
