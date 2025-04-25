@@ -11,7 +11,7 @@
 -type definition() :: {
     atom(),
     #{
-        question := {string() | binary(), dns:type()},
+        question := {binary(), dns:type()},
         additional => [dns:optrr()],
         transport => udp | tcp,
         ignore => [atom()],
