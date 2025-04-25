@@ -3,5 +3,5 @@
     {vsn, git},
     {registered, [dnstest_harness]},
     {mod, {dnstest_app, []}},
-    {applications, [kernel, stdlib, dns_erlang]}
+    {applications, [kernel, stdlib, crypto, dns_erlang]}
 ]}.

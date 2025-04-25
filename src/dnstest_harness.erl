@@ -13,6 +13,9 @@
 % Internal API
 -export([send_request/4]).
 
+% Helper functions for dnskey process (RSA)
+-export([decode_dnskey_public_key/1, compute_base64_key/1]).
+
 -opaque request() ::
     {run, [dnstest:definition()]}
     | {run_target, [dnstest:definition()], [dnstest:name()]}.
@@ -272,7 +275,11 @@ compare_record_fields(
     end,
     case DataE =:= DataA of
         false ->
-            ?LOG_INFO_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [DataE, DataA]),
+            ?LOG_INFO_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [
+                % record_to_string(DataE), record_to_string(DataA)
+                DataE,
+                DataA
+            ]),
             % Add specific formatting for known binary-containing types
             % Check TypeE first, assuming Type mismatch was already caught if they differ.
             case TypeE of
@@ -327,6 +334,61 @@ compare_record_fields(
             ok
     end,
     ok.
+
+-spec decode_dnskey_public_key(binary()) -> [integer(), ...].
+decode_dnskey_public_key(Base64Key) ->
+    % Remove any whitespace
+    CleanKey = binary:replace(Base64Key, <<" ">>, <<"">>, [global]),
+
+    % Decode from base64
+    KeyBin = base64:decode(CleanKey),
+
+    % Extract the format, exponent length, exponent, and modulus
+    <<ExpLenByte:8, Rest/binary>> = KeyBin,
+
+    % Handle exponent length
+    {Exponent, ModulusBin} =
+        case ExpLenByte of
+            0 ->
+                <<ExpLen:16, ExpRest/binary>> = Rest,
+                <<Exp:ExpLen/unit:8, Mod/binary>> = ExpRest,
+                {Exp, Mod};
+            _ ->
+                <<Exp:ExpLenByte/unit:8, Mod/binary>> = Rest,
+                {Exp, Mod}
+        end,
+
+    % Convert modulus to integer
+    Modulus = binary:decode_unsigned(ModulusBin),
+
+    % Return as list [Exponent, Modulus] to match your original format
+    [Exponent, Modulus].
+
+-spec compute_base64_key(iodata()) -> binary().
+compute_base64_key(PublicKey) ->
+    % Extract exponent and modulus from the key
+    [Exponent, Modulus] = PublicKey,
+
+    % Encode exponent length (1 byte if exp <= 255, 3 bytes otherwise)
+    ExpBytes =
+        case Exponent of
+            _ when Exponent =< 255 ->
+                <<1:8, Exponent:8>>;
+            _ when Exponent =< 16#FFFF ->
+                <<2:8, Exponent:16>>;
+            _ ->
+                ExpSize = byte_size(binary:encode_unsigned(Exponent)),
+                <<ExpSize:8, Exponent:(ExpSize * 8)>>
+        end,
+
+    % Encode modulus as binary
+    ModulusBin = binary:encode_unsigned(Modulus),
+
+    % Concatenate exponent and modulus
+    KeyBin = <<ExpBytes/binary, ModulusBin/binary>>,
+
+    % Convert to base32
+    base64:encode(KeyBin).
 
 % Test expected header values against actual header values.
 test_header(ExpectedHeader, Response) ->

@@ -500,10 +500,12 @@ erldns_dnssec_definitions() ->
                             flags = 257,
                             protocol = 3,
                             alg = ?DNS_ALG_RSASHA256,
-                            public_key = [
-                                65537,
-                                15059316713381372792275644334141935314803758862584257546870685478540371458918789200658332004862025352272728485388383998473482292097383780966296499655106981035141199479945546229111376814887227425965140988124605444319782994454509082467369732584483244448613249489775522897139820573096035864215931055449707191213195502803777221381192536005861928617582326748645966424833881770581305290881791
-                            ],
+                            public_key = dnstest_harness:decode_dnskey_public_key(
+                                <<"AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36",
+                                    "ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiy",
+                                    "SC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZK",
+                                    "DcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8=">>
+                            ),
                             key_tag = 7709
                         }},
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
@@ -1342,9 +1344,9 @@ pdns_dnssec_definitions() ->
         %}}
         %}},
 
-        % minimal-dnssec.com.	3600	IN	RRSIG	DNSKEY 8 2 3600 20250701022432 20250402022432 7709 minimal-dnssec.com. ftamO2KppO1zevAzJGhQwXiuJTkwm0hCLG0NWNyMXQjZnC+fKqUtV6xV vTGSHbxPOk+g4S7zNrJnhyn3xKLe8EAsNq9pFc1g4/evxjKMNBroIRm1 p4F0bhCIGSOWruP07W5i3ir0YOk3qCeVhybwpB8itlSU06CIBKeoU4ro GgUjfk0WlOxoIOmo+3QW2ziwOPX2M7DJPcLuwnOnz3aPrg==
-        % minimal-dnssec.com.	3600	IN	DNSKEY	256 3 8 AwEAAdIqMYlTELLVzA8yP7FHshb0e+Kojr2IIjtCgpk4hspMtSJyavOm qT7fRu2FgzY5mo++FVLdkMd1+8Yj8I5bbnCWayA5kQgwY7HtFur1He19 i0ps5IZ2i+2XopOlmi2Zdob/RK4sYAw3G3t3ji8t6RMwLdsljNp+KDJU 59cVMRH9
-        % minimal-dnssec.com.	3600	IN	DNSKEY	257 3 8 AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36 ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiy SC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZK DcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8=
+        % minimal-dnssec.com.  3600  IN  RRSIG  DNSKEY 8 2 3600 20250701022432 20250402022432 7709 minimal-dnssec.com. ftamO2KppO1zevAzJGhQwXiuJTkwm0hCLG0NWNyMXQjZnC+fKqUtV6xV vTGSHbxPOk+g4S7zNrJnhyn3xKLe8EAsNq9pFc1g4/evxjKMNBroIRm1 p4F0bhCIGSOWruP07W5i3ir0YOk3qCeVhybwpB8itlSU06CIBKeoU4ro GgUjfk0WlOxoIOmo+3QW2ziwOPX2M7DJPcLuwnOnz3aPrg==
+        % minimal-dnssec.com.  3600  IN  DNSKEY  256 3 8 AwEAAdIqMYlTELLVzA8yP7FHshb0e+Kojr2IIjtCgpk4hspMtSJyavOm qT7fRu2FgzY5mo++FVLdkMd1+8Yj8I5bbnCWayA5kQgwY7HtFur1He19 i0ps5IZ2i+2XopOlmi2Zdob/RK4sYAw3G3t3ji8t6RMwLdsljNp+KDJU 59cVMRH9
+        % minimal-dnssec.com.  3600  IN  DNSKEY  257 3 8 AwEAAbk0RRaXNYo0Z/8B24QelHa/CedMRxO68qSPHjisJETLzSEO7E36 ZZpLWZghsPAbxkqf1ipAmihUCnT6gTs/aZz01XIiewiaYgmiUEUPbOiy SC+mDy5LnOB/0+Z6HsBUrJxC9jT/VIVpEYqeRvyWFMu+5ry0nIm4ZiZK DcMYZ7ZXDQ3vqwrZKACGhTEMmCIvbzD0SUv4G19jMJxR6xovev8=
         % 2  .  IN  OPT  32768
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='example.com.', qtype=DNSKEY
@@ -1739,19 +1741,19 @@ pdns_definitions() ->
         }},
 
         % ;; ANSWER SECTION:
-        % example.com.		120	IN	NS	ns1.example.com.
-        % example.com.		120	IN	NS	ns2.example.com.
-        % example.com.		100000	IN	SOA	ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-        % example.com.		120	IN	MX	10 smtp-servers.example.com.
-        % example.com.		120	IN	MX	15 smtp-servers.test.com.
+        % example.com.    120  IN  NS  ns1.example.com.
+        % example.com.    120  IN  NS  ns2.example.com.
+        % example.com.    100000  IN  SOA  ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
+        % example.com.    120  IN  MX  10 smtp-servers.example.com.
+        % example.com.    120  IN  MX  15 smtp-servers.test.com.
 
         % ;; ADDITIONAL SECTION:
-        % ns1.example.com.	120	IN	A	192.168.1.1
-        % ns1.example.com.	120	IN	AAAA	2001:db8:85a3::8a2e:370:7334
-        % ns2.example.com.	120	IN	A	192.168.1.2
-        % smtp-servers.example.com. 120	IN	A	192.168.0.2
-        % smtp-servers.example.com. 120	IN	A	192.168.0.3
-        % smtp-servers.example.com. 120	IN	A	192.168.0.4
+        % ns1.example.com.  120  IN  A  192.168.1.1
+        % ns1.example.com.  120  IN  AAAA  2001:db8:85a3::8a2e:370:7334
+        % ns2.example.com.  120  IN  A  192.168.1.2
+        % smtp-servers.example.com. 120  IN  A  192.168.0.2
+        % smtp-servers.example.com. 120  IN  A  192.168.0.3
+        % smtp-servers.example.com. 120  IN  A  192.168.0.4
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='example.com.', qtype=ANY
 
@@ -1911,13 +1913,13 @@ pdns_definitions() ->
         % ;; OPT PSEUDOSECTION:
         % ; EDNS: version: 0, flags:; udp: 4096
         % ;; QUESTION SECTION:
-        % ;test.com.			IN	NS
+        % ;test.com.      IN  NS
 
         % ;; ANSWER SECTION:
-        % test.com.		3600	IN	NS	ns1.dnsimple.com.
-        % test.com.		3600	IN	NS	ns2.dnsimple-edge.net.
-        % test.com.		3600	IN	NS	ns3.dnsimple.com.
-        % test.com.		3600	IN	NS	ns4.dnsimple-edge.org.
+        % test.com.    3600  IN  NS  ns1.dnsimple.com.
+        % test.com.    3600  IN  NS  ns2.dnsimple-edge.net.
+        % test.com.    3600  IN  NS  ns3.dnsimple.com.
+        % test.com.    3600  IN  NS  ns4.dnsimple-edge.org.
         % Reply to question for qname='test.com.', qtype=NS
 
         {apex_level_ns, #{
