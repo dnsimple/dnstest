@@ -1405,7 +1405,7 @@ pdns_dnssec_definitions() ->
         % erldns rejects direct RRSIG queries
 
         {direct_rrsig, #{
-            question => {"example-dnssec.com", ?DNS_TYPE_RRSIG},
+            question => {"minimal-dnssec.com", ?DNS_TYPE_RRSIG},
             additional => [#dns_optrr{dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -4249,6 +4249,7 @@ pdns_definitions() ->
 
         {unknown_domain, #{
             question => {"this.domain.is.not.in.the.server", ?DNS_TYPE_A},
+            ignore => [authority, additional],
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_REFUSED,

@@ -143,15 +143,28 @@ do_run_test(
     case Result of
         {ok, Response} ->
             ?LOG_DEBUG("Response: ~p", [Response]),
+            IgnoreSections = maps:get(ignore, TestDefinitionMap, []),
+
             % Check the results
             QHeader = test_header(ExpectedHeader, Response),
 
-            QAnswers = test_records(ExpectedAnswers, Response#dns_message.answers, answers),
-            QAuthority = test_records(ExpectedAuthority, Response#dns_message.authority, authority),
+            QAnswers = case lists:member(answers, IgnoreSections) of
+                true -> true;
+                false -> test_records(ExpectedAnswers, Response#dns_message.answers, answers)
+            end,
 
-            QAdditional = test_records(
-                ExpectedAdditional, Response#dns_message.additional, additional
-            ),
+            QAuthority = case lists:member(authority, IgnoreSections) of
+                true -> true;
+                false -> test_records(ExpectedAuthority, Response#dns_message.authority, authority)
+            end,
+
+            QAdditional = case lists:member(additional, IgnoreSections) of
+                true -> true;
+                false -> test_records(
+                    ExpectedAdditional, Response#dns_message.additional, additional
+                )
+            end,
+
             Pass = QHeader andalso QAnswers andalso QAuthority andalso QAdditional,
             case Pass of
                 true ->
