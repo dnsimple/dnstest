@@ -918,6 +918,65 @@ erldns_dnssec_definitions() ->
             }
         }},
 
+        % Verify NXNAME not present in ENT response
+        {nsec_nxname_ent, #{
+            question => {"ent1.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.ent1.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                        }},
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 4,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
         % Verify NSEC RR Type bitmap is correct
         {nsec_rr_type_bitmap_wildcard, #{
             question => {"nosuch.something.minimal-dnssec.com", ?DNS_TYPE_AAAA},

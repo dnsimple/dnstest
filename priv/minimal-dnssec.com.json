@@ -255,6 +255,15 @@
         "context": []
       },
       {
+        "name": "exist.ent1.minimal-dnssec.com",
+        "type": "A",
+        "data": {
+          "ip": "3.4.5.6"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
         "name": "minimal-dnssec.com",
         "type": "DNSKEY",
         "data": {
