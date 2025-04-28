@@ -896,13 +896,13 @@ erldns_dnssec_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC,
-                        86400, #dns_rrdata_nsec{
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
                             next_dname = <<"\000.nxname.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, 128]
                         }},
-                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG,
-                        86400, #dns_rrdata_rrsig{
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 4,
