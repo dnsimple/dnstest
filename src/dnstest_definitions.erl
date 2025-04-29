@@ -841,7 +841,7 @@ erldns_dnssec_definitions() ->
         % Verify NXNAME query
         % https://www.ietf.org/archive/id/draft-ietf-dnsop-compact-denial-of-existence-07.html#section-3.5
         {nxname_query, #{
-            question => {"nxname.minimal-dnssec.com", 128},
+            question => {"nxname.minimal-dnssec.com", ?DNS_TYPE_NXNAME},
             additional => [#dns_optrr{dnssec = true}],
             transport => tcp,
             response => #{
@@ -899,7 +899,7 @@ erldns_dnssec_definitions() ->
                     {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.nxname.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, 128]
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
                         }},
                     {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
