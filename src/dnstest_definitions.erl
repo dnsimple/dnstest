@@ -768,6 +768,7 @@ erldns_dnssec_definitions() ->
         }},
 
         % Ensure the correct NSEC result when zone is present but the qname is not, and the qtype is ANY.
+        % TODO: Update this to NXNAME when ENTs are implemented
         {nsec_name_any, #{
             question => {"ab.minimal-dnssec.com", ?DNS_TYPE_ANY},
             additional => [#dns_optrr{dnssec = true}],
@@ -807,19 +808,7 @@ erldns_dnssec_definitions() ->
                     {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.ab.minimal-dnssec.com">>,
-                            types = [
-                                ?DNS_TYPE_NS,
-                                ?DNS_TYPE_SOA,
-                                ?DNS_TYPE_MX,
-                                ?DNS_TYPE_TXT,
-                                ?DNS_TYPE_RRSIG,
-                                ?DNS_TYPE_NSEC,
-                                ?DNS_TYPE_DNSKEY,
-                                ?DNS_TYPE_CDS,
-                                ?DNS_TYPE_CDNSKEY,
-                                ?DNS_TYPE_SPF,
-                                ?DNS_TYPE_CAA
-                            ]
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
                         }},
                     {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
