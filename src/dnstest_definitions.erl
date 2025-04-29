@@ -905,7 +905,7 @@ erldns_dnssec_definitions() ->
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
-                            labels = 4,
+                            labels = 3,
                             original_ttl = 86400,
                             expiration = 0,
                             inception = 0,
@@ -964,7 +964,7 @@ erldns_dnssec_definitions() ->
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
-                            labels = 4,
+                            labels = 3,
                             original_ttl = 86400,
                             expiration = 0,
                             inception = 0,
