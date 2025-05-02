@@ -48,7 +48,7 @@
         "name": "alias.minimal-dnssec.com",
         "type": "ALIAS",
         "data": {
-          "dname": "nxdomain.example.com"
+          "dname": "dnstest.dnsimple-test.com"
         },
         "ttl": 3600,
         "context": []
