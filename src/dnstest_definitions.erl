@@ -807,19 +807,7 @@ erldns_dnssec_definitions() ->
                     {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.ab.minimal-dnssec.com">>,
-                            types = [
-                                ?DNS_TYPE_NS,
-                                ?DNS_TYPE_SOA,
-                                ?DNS_TYPE_MX,
-                                ?DNS_TYPE_TXT,
-                                ?DNS_TYPE_RRSIG,
-                                ?DNS_TYPE_NSEC,
-                                ?DNS_TYPE_DNSKEY,
-                                ?DNS_TYPE_CDS,
-                                ?DNS_TYPE_CDNSKEY,
-                                ?DNS_TYPE_SPF,
-                                ?DNS_TYPE_CAA
-                            ]
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
                         }},
                     {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
@@ -830,6 +818,145 @@ erldns_dnssec_definitions() ->
                             expiration = 1751336672,
                             inception = 1743560672,
                             key_tag = 27123,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
+        % Verify NXNAME query
+        % https://www.ietf.org/archive/id/draft-ietf-dnsop-compact-denial-of-existence-07.html#section-3.5
+        {nxname_query, #{
+            question => {"nxname.minimal-dnssec.com", ?DNS_TYPE_NXNAME},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_FORMERR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [],
+                additional => []
+            }
+        }},
+
+        % Verify NSEC bitmap correctly has NXNAME (TYPE128) in the event that label is NXDOMAIN
+        {nsec_nxname, #{
+            question => {"nxname.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.nxname.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
+                        }},
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
+        % Verify NXNAME not present in ENT response
+        {nsec_nxname_ent, #{
+            question => {"ent1.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.ent1.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                        }},
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
