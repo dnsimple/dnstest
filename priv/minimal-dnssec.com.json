@@ -45,6 +45,24 @@
         "context": []
       },
       {
+        "name": "alias.minimal-dnssec.com",
+        "type": "ALIAS",
+        "data": {
+          "dname": "dnstest.dnsimple-test.com"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "alias.minimal-dnssec.com",
+        "type": "TXT",
+        "data": {
+          "txt": "ALIAS companion"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
         "name": "real-a.minimal-dnssec.com",
         "type": "A",
         "data": {

@@ -847,6 +847,189 @@ erldns_dnssec_definitions() ->
             }
         }},
 
+        % Verify NSEC bitmap is correct for ALIAS queries when qtype is A
+        {nsec_alias_a, #{
+            question => {"alias.minimal-dnssec.com", ?DNS_TYPE_A},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.alias.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_TXT, ?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
+        % Verify NSEC bitmap is correct for ALIAS queries when qtype is AAAA
+        {nsec_alias_aaaa, #{
+            question => {"alias.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.alias.minimal-dnssec.com">>,
+                            types = [?DNS_TYPE_A, ?DNS_TYPE_TXT, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
+        % Verify NSEC bitmap is correct for ALIAS queries when qtype is CNAME
+        {nsec_alias_other, #{
+            question => {"alias.minimal-dnssec.com", ?DNS_TYPE_CNAME},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [],
+                authority => [
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.example.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2000081501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
+                    }},
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_SOA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 2,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                        #dns_rrdata_nsec{
+                            next_dname = <<"\000.alias.minimal-dnssec.com">>,
+                            types = [
+                                ?DNS_TYPE_A,
+                                ?DNS_TYPE_TXT,
+                                ?DNS_TYPE_AAAA,
+                                ?DNS_TYPE_RRSIG,
+                                ?DNS_TYPE_NSEC
+                            ]
+                        }},
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_NSEC,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 3,
+                            original_ttl = 86400,
+                            expiration = 0,
+                            inception = 0,
+                            key_tag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                additional => []
+            }
+        }},
+
         % Verify NSEC bitmap correctly has NXNAME (TYPE128) in the event that label is NXDOMAIN
         {nsec_nxname, #{
             question => {"nxname.minimal-dnssec.com", ?DNS_TYPE_AAAA},
