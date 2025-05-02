@@ -1005,7 +1005,13 @@ erldns_dnssec_definitions() ->
                     {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.alias.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_A, ?DNS_TYPE_TXT, ?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
+                            types = [
+                                ?DNS_TYPE_A,
+                                ?DNS_TYPE_TXT,
+                                ?DNS_TYPE_AAAA,
+                                ?DNS_TYPE_RRSIG,
+                                ?DNS_TYPE_NSEC
+                            ]
                         }},
                     {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
                         #dns_rrdata_rrsig{
