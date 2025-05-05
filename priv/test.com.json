@@ -128,6 +128,27 @@
         "context": []
       },
       {
+        "name": "host1.test.test.com",
+        "type": "A",
+        "data": {
+          "ip": "5.6.7.8"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "_voip._tcp.host1.test.test.com",
+        "type": "SRV",
+        "data": {
+          "priority": 0,
+          "weight": 100,
+          "port": 422,
+          "target": "server2.example.net."
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
         "name": "sub.test.test.com",
         "type": "NS",
         "data": {
@@ -346,6 +367,15 @@
         "context": []
       },
       {
+        "name": "h.j.k.l.test.com",
+        "type": "A",
+        "data": {
+          "ip": "9.8.7.6"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
         "name": "aland.test.com",
         "type": "TXT",
         "data": {
@@ -438,8 +468,67 @@
         },
         "ttl": 3600,
         "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "DNSKEY",
+        "data": {
+          "flags": 257,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAe17EaAsPtEjpwxmcp4pM2zyFqVZviJUzk3QS1sjPCC1CQRdSteKN/nKyN6fFaJHBdYhvf1MCYlbz48Sw+anLiRkZY+EwFHoE9BfYbQa5itSckzTL1gpFFMpjGpVjuyfRSVRqxnHBzUGeioUXvCqbGWTjE+UifjoW+3tN4p7ltlm1rKnIL0olvVAtHIPOGZFDiCJ56HJhjminH1V1dIV7iU="
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "DNSKEY",
+        "data": {
+          "flags": 256,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAdn4y2+iYBh3SG0p0Udo+BZTylnh6ZpPfffMWxPVB87aCV0f+xdJ6M8aL/Yk2LzejLlWPbvcacoMGgRMV2c7D6RR0c1dkYPDgQVOZbkeBQZbSZeujNuyr7IgKpa8ExBOJSN7Jhp8eLSDmeUNQhC9TK6LFvZC4Dh9sCHwo/csOyJB"
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "CDNSKEY",
+        "data": {
+          "flags": 257,
+          "protocol": 3,
+          "alg": 8,
+          "public_key": "AwEAAe17EaAsPtEjpwxmcp4pM2zyFqVZviJUzk3QS1sjPCC1CQRdSteKN/nKyN6fFaJHBdYhvf1MCYlbz48Sw+anLiRkZY+EwFHoE9BfYbQa5itSckzTL1gpFFMpjGpVjuyfRSVRqxnHBzUGeioUXvCqbGWTjE+UifjoW+3tN4p7ltlm1rKnIL0olvVAtHIPOGZFDiCJ56HJhjminH1V1dIV7iU="
+        },
+        "ttl": 3600,
+        "context": []
+      },
+      {
+        "name": "test.com",
+        "type": "CDS",
+        "data": {
+          "keytag": 5972,
+          "alg": 8,
+          "digest_type": 2,
+          "digest": "7675AA83358D9CF8FACA79FA0934EB5B41CC4F9CFBF879166E3831DBB201687F"
+        },
+        "ttl": 3600,
+        "context": []
       }
     ],
-    "keys": []
+    "keys": [
+      {
+        "ksk": "-----BEGIN RSA PRIVATE KEY-----\nMIIC7QIBAAKBoQDtexGgLD7RI6cMZnKeKTNs8halWb4iVM5N0EtbIzwgtQkEXUrX\nijf5ysjenxWiRwXWIb39TAmJW8+PEsPmpy4kZGWPhMBR6BPQX2G0GuYrUnJM0y9Y\nKRRTKYxqVY7sn0UlUasZxwc1BnoqFF7wqmxlk4xPlIn46Fvt7TeKe5bZZtaypyC9\nKJb1QLRyDzhmRQ4gieehyYY5opx9VdXSFe4lAgMBAAECgaAIQD9jhkYEdC2oo6KV\n1i6gOWUKB60weivUzkjf+MBtDn0qtqcUCAxb1GzYN0TEJ52PTArS0yJ9sD/s46UE\nzYgv4YEZ1G3uKpcNpVK6tDiNBrYncYOqo29EguJkv880mK2ieYW4NQEYydsOw+mJ\nYj+3iRoCeoD9lO3oBkR8FuC2tHF7ZBoxD9FbjrOwcsaWktiPJ16hrgwTb4hPtGyw\nipchAlEA/q/cKg+Xvu5EwGamsrp/GB/rpehF7cqCj9zWLE9ksLIqqhqcyTPWyoVI\njUiiBogpJgz8UkQ9Rn8mL4ilm7pJ/Vlqyvr1Bw61/kMWSIUO0DkCUQDutH/yRA8m\n2tB1QruR1bjwvf0aP3n7a8HhdmUtMzqXaR1h+RkXcVF8KjnM9SH9a4gYxlF5AhTA\n2Qi6TGju7icCnKGqayqlAHhlMxUfPLG1TQJRAPejMRSooqigbrMRXKbOFYP0jaF8\nrnne/YI6fPkKnWH9auSJCcfNIt06KWhOplRpknEQEUtAVMA2I3/2guhfg0/W4LLK\nvvMEx8qZmpIa5mNpAlAqxX7ziwxn+udFS5rOa8xCnthePqd9zHYmDw/cBIToInaY\nWokLcUuXgv1uYzIe9YiiX86zbxMG5xywPQbEYTnuNuCk56Txgd8QyxFq0nZJNQJR\nAMR674Q0Ac7YdNyU9paUXuUO4Q3d697eJL+H6dTzzcMxjbNyYSTrtFG7B7P/mHiN\nwruik5i9Gn3s1Ah/wVySjmNe6hWXsKQC4ujW1ivI+8W7\n-----END RSA PRIVATE KEY-----\n",
+        "ksk_keytag": 5972,
+        "ksk_alg": 8,
+        "zsk": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDZ+MtvomAYd0htKdFHaPgWU8pZ4emaT333zFsT1QfO2gldH/sX\nSejPGi/2JNi83oy5Vj273GnKDBoETFdnOw+kUdHNXZGDw4EFTmW5HgUGW0mXrozb\nsq+yICqWvBMQTiUjeyYafHi0g5nlDUIQvUyuixb2QuA4fbAh8KP3LDsiQQIDAQAB\nAoGADa7ShnV49tA2GbQwUP1D5ZLo9u95jJhE3hNT/FC5JsEFKXVie7nGBYotTJRP\njruhtdi2E17ovSg5Ud/A9Nf+SUK4qDP9p8S3G21eRdYeTCC1PKVGfwaNh/1anqUE\n930FbP2wvTw2vLQU0Zf/hv40Wbe+S6H+e60cDjtMlTHg2ckCQQDvR4JNkptje7In\n7LcDbvBOkXxqS9/MEJMpEv+omYXT+mDJaRJ6t2p5THAVAMClDzo7l66IIuE36xMK\nlOHdA5/XAkEA6TQdOTLR03Vyu1ZV1iD14NOmn0hO2IYSdv3z8MbLcUYjssA1nzCe\nHp4/R5Yg0bdMes5YwvJBBVHbCrjOd4lrpwJBAJPjxLuhU31HZLOccPkkRk6pSRaB\n0s7Tp8EJRw6z5K1B4TRbRtqmJp7WCahRkL/0C2/trifiNwVSu7AcmQT7Sn0CQQDE\n8akYbC2+CnspcQEuxElCZRxbemJ0A85GRbQlDI41jImLZT4jwZhXvUctusDeu5FQ\nSUG26YY16uo0xNxBIYITAkA03kl5xBiPaJ53CYcn4yKQo7xV11Ds4da36JMdk8/o\n+Z70F5ybsuMdGbB8aCmkpLykO+yzICVqSkcIysiADBuC\n-----END RSA PRIVATE KEY-----\n",
+        "zsk_keytag": 29806,
+        "zsk_alg": 8,
+        "inception": "2025-05-05T09:40:51.056452Z",
+        "until": "2025-08-03T09:40:51.0549Z"
+      }
+    ]
   }
 ]
