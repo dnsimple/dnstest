@@ -99,6 +99,14 @@
         }
       },
       {
+        "name": "a.b.c.d.cover.wtest.com",
+        "type": "A",
+        "ttl": 3600,
+        "data": {
+          "ip": "9.9.9.9"
+        }
+      },
+      {
         "name": "secure.wtest.com",
         "type": "MX",
         "ttl": 3600,
