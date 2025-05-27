@@ -35,7 +35,9 @@
 -define(SERVER, ?MODULE).
 -define(DEFAULT_IPV4_ADDRESS, {127, 0, 0, 1}).
 -define(DEFAULT_PORT, 53).
--define(LOG_INFO_PAD(Pad, Fmt, Args), ?LOG_INFO("|~s" ++ Fmt, [lists:duplicate(Pad, $\s) | Args])).
+-define(LOG_WARNING_PAD(Pad, Fmt, Args),
+    ?LOG_WARNING("|~s" ++ Fmt, [lists:duplicate(Pad, $\s) | Args])
+).
 
 % Public API
 
@@ -225,14 +227,18 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
     ExpectedRecordsSorted = lists:sort(
         lists:map(fill_data_function(ActualRecordsSorted), ExpectedRecords)
     ),
-
-    case length(ExpectedRecordsSorted) =/= length(ActualRecordsSorted) of
-        true ->
-            ?LOG_INFO("Record count mismatch in ~p section.", [SectionType]),
-            ?LOG_INFO("Expected (~p): ~p", [length(ExpectedRecordsSorted), ExpectedRecordsSorted]),
-            ?LOG_INFO("Actual\s\s\s(~p): ~p", [length(ActualRecordsSorted), ActualRecordsSorted]),
-            false;
+    case length(ExpectedRecordsSorted) =:= length(ActualRecordsSorted) of
         false ->
+            ?LOG_WARNING(#{
+                what => record_count_mismatch,
+                section => SectionType,
+                expected => ExpectedRecordsSorted,
+                expected_count => length(ExpectedRecordsSorted),
+                actual => ActualRecordsSorted,
+                actual_count => length(ActualRecordsSorted)
+            }),
+            false;
+        true ->
             ZippedRecords = lists:zip(ExpectedRecordsSorted, ActualRecordsSorted),
             lists:foldl(
                 fun({Expected, Actual}, Acc) ->
@@ -262,24 +268,27 @@ test_records(ExpectedRecords, ActualRecords, SectionType) ->
 compare_record_fields(
     {NameE, ClassE, TypeE, TTLE, DataE}, {NameA, ClassA, TypeA, TTLA, DataA}, SectionType
 ) ->
-    ?LOG_INFO("Record mismatch in ~p section:", [SectionType]),
-    ?LOG_INFO_PAD(2, "Full Expected: ~p", [{NameE, ClassE, TypeE, TTLE, DataE}]),
-    ?LOG_INFO_PAD(2, "Full Actual:\s\s\s~p", [{NameA, ClassA, TypeA, TTLA, DataA}]),
+    ?LOG_WARNING(#{
+        what => record_mismatch,
+        section => SectionType,
+        expected => {NameE, ClassE, TypeE, TTLE, DataE},
+        actual => {NameA, ClassA, TypeA, TTLA, DataA}
+    }),
     case NameE =:= NameA of
         false ->
-            ?LOG_INFO_PAD(4, "Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
+            ?LOG_WARNING_PAD(4, "Field 'Name' mismatch: Expected ~p, Actual ~p", [NameE, NameA]);
         true ->
             ok
     end,
     case ClassE =:= ClassA of
         false ->
-            ?LOG_INFO_PAD(4, "Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
+            ?LOG_WARNING_PAD(4, "Field 'Class' mismatch: Expected ~p, Actual ~p", [ClassE, ClassA]);
         true ->
             ok
     end,
     case TypeE =:= TypeA of
         false ->
-            ?LOG_INFO_PAD(
+            ?LOG_WARNING_PAD(
                 4,
                 "Field 'Type' mismatch: Expected ~p (~s), Actual ~p (~s)",
                 [TypeE, dns_names:type_name(TypeE), TypeA, dns_names:type_name(TypeA)]
@@ -289,13 +298,13 @@ compare_record_fields(
     end,
     case TTLE =:= TTLA of
         false ->
-            ?LOG_INFO_PAD(4, "Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
+            ?LOG_WARNING_PAD(4, "Field 'TTL' mismatch: Expected ~p, Actual ~p", [TTLE, TTLA]);
         true ->
             ok
     end,
     case DataE =:= DataA of
         false ->
-            ?LOG_INFO_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [
+            ?LOG_WARNING_PAD(4, "Field 'Data' mismatch: Expected ~p, Actual ~p", [
                 % record_to_string(DataE), record_to_string(DataA)
                 DataE,
                 DataA
@@ -310,7 +319,7 @@ compare_record_fields(
                     SigA = binary_to_list(DataA#dns_rrdata_rrsig.signature),
                     case SigE =:= SigA of
                         false ->
-                            ?LOG_INFO_PAD(6, "RRSIG Signature Hex: Expected ~s, Actual ~s", [
+                            ?LOG_WARNING_PAD(6, "RRSIG Signature Hex: Expected ~s, Actual ~s", [
                                 SigE, SigA
                             ]);
                         true ->
@@ -323,7 +332,7 @@ compare_record_fields(
                     MapA = DataA#dns_rrdata_nsec.types,
                     case MapE =:= MapA of
                         false ->
-                            ?LOG_INFO_PAD(6, "NSEC Type Bit Maps: Expected ~p, Actual ~p", [
+                            ?LOG_WARNING_PAD(6, "NSEC Type Bit Maps: Expected ~p, Actual ~p", [
                                 MapE, MapA
                             ]);
                         true ->
@@ -340,7 +349,7 @@ compare_record_fields(
                     ),
                     case TxtE =:= TxtA of
                         false ->
-                            ?LOG_INFO_PAD(6, "TXT Text Hex List: Expected ~p, Actual ~p", [
+                            ?LOG_WARNING_PAD(6, "TXT Text Hex List: Expected ~p, Actual ~p", [
                                 TxtE, TxtA
                             ]);
                         true ->
@@ -423,8 +432,11 @@ test_header(ExpectedHeader, Response) ->
     },
     case ExpectedHeader =:= ActualHeader of
         false ->
-            ?LOG_INFO("Expected header: ~p", [ExpectedHeader]),
-            ?LOG_INFO("Actual header:\s\s\s~p", [ActualHeader]),
+            ?LOG_WARNING(#{
+                what => header_check_failed,
+                expected => ExpectedHeader,
+                actual => ActualHeader
+            }),
             false;
         true ->
             true
