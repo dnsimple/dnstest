@@ -282,7 +282,7 @@ compare_record_fields(
             ?LOG_INFO_PAD(
                 4,
                 "Field 'Type' mismatch: Expected ~p (~s), Actual ~p (~s)",
-                [TypeE, dns:type_name(TypeE), TypeA, dns:type_name(TypeA)]
+                [TypeE, dns_names:type_name(TypeE), TypeA, dns_names:type_name(TypeA)]
             );
         true ->
             ok
@@ -528,7 +528,7 @@ update_rrsig(ExpectedRRData, [{_, _, _, _, Data} | _]) ->
     ExpectedRRData#dns_rrdata_rrsig{
         expiration = Data#dns_rrdata_rrsig.expiration,
         inception = Data#dns_rrdata_rrsig.inception,
-        key_tag = Data#dns_rrdata_rrsig.key_tag,
+        keytag = Data#dns_rrdata_rrsig.keytag,
         signature = Data#dns_rrdata_rrsig.signature
     }.
 
@@ -536,7 +536,7 @@ update_dnskey(ExpectedRRData, []) ->
     ExpectedRRData;
 update_dnskey(ExpectedRRData, [{_, _, _, _, Data} | _]) ->
     ExpectedRRData#dns_rrdata_dnskey{
-        key_tag = Data#dns_rrdata_dnskey.key_tag,
+        keytag = Data#dns_rrdata_dnskey.keytag,
         public_key = Data#dns_rrdata_dnskey.public_key
     }.
 
