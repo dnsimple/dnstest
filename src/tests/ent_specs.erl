@@ -12,7 +12,7 @@ definitions() ->
     [
         %% ENT basic - Queries to empty non-terminal nodes should return SOA in authority section
         {ent, #{
-            question => {"c.test.com", ?DNS_TYPE_A},
+            question => {~"c.test.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -40,7 +40,7 @@ definitions() ->
 
         %% ENT ANY - Querying for ANY on ENT nodes should also return SOA in authority section
         {ent_any, #{
-            question => {"c.test.com", ?DNS_TYPE_ANY},
+            question => {~"c.test.com", ?DNS_TYPE_ANY},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -68,7 +68,7 @@ definitions() ->
 
         %% SOA queries to ENTs should get the zone's SOA
         {ent_soa, #{
-            question => {"c.test.com", ?DNS_TYPE_SOA},
+            question => {~"c.test.com", ?DNS_TYPE_SOA},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -96,7 +96,7 @@ definitions() ->
 
         %% Testing RR that is enclosed in ENTs
         {ent_rr_enclosed_in_ent, #{
-            question => {"b.c.test.com", ?DNS_TYPE_TXT},
+            question => {~"b.c.test.com", ?DNS_TYPE_TXT},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -124,7 +124,7 @@ definitions() ->
 
         %% Testing NSEC RR that is enclosed in ENTs
         {ent_rr_enclosed_in_ent_nsec, #{
-            question => {"b.c.test.com", ?DNS_TYPE_TXT},
+            question => {~"b.c.test.com", ?DNS_TYPE_TXT},
             additional => [#dns_optrr{udp_payload_size = 1232, dnssec = true}],
             response => #{
                 header => #dns_message{
@@ -153,7 +153,7 @@ definitions() ->
                         original_ttl = 3600,
                         expiration = 0,
                         inception = 0,
-                        key_tag = 0,
+                        keytag = 0,
                         signers_name = <<"test.com">>,
                         signature = <<>>
                     }},
@@ -168,7 +168,7 @@ definitions() ->
                         original_ttl = 300,
                         expiration = 0,
                         inception = 0,
-                        key_tag = 0,
+                        keytag = 0,
                         signers_name = <<"test.com">>,
                         signature = <<>>
                     }}
@@ -179,7 +179,7 @@ definitions() ->
 
         %% With DNSSEC, ENTs should not have NXNAME in the bitmap
         {nsec_nxname_ent, #{
-            question => {"ent1.minimal-dnssec.com", ?DNS_TYPE_AAAA},
+            question => {~"ent1.minimal-dnssec.com", ?DNS_TYPE_AAAA},
             additional => [#dns_optrr{dnssec = true}],
             transport => tcp,
             response => #{
@@ -210,7 +210,7 @@ definitions() ->
                             original_ttl = 3600,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -227,7 +227,7 @@ definitions() ->
                             original_ttl = 86400,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
@@ -238,7 +238,7 @@ definitions() ->
 
         %% Wildcard below an ENT
         {ent_wildcard_below_ent, #{
-            question => {"something.a.b.c.test.com", ?DNS_TYPE_A},
+            question => {~"something.a.b.c.test.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,

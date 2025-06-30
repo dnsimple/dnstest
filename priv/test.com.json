@@ -57,7 +57,6 @@
         "name": "txt.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"welp\" \"derpier\"",
           "txts": ["welp", "derpier"]
         },
         "ttl": 3600,
@@ -320,7 +319,6 @@
         "name": "very-long-txt.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long!\"",
           "txts": [
             "A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you won't believe how long. A very long TXT record! boy you",
             " won't believe how long!"
@@ -342,7 +340,6 @@
         "name": "_underscore.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"underscores are terrible\"",
           "txts": ["underscores are terrible"]
         },
         "ttl": 3600,
@@ -379,7 +376,6 @@
         "name": "aland.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"\\\\195\\\\133LAND ISLANDS\"",
           "txts": ["\\195\\133LAND ISLANDS"]
         },
         "ttl": 3600,
@@ -389,7 +385,6 @@
         "name": "hightxt.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"v=spf1 mx ip4:78.46.192.210 –all\"",
           "txts": ["v=spf1 mx ip4:78.46.192.210 –all"]
         },
         "ttl": 3600,
@@ -408,7 +403,6 @@
         "name": "interrupted-rrset.test.com",
         "type": "TXT",
         "data": {
-          "txt": "\"check AXFR signpipe\"",
           "txts": ["check AXFR signpipe"]
         },
         "ttl": 3600,

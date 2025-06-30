@@ -128,7 +128,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "make the empty non-terminal non-empty"
+          "txts": ["make the empty non-terminal non-empty"]
         }
       },
       {
@@ -152,7 +152,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "non-empty"
+          "txts": ["non-empty"]
         }
       },
       {
@@ -160,7 +160,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "non-empty"
+          "txts": ["non-empty"]
         }
       },
       {
@@ -168,7 +168,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "non-empty"
+          "txts": ["non-empty"]
         }
       },
       {
@@ -176,7 +176,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "non-empty"
+          "txts": ["non-empty"]
         }
       },
       {
@@ -184,7 +184,7 @@
         "type": "TXT",
         "ttl": 3600,
         "data": {
-          "txt": "non-empty"
+          "txts": ["non-empty"]
         }
       },
       {

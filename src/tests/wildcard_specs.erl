@@ -13,7 +13,7 @@ definitions() ->
         % Reply to question for qname='www.something.wtest.com.', qtype=ANY
 
         {any_wildcard, #{
-            question => {"www.something.wtest.com", ?DNS_TYPE_ANY},
+            question => {~"www.something.wtest.com", ?DNS_TYPE_ANY},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -35,7 +35,7 @@ definitions() ->
 
         % Wildcard bounded in A record
         {wildcard_bounded, #{
-            question => {"b.c.d.cover.wtest.com", ?DNS_TYPE_ANY},
+            question => {~"b.c.d.cover.wtest.com", ?DNS_TYPE_ANY},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -64,7 +64,7 @@ definitions() ->
         % Reply to question for qname='secure.wtest.com.', qtype=A
 
         {cname_and_wildcard_at_root, #{
-            question => {"secure.wtest.com", ?DNS_TYPE_A},
+            question => {~"secure.wtest.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -100,7 +100,7 @@ definitions() ->
         % Reply to question for qname='yo.test.test.com.', qtype=AAAA
 
         {cname_and_wildcard_but_no_correct_type, #{
-            question => {"yo.test.test.com", ?DNS_TYPE_AAAA},
+            question => {~"yo.test.test.com", ?DNS_TYPE_AAAA},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -139,7 +139,7 @@ definitions() ->
         % Reply to question for qname='www.test.test.com.', qtype=MX
 
         {cname_and_wildcard, #{
-            question => {"www.test.test.com", ?DNS_TYPE_MX},
+            question => {~"www.test.test.com", ?DNS_TYPE_MX},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -178,7 +178,7 @@ definitions() ->
         % Reply to question for qname='start.example.com.', qtype=A
 
         {cname_wildcard_chain, #{
-            question => {"start.example.com", ?DNS_TYPE_A},
+            question => {~"start.example.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -216,7 +216,7 @@ definitions() ->
         % Reply to question for qname='semi-external.example.com.', qtype=A
 
         {cross_domain_cname_to_wildcard, #{
-            question => {"semi-external.example.com", ?DNS_TYPE_A},
+            question => {~"semi-external.example.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -242,7 +242,7 @@ definitions() ->
         % Reply to question for qname='www.something.wtest.com.', qtype=A
 
         {direct_wildcard, #{
-            question => {"www.something.wtest.com", ?DNS_TYPE_A},
+            question => {~"www.something.wtest.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -271,7 +271,7 @@ definitions() ->
         % Reply to question for qname='www.a.b.c.d.e.something.wtest.com.', qtype=A
 
         {five_levels_wildcard_one_below_apex, #{
-            question => {"www.a.b.c.d.e.something.wtest.com", ?DNS_TYPE_A},
+            question => {~"www.a.b.c.d.e.something.wtest.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -298,7 +298,7 @@ definitions() ->
         % Reply to question for qname='www.a.something.wtest.com.', qtype=A
 
         {obscured_wildcard, #{
-            question => {"www.a.something.wtest.com", ?DNS_TYPE_A},
+            question => {~"www.a.something.wtest.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NXDOMAIN,
@@ -329,7 +329,7 @@ definitions() ->
         % Reply to question for qname='www.sub.test.test.com.', qtype=A
 
         {wildcard_overlaps_delegation, #{
-            question => {"www.sub.test.test.com", ?DNS_TYPE_A},
+            question => {~"www.sub.test.test.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -354,7 +354,7 @@ definitions() ->
         % Reply to question for qname='www.something.wtest.com.', qtype=TXT
 
         {wrong_type_wildcard, #{
-            question => {"www.something.wtest.com", ?DNS_TYPE_TXT},
+            question => {~"www.something.wtest.com", ?DNS_TYPE_TXT},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -381,7 +381,7 @@ definitions() ->
         }},
 
         {cname_wildcard_cover, #{
-            question => {"www.cover.wtest.com", ?DNS_TYPE_A},
+            question => {~"www.cover.wtest.com", ?DNS_TYPE_A},
             response => #{
                 header => #dns_message{
                     rc = ?DNS_RCODE_NOERROR,
@@ -405,11 +405,10 @@ definitions() ->
             }
         }},
 
-
         % Ensure wildcard chaining with DNSSEC works.
         % In erldns the wildcard matched response are signed on the fly.
         {cname_wildcard_chain_dnssec, #{
-            question => {"start.minimal-dnssec.com", ?DNS_TYPE_A},
+            question => {~"start.minimal-dnssec.com", ?DNS_TYPE_A},
             additional => [#dns_optrr{dnssec = true}],
             transport => tcp,
             response => #{
@@ -434,7 +433,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -450,7 +449,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -466,7 +465,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -482,7 +481,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -498,7 +497,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
@@ -512,7 +511,7 @@ definitions() ->
                             original_ttl = 120,
                             expiration = 0,
                             inception = 0,
-                            key_tag = 0,
+                            keytag = 0,
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }}
@@ -521,5 +520,4 @@ definitions() ->
                 additional => []
             }
         }}
-
     ].

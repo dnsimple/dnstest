@@ -57,7 +57,7 @@
         "name": "alias.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "ALIAS companion"
+          "txts": ["ALIAS companion"]
         },
         "ttl": 3600,
         "context": []
@@ -151,7 +151,6 @@
         "name": "minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"v=spf1 include:mailgun.org ~all\"",
           "txts": ["v=spf1 include:mailgun.org ~all"]
         },
         "ttl": 3600,
@@ -161,7 +160,6 @@
         "name": "smtp._domainkey.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgsJXQkDrOJUgdK/f6AnQf7yAPFodCigBDsTLZn7WMLBw+/e790k3zDAugMG2b2P50zhGviYA37ZFlJuyuEtAkIpp9N+x7EdH+jgYMb5XlffM38vSAEPUzrZoA9mkMzeWyUsABOrcdG/eIOo/9mScS2D2BHQravGmoNnarXp0O6QIDAQAB\"",
           "txts": [
             "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgsJXQkDrOJUgdK/f6AnQf7yAPFodCigBDsTLZn7WMLBw+/e790k3zDAugMG2b2P50zhGviYA37ZFlJuyuEtAkIpp9N+x7EdH+jgYMb5XlffM38vSAEPUzrZoA9mkMzeWyUsABOrcdG/eIOo/9mScS2D2BHQravGmoNnarXp0O6QIDAQAB"
           ]
@@ -218,7 +216,6 @@
         "name": "alias-test.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"ALIAS for some.domain.that.does.not.exist\"",
           "txts": ["ALIAS for some.domain.that.does.not.exist"]
         },
         "ttl": 3600,
@@ -248,7 +245,6 @@
         "name": "alias-test-2.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"ALIAS for dnsimple.com\"",
           "txts": ["ALIAS for dnsimple.com"]
         },
         "ttl": 3600,
@@ -333,7 +329,6 @@
         "name": "minimal-dnssec.com",
         "type": "SPF",
         "data": {
-          "spf": "v=spf1 include:mailgun.org ~all",
           "txts": ["v=spf1 include:mailgun.org ~all"]
         },
         "ttl": 3600,
@@ -343,7 +338,6 @@
         "name": "spfl.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.superduperlongdomain.superduperlongtld ~all\"",
           "txts": [
             "v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.sup",
             "erduperlongdomain.superduperlongtld ~all"
@@ -356,7 +350,6 @@
         "name": "spfl.minimal-dnssec.com",
         "type": "TXT",
         "data": {
-          "txt": "\"v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.superduperlongdomain.superduperlontld ~all\"",
           "txts": [
             "v=spf1 a mx ip4:69.64.153.131 ip4:69.64.153.132 ip4:69.64.153.133 ip4:69.64.153.134 ip4:69.64.153.135 include:_spf.google.com include:sendgrid.net include:relay.mailchannels.net include:smtp.groovehq.com include:one.zoho.com include:superduperlongname.sup",
             "erduperlongdomain.superduperlontld ~all"
