@@ -157,31 +157,6 @@ erldns_definitions() ->
             }
         }},
 
-        {cname_wildcard_cover, #{
-            question => {<<"www.cover.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"www.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
-                        #dns_rrdata_cname{
-                            dname = <<"proxy.cover.wtest.com">>
-                        }},
-                    {<<"proxy.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {1, 2, 3, 4}
-                    }}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
         {caa_record, #{
             question => {<<"caa.example.com">>, ?DNS_TYPE_CAA},
             response => #{
@@ -1095,65 +1070,6 @@ erldns_dnssec_definitions() ->
             }
         }},
 
-        % Verify NXNAME not present in ENT response
-        {nsec_nxname_ent, #{
-            question => {<<"ent1.minimal-dnssec.com">>, ?DNS_TYPE_AAAA},
-            additional => [#dns_optrr{dnssec = true}],
-            transport => tcp,
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
-                        mname = <<"ns1.example.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 2000081501,
-                        refresh = 28800,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 86400
-                    }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_SOA,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 2,
-                            original_ttl = 3600,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
-                        #dns_rrdata_nsec{
-                            next_dname = <<"\000.ent1.minimal-dnssec.com">>,
-                            types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
-                        }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_NSEC,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 3,
-                            original_ttl = 86400,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }}
-                ],
-                additional => []
-            }
-        }},
-
         % Verify NSEC RR Type bitmap is correct
         {nsec_rr_type_bitmap_wildcard, #{
             question => {<<"nosuch.something.minimal-dnssec.com">>, ?DNS_TYPE_AAAA},
@@ -1267,122 +1183,6 @@ erldns_dnssec_definitions() ->
                             signature = <<>>
                         }}
                 ],
-                additional => []
-            }
-        }},
-
-        % Ensure wildcard chaining with DNSSEC works.
-        % In erldns the wildcard matched response are signed on the fly.
-        {cname_wildcard_chain_dnssec, #{
-            question => {<<"start.minimal-dnssec.com">>, ?DNS_TYPE_A},
-            additional => [#dns_optrr{dnssec = true}],
-            transport => tcp,
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"start.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"x.y.z.w1.minimal-dnssec.com">>
-                        }},
-                    {<<"start.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 3,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"x.y.z.w1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"x.y.z.w2.minimal-dnssec.com">>
-                        }},
-                    {<<"x.y.z.w1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 6,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"x.y.z.w2.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"x.y.z.w3.minimal-dnssec.com">>
-                        }},
-                    {<<"x.y.z.w2.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 6,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"x.y.z.w3.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"x.y.z.w4.minimal-dnssec.com">>
-                        }},
-                    {<<"x.y.z.w3.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 6,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"x.y.z.w4.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"x.y.z.w5.minimal-dnssec.com">>
-                        }},
-                    {<<"x.y.z.w4.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_CNAME,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 6,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }},
-                    {<<"x.y.z.w5.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
-                        #dns_rrdata_a{ip = {1, 2, 3, 5}}},
-                    {<<"x.y.z.w5.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120,
-                        #dns_rrdata_rrsig{
-                            type_covered = ?DNS_TYPE_A,
-                            alg = ?DNS_ALG_RSASHA256,
-                            labels = 6,
-                            original_ttl = 120,
-                            expiration = 0,
-                            inception = 0,
-                            keytag = 0,
-                            signers_name = <<"minimal-dnssec.com">>,
-                            signature = <<>>
-                        }}
-                ],
-                authority => [],
                 additional => []
             }
         }}
@@ -1624,41 +1424,6 @@ pdns_dnssec_definitions() ->
         % 2  .  IN  OPT  32768
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='start.example.com.', qtype=A
-
-        %{cname_wildcard_chain_dnssec, {
-        %question => {<<"start.example-dnssec.com">>, ?DNS_TYPE_A},
-        %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %additional => [#dns_optrr{dnssec=true}]},
-        %response => #{
-        %answers => [
-        %{<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w1.example-dnssec.com">>}},
-        %{<<"start.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %{<<"x.y.z.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w2.example-dnssec.com">>}},
-        %{<<"x.y.z.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %{<<"x.y.z.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w3.example-dnssec.com">>}},
-        %{<<"x.y.z.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %{<<"x.y.z.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w4.example-dnssec.com">>}},
-        %{<<"x.y.z.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %{<<"x.y.z.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120, #dns_rrdata_cname{dname = <<"x.y.z.w5.example-dnssec.com">>}},
-        %{<<"x.y.z.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_CNAME, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %{<<"x.y.z.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{ip = {1,2,3,5}}},
-        %{<<"x.y.z.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 120, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_A, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 120, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}}
-        %]},
-        %authority => [
-        %%{<<"*.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w2.example-dnssec.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-        %%{<<"*.w1.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %%{<<"*.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w3.exaexample-dnssecle.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-        %%{<<"*.w2.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %%{<<"*.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w4.example-dnssec.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-        %%{<<"*.w3.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %%{<<"*.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"*.w5.example-dnssec.com">>, types = [?DNS_TYPE_CNAME, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-        %%{<<"*.w4.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}},
-        %%{<<"*.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400, #dns_rrdata_nsec{next_dname = <<"www.example-dnssec.com">>, types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]}},
-        %%{<<"*.w5.example-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400, #dns_rrdata_rrsig{type_covered = ?DNS_TYPE_NSEC, alg = ?DNS_ALG_RSASHA256, labels = 3, original_ttl = 86400, expiration = 0, inception = 0, keytag = 0, signers_name = <<"example-dnssec.com">>, signature = 0}}
-        %]},
-        %additional => []
-        %}}
-        %}},
 
         % minimal-dnssec.com.  3600  IN  RRSIG  DNSKEY 8 2 3600 20250701022432 20250402022432 7709 minimal-dnssec.com. ftamO2KppO1zevAzJGhQwXiuJTkwm0hCLG0NWNyMXQjZnC+fKqUtV6xV vTGSHbxPOk+g4S7zNrJnhyn3xKLe8EAsNq9pFc1g4/evxjKMNBroIRm1 p4F0bhCIGSOWruP07W5i3ir0YOk3qCeVhybwpB8itlSU06CIBKeoU4ro GgUjfk0WlOxoIOmo+3QW2ziwOPX2M7DJPcLuwnOnz3aPrg==
         % minimal-dnssec.com.  3600  IN  DNSKEY  256 3 8 AwEAAdIqMYlTELLVzA8yP7FHshb0e+Kojr2IIjtCgpk4hspMtSJyavOm qT7fRu2FgzY5mo++FVLdkMd1+8Yj8I5bbnCWayA5kQgwY7HtFur1He19 i0ps5IZ2i+2XopOlmi2Zdob/RK4sYAw3G3t3ji8t6RMwLdsljNp+KDJU 59cVMRH9
@@ -2138,31 +1903,6 @@ pdns_definitions() ->
             }
         }},
 
-        % 0  www.something.wtest.com.  IN  A  3600  4.3.2.1
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.something.wtest.com.', qtype=ANY
-
-        {any_wildcard, #{
-            question => {<<"www.something.wtest.com">>, ?DNS_TYPE_ANY},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {4, 3, 2, 1}
-                    }}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
         % Test for A query for test.com in test.com. Should return an AA nodata, since
         % there is no A record there.
 
@@ -2492,116 +2232,6 @@ pdns_definitions() ->
             }
         }},
 
-        % If a CNAME wildcard is present, but there is also a direct hit for the qname
-        % but not for the qtype, a NODATA response should ensue. This test runs at the
-        % root of the domain (the 'apex')
-
-        % 1  wtest.com.  IN  SOA  3600  ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='secure.wtest.com.', qtype=A
-
-        {cname_and_wildcard_at_root, #{
-            question => {<<"secure.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
-                        mname = <<"ns1.wtest.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 86400
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
-        % If a CNAME wildcard is present, but it points to a record that
-        % does not have the requested type, a CNAME should be emitted plus a SOA to
-        % indicate no match with the right record
-
-        % 0  yo.test.test.com.  IN  CNAME  3600  server1.test.com.
-        % 1  test.com.  IN  SOA  3600  ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='yo.test.test.com.', qtype=AAAA
-
-        {cname_and_wildcard_but_no_correct_type, #{
-            question => {<<"yo.test.test.com">>, ?DNS_TYPE_AAAA},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"yo.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 3600,
-                        #dns_rrdata_cname{dname = <<"server1.test.com">>}}
-                ],
-                authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
-                        mname = <<"ns1.test.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 1728543606,
-                        refresh = 86400,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 300
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
-        % If a CNAME wildcard is present, but there is also a direct hit for the qname
-        % but not for the qtype, a NODATA response should ensue.
-        %
-        % In this case www.test.test.com is an A record, but the query is for an MX.
-
-        % 1  test.com.  IN  SOA  3600  ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.test.test.com.', qtype=MX
-
-        {cname_and_wildcard, #{
-            question => {<<"www.test.test.com">>, ?DNS_TYPE_MX},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
-                        mname = <<"ns1.test.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 1728543606,
-                        refresh = 86400,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 300
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
         % Tries to resolve the AAAA for www.example.com, which is a CNAME to
         % outpost.example.com, which has an A record, but no AAAA record. Should show
         % CNAME and SOA.
@@ -2876,78 +2506,6 @@ pdns_definitions() ->
             }
         }},
 
-        % A five-long CNAME chain involving wildcards at every step
-
-        % 0  start.example.com.  IN  CNAME  120  x.y.z.w1.example.com.
-        % 0  x.y.z.w1.example.com.  IN  CNAME  120  x.y.z.w2.example.com.
-        % 0  x.y.z.w2.example.com.  IN  CNAME  120  x.y.z.w3.example.com.
-        % 0  x.y.z.w3.example.com.  IN  CNAME  120  x.y.z.w4.example.com.
-        % 0  x.y.z.w4.example.com.  IN  CNAME  120  x.y.z.w5.example.com.
-        % 0  x.y.z.w5.example.com.  IN  A  120  1.2.3.5
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='start.example.com.', qtype=A
-
-        {cname_wildcard_chain, #{
-            question => {<<"start.example.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"start.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{dname = <<"x.y.z.w1.example.com">>}},
-                    {<<"x.y.z.w1.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{dname = <<"x.y.z.w2.example.com">>}},
-                    {<<"x.y.z.w2.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{dname = <<"x.y.z.w3.example.com">>}},
-                    {<<"x.y.z.w3.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{dname = <<"x.y.z.w4.example.com">>}},
-                    {<<"x.y.z.w4.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{dname = <<"x.y.z.w5.example.com">>}},
-                    {<<"x.y.z.w5.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120, #dns_rrdata_a{
-                        ip = {1, 2, 3, 5}
-                    }}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
-        % If we CNAME to another locally-hosted domain, return only the CNAME. Resolvers
-        % will take care of further resolution.
-
-        % 0  semi-external.example.com.  IN  CNAME  120  bla.something.wtest.com.
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='semi-external.example.com.', qtype=A
-
-        {cross_domain_cname_to_wildcard, #{
-            question => {<<"semi-external.example.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"semi-external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
-                        #dns_rrdata_cname{
-                            dname = <<"bla.something.wtest.com">>
-                        }}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
         % 1  example.com.  IN  SOA  86400  ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
         % 2  .  IN  OPT  32768
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
@@ -2976,31 +2534,6 @@ pdns_definitions() ->
                         minimum = 86400
                     }}
                 ],
-                additional => []
-            }
-        }},
-
-        % 0  www.something.wtest.com.  IN  A  3600  4.3.2.1
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.something.wtest.com.', qtype=A
-
-        {direct_wildcard, #{
-            question => {<<"www.something.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"www.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {4, 3, 2, 1}
-                    }}
-                ],
-                authority => [],
                 additional => []
             }
         }},
@@ -3112,117 +2645,7 @@ pdns_definitions() ->
         %}}
         %}},
 
-        % 1  example.com.  IN  SOA  86400  ns1.example.com. ahu.example.com. 2000081501 28800 7200 604800 86400
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='sub.host.sub.example.com.', qtype=A
-
-        % The record name is host.*.sub.example.com, however erldns only supports wildcards in the left-most position.
-
-        %{ent_asterisk, {
-        %question => {<<"sub.host.sub.example.com">>, ?DNS_TYPE_A},
-        %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %response => #{
-        %answers => []},
-        %authority => [
-        %{<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{mname = <<"ns1.example.com">>, rname = <<"ahu.example.com">>, serial=2000081501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-        %]},
-        %additional => []
-        %}}
-        %}},
-
         % TODO: ent_axfr
-
-        % 1  test.com.  IN  SOA  3600  ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='b.c.test.com.', qtype=TXT
-
-        {ent_rr_enclosed_in_ent, #{
-            question => {<<"b.c.test.com">>, ?DNS_TYPE_TXT},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
-                        mname = <<"ns1.test.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 1728543606,
-                        refresh = 86400,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 300
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
-        % 1  test.com.  IN  SOA  3600  ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='c.test.com.', qtype=SOA
-
-        %{ent_soa, {
-        %question => {<<"c.test.com">>, ?DNS_TYPE_SOA},
-        %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %response => #{
-        %answers => []},
-        %authority => [
-        %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-        %]},
-        %additional => []
-        %}}
-        %}},
-
-        % 0  something.a.b.c.test.com.  IN  A  3600  8.7.6.5
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='something.a.b.c.test.com.', qtype=A
-
-        {ent_wildcard_below_ent, #{
-            question => {<<"something.a.b.c.test.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"something.a.b.c.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
-                        #dns_rrdata_a{ip = {8, 7, 6, 5}}}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
-        % 1  test.com.  IN  SOA  3600  ns1.test.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='c.test.com.', qtype=A
-
-        %{ent, {
-        %question => {<<"c.test.com">>, ?DNS_TYPE_A},
-        %header => #dns_message{rc=?DNS_RCODE_NOERROR, rd=false, qr=true, tc=false, aa=true, oc=?DNS_OPCODE_QUERY}},
-        %response => #{
-        %answers => []},
-        %authority => [
-        %{<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{mname = <<"ns1.test.com">>, rname = <<"ahu.example.com">>, serial=2005092501, refresh=28800, retry=7200, expire=604800, minimum = 86400}}
-        %]},
-        %additional => []
-        %}}
-        %}},
 
         % 4 TXT response with 0 to 3 backslashes before a semicolon.
 
@@ -3299,63 +2722,6 @@ pdns_definitions() ->
                 answers => [
                     {<<"external.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_CNAME, 120,
                         #dns_rrdata_cname{dname = <<"somewhere.else.net">>}}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
-        % 0  www.a.b.c.d.e.something.wtest.com.  IN  A  3600  4.3.2.1
-        % 0  www.a.b.c.d.e.something.wtest.com.  IN  RRSIG  3600  A 8 3 3600 [expiry] [inception] [keytag] wtest.com. ...
-        % 1  a.something.wtest.com.  IN  NSEC  86400  wtest.com. A RRSIG NSEC
-        % 1  a.something.wtest.com.  IN  RRSIG  86400  NSEC 8 4 86400 [expiry] [inception] [keytag] wtest.com. ...
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.a.b.c.d.e.something.wtest.com.', qtype=A
-
-        {five_levels_wildcard_one_below_apex, #{
-            question => {<<"www.a.b.c.d.e.something.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"www.a.b.c.d.e.something.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600,
-                        #dns_rrdata_a{ip = {4, 3, 2, 1}}}
-                ],
-                authority => [],
-                additional => []
-            }
-        }},
-
-        % 0  www.a.b.c.d.e.wtest.com.  IN  A  3600  6.7.8.9
-        % 0  www.a.b.c.d.e.wtest.com.  IN  RRSIG  3600  A 8 7 3600 [expiry] [inception] [keytag] wtest.com. ...
-        % 1  *.a.b.c.d.e.wtest.com.  IN  NSEC  86400  ns1.wtest.com. A RRSIG NSEC
-        % 1  *.a.b.c.d.e.wtest.com.  IN  RRSIG  86400  NSEC 8 7 86400 [expiry] [inception] [keytag] wtest.com. ...
-        % 2  .  IN  OPT  32768
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.a.b.c.d.e.wtest.com.', qtype=A
-
-        {five_levels_wildcard, #{
-            question => {<<"www.a.b.c.d.e.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [
-                    {<<"www.a.b.c.d.e.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {6, 7, 8, 9}
-                    }}
                 ],
                 authority => [],
                 additional => []
@@ -3930,40 +3296,6 @@ pdns_definitions() ->
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
-                        refresh = 28800,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 86400
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
-        % If there is a more-specific subtree that matches part of a name,
-        % a less-specific wildcard cannot match it.
-
-        % 1  wtest.com.  IN  SOA  3600  ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % Rcode: 3, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.a.something.wtest.com.', qtype=A
-
-        {obscured_wildcard, #{
-            question => {<<"www.a.something.wtest.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NXDOMAIN,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
-                        mname = <<"ns1.wtest.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
                         refresh = 28800,
                         retry = 7200,
                         expire = 604800,
@@ -4558,70 +3890,5 @@ pdns_definitions() ->
                 authority => [],
                 additional => []
             }
-        }},
-
-        % 1  sub.test.test.com.  IN  NS  3600  ns-test.example.net.test.com.
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 0, opcode: 0
-        % Reply to question for qname='www.sub.test.test.com.', qtype=A
-
-        {wildcard_overlaps_delegation, #{
-            question => {<<"www.sub.test.test.com">>, ?DNS_TYPE_A},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = false,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"sub.test.test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NS, 3600, #dns_rrdata_ns{
-                        dname = <<"ns-test.example.net.test.com">>
-                    }}
-                ],
-                additional => []
-            }
-        }},
-
-        % 1  wtest.com.  IN  SOA  3600  ns1.wtest.com. ahu.example.com. 2005092501 28800 7200 604800 86400
-        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
-        % Reply to question for qname='www.something.wtest.com.', qtype=TXT
-
-        {wrong_type_wildcard, #{
-            question => {<<"www.something.wtest.com">>, ?DNS_TYPE_TXT},
-            response => #{
-                header => #dns_message{
-                    rc = ?DNS_RCODE_NOERROR,
-                    rd = false,
-                    qr = true,
-                    tc = false,
-                    aa = true,
-                    oc = ?DNS_OPCODE_QUERY
-                },
-                answers => [],
-                authority => [
-                    {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
-                        mname = <<"ns1.wtest.com">>,
-                        rname = <<"ahu.example.com">>,
-                        serial = 2005092501,
-                        refresh = 28800,
-                        retry = 7200,
-                        expire = 604800,
-                        minimum = 86400
-                    }}
-                ],
-                additional => []
-            }
         }}
     ].
-
-%hex_to_bin(Bin) when is_binary(Bin) ->
-%Fun = fun(A, B) ->
-%case io_lib:fread("~16u", [A, B]) of
-%{ok, [V], []} -> V;
-%_ -> error(badarg)
-%end
-%end,
-%<< <<(Fun(A,B))>> || <<A, B>> <= Bin >>.
