@@ -200,7 +200,7 @@ definitions() ->
                         refresh = 28800,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }},
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
