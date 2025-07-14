@@ -24,7 +24,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -52,7 +52,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -80,7 +80,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -108,7 +108,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -137,7 +137,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -146,7 +146,7 @@ definitions() ->
                         expire = 604800,
                         minimum = 300
                     }},
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300, #dns_rrdata_rrsig{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{
                         type_covered = ?DNS_TYPE_SOA,
                         alg = ?DNS_ALG_RSASHA256,
                         labels = 2,
@@ -200,7 +200,7 @@ definitions() ->
                         refresh = 28800,
                         retry = 7200,
                         expire = 604800,
-                        minimum = 86400
+                        minimum = 300
                     }},
                     {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
                         #dns_rrdata_rrsig{
@@ -214,17 +214,17 @@ definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.ent1.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
