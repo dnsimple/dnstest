@@ -214,17 +214,17 @@ definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.ent1.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"ent1.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
