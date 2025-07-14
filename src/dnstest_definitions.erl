@@ -219,17 +219,17 @@ erldnsimple_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.alias.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_TXT, ?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
@@ -278,17 +278,17 @@ erldnsimple_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.alias.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_A, ?DNS_TYPE_TXT, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
@@ -337,7 +337,7 @@ erldnsimple_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.alias.minimal-dnssec.com">>,
                             types = [
@@ -348,12 +348,12 @@ erldnsimple_definitions() ->
                                 ?DNS_TYPE_NSEC
                             ]
                         }},
-                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"alias.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
@@ -776,17 +776,17 @@ erldns_dnssec_definitions() ->
                             signature =
                                 <<"YHRxn+lwC/bQ9Nur148Z29WPm6nqSPxXsHQ+oNtBGy9SNDvVtG08EtMc pPJCHOna0JY3+NtjIGCvO3LmJlfRH+2GD22arRMDZMx0mZAbpVziyzMl //3UEpGZNScS9s77iTYeFQJtVfI8mpyVAltZPisMeCEDiwzNzzD5a+iK 5O8=">>
                         }},
-                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.a.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"a.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 20250701022432,
                             inception = 20250402022432,
                             keytag = 27123,
@@ -837,17 +837,17 @@ erldns_dnssec_definitions() ->
                             signature =
                                 <<"ZwhobjkUbO2gLHv8nnYMJbM80+wTxYagnP26e5WIDg9L9rtd4FfWfuXE e7YA6LXP3g4Fo/VRujbk3KVgVLj3sRbc2WRnlP+yef8l6rG4q5IjuocB WBliUTV1mUjaOL2EGmuix65cxP7UK2WCUcTFVvEB8u22vnc4tr5nrnc5 Ljw=">>
                         }},
-                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.a.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_AAAA, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
-                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"a.Minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 20250701022432,
                             inception = 20250402022432,
                             keytag = 27123,
@@ -897,7 +897,7 @@ erldns_dnssec_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.minimal-dnssec.com">>,
                             types = [
@@ -914,12 +914,12 @@ erldns_dnssec_definitions() ->
                                 ?DNS_TYPE_CAA
                             ]
                         }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
@@ -968,17 +968,17 @@ erldns_dnssec_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.ab.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
                         }},
-                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"ab.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 1751336672,
                             inception = 1743560672,
                             keytag = 27123,
@@ -1048,17 +1048,17 @@ erldns_dnssec_definitions() ->
                             signers_name = <<"minimal-dnssec.com">>,
                             signature = <<>>
                         }},
-                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 86400,
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC, 300,
                         #dns_rrdata_nsec{
                             next_dname = <<"\000.nxname.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC, ?DNS_TYPE_NXNAME]
                         }},
-                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 86400,
+                    {<<"nxname.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 3,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
@@ -1108,16 +1108,16 @@ erldns_dnssec_definitions() ->
                             signature = <<>>
                         }},
                     {<<"nosuch.something.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_NSEC,
-                        86400, #dns_rrdata_nsec{
+                        300, #dns_rrdata_nsec{
                             next_dname = <<"\000.nosuch.something.minimal-dnssec.com">>,
                             types = [?DNS_TYPE_A, ?DNS_TYPE_RRSIG, ?DNS_TYPE_NSEC]
                         }},
                     {<<"nosuch.something.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG,
-                        86400, #dns_rrdata_rrsig{
+                        300, #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_NSEC,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 4,
-                            original_ttl = 86400,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
