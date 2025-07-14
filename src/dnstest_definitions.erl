@@ -1810,7 +1810,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -2257,7 +2257,7 @@ pdns_definitions() ->
                     }}
                 ],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -2354,7 +2354,7 @@ pdns_definitions() ->
                     }}
                 ],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -2523,7 +2523,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -2613,7 +2613,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -3159,7 +3159,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -3190,7 +3190,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -3291,7 +3291,7 @@ pdns_definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 86400, #dns_rrdata_soa{
+                    {<<"example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 100000, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
