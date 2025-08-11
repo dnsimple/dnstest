@@ -1184,6 +1184,46 @@ erldns_dnssec_definitions() ->
                 ],
                 additional => []
             }
+        }},
+        {dnssec_tlsa, #{
+            question => {<<"_443._tcp.minimal-dnssec.com">>, ?DNS_TYPE_TLSA},
+            additional => [#dns_optrr{dnssec = true}],
+            transport => tcp,
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [
+                    {<<"_443._tcp.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_TLSA, 3600,
+                        #dns_rrdata_tlsa{
+                            usage = 3,
+                            selector = 1,
+                            matching_type = 1,
+                            certificate = binary:decode_hex(
+                                <<"DE38C1C08EB239D76B45DA575C70151CE7DA13A935BF5FB887B4E43664D6F728">>
+                            )
+                        }},
+                    {<<"_443._tcp.minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                        #dns_rrdata_rrsig{
+                            type_covered = ?DNS_TYPE_TLSA,
+                            alg = ?DNS_ALG_RSASHA256,
+                            labels = 4,
+                            original_ttl = 3600,
+                            expiration = 0,
+                            inception = 0,
+                            keytag = 0,
+                            signers_name = <<"minimal-dnssec.com">>,
+                            signature = <<>>
+                        }}
+                ],
+                authority => [],
+                additional => []
+            }
         }}
     ].
 
