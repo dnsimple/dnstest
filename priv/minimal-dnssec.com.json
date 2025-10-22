@@ -326,15 +326,6 @@
         "context": []
       },
       {
-        "name": "minimal-dnssec.com",
-        "type": "SPF",
-        "data": {
-          "txts": ["v=spf1 include:mailgun.org ~all"]
-        },
-        "ttl": 3600,
-        "context": []
-      },
-      {
         "name": "spfl.minimal-dnssec.com",
         "type": "TXT",
         "data": {

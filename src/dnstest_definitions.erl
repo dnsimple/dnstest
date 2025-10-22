@@ -909,7 +909,6 @@ erldns_dnssec_definitions() ->
                                 ?DNS_TYPE_DNSKEY,
                                 ?DNS_TYPE_CDS,
                                 ?DNS_TYPE_CDNSKEY,
-                                ?DNS_TYPE_SPF,
                                 ?DNS_TYPE_CAA
                             ]
                         }},
