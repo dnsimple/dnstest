@@ -1,0 +1,81 @@
+[
+  {
+    "name": "secure-delegated.dnssec-parent.com",
+    "records": [
+      {
+        "name": "secure-delegated.dnssec-parent.com",
+        "type": "SOA",
+        "data": {
+          "mname": "ns1.secure-delegated.dnssec-parent.com",
+          "rname": "ahu.example.com",
+          "serial": 2005092501,
+          "refresh": 28800,
+          "retry": 7200,
+          "expire": 604800,
+          "minimum": 300
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "secure-delegated.dnssec-parent.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns1.secure-delegated.dnssec-parent.com"
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "secure-delegated.dnssec-parent.com",
+        "type": "NS",
+        "data": {
+          "dname": "ns2.secure-delegated.dnssec-parent.com"
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "secure-delegated.dnssec-parent.com",
+        "type": "A",
+        "data": {
+          "ip": "9.9.9.9"
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "ns1.secure-delegated.dnssec-parent.com",
+        "type": "A",
+        "data": {
+          "ip": "1.2.3.4"
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "ns2.secure-delegated.dnssec-parent.com",
+        "type": "A",
+        "data": {
+          "ip": "5.6.7.8"
+        },
+        "ttl": 3600
+      },
+      {
+        "name": "www.secure-delegated.dnssec-parent.com",
+        "type": "CNAME",
+        "data": {
+          "dname": "secure-delegated.dnssec-parent.com"
+        },
+        "ttl": 3600
+      }
+    ],
+    "keys": [
+      {
+        "ksk": "-----BEGIN RSA PRIVATE KEY-----\nMIIC7QIBAAKBoQC5NEUWlzWKNGf/AduEHpR2vwnnTEcTuvKkjx44rCREy80hDuxN\n+mWaS1mYIbDwG8ZKn9YqQJooVAp0+oE7P2mc9NVyInsImmIJolBFD2zoskgvpg8u\nS5zgf9Pmeh7AVKycQvY0/1SFaRGKnkb8lhTLvua8tJyJuGYmSg3DGGe2Vw0N76sK\n2SgAhoUxDJgiL28w9ElL+BtfYzCcUesaL3r/AgMBAAECgaEAgxZXLGU8lSUA0wNK\nj9phNSeE5/0adgGlywot1ukpBrTF7Xc1lP/9uFdLBB4csebG1H0Lxn5RXugVOrUw\nkXIR2/GDvrRfJzi22aDUdf00FgMeBHEygv7+M8ig25tBR/PKogNAMKGa840dewl2\nkS18I+tgBGkg50QeijH7ySINL81/f353BhoeJvAEOOg9Ga+VLSQBizm2xhwowuXz\nYeTQmQJRAONI4pX/ja+Qlk0cC2+nw6XYx1NpeEBTysp41G4iW1ssBj2z9a01zYSs\nVkp2hG0ySI5ezuILyz/pPOTCi+PbDUPpBoKXnAGACwCHs7rOIyhlAlEA0JpdpX9U\neRDOSas76WgFJN05JPp15rUFLkXR5UnMAs0Bcqt2AgSL0hrVP+bUPNHB4wx+wCyV\nYsueWxJrUwryg91TsBfAcCpI0wAW8ZaDFZMCUEctkChBe/G7ahaD7eDtvQu3M9Uf\ndpVOqHd4F67V+541z06LiSjRbKdcAToYm6hG0wojDs8jumctd/B8LKsS8riNxYgo\nSqb9nnRwCw05eTExAlEAzrcp9caoPxCYXAiD5lheQJm49xv7mhPofmJSDZWDxYLB\n3JBs8LLwm9RbXmewClUSfZz0PhvwLWb6FeW61SAUEvhQ5j+jQ4OjhvSfx+gPHmEC\nUA/7P+b3TDuCGorK9FIkY7fAdqvUQsiZjfoW90YkSMKRbugBRcyoxs+Dh66ZFi/3\nG1ccYA/jAKXy59mNHPccj0wsilDFRdNDfhGGMDI0cXFo\n-----END RSA PRIVATE KEY-----\n",
+        "ksk_keytag": 7709,
+        "ksk_alg": 8,
+        "zsk": "-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQDSKjGJUxCy1cwPMj+xR7IW9HviqI69iCI7QoKZOIbKTLUicmrz\npqk+30bthYM2OZqPvhVS3ZDHdfvGI/COW25wlmsgOZEIMGOx7Rbq9R3tfYtKbOSG\ndovtl6KTpZotmXaG/0SuLGAMNxt7d44vLekTMC3bJYzafigyVOfXFTER/QIDAQAB\nAoGBAIHO+9/FBZhgA3UTZVG7Zd1VzrsVv2yDjBksIHxA9Mg5Dtwi7bpmozypLicB\nAyVX+QZ1srgHECiS0Br3Edrr0E7tl7Ux3NsWqxqPdOm41iUnudFAoZuaCbxljjY4\n1TiAFeU9OL7hjoKeW/vQVQva5K8DYkvmqhNUGsK3FAPtW1FlAkEA63voSLhJP5bS\nWYUvuraOhBX+eiBkv17IN3nQQ1OuOwFFn+Gum9c3ZV0v2PhwZqe7ibQdGgrXn9AQ\nmBbejgkbxwJBAOR5lQlnSfA5O10BvuKZOAsG9RNJUbzpCyWkrQ14ccnxWRtZsDZM\nIUFWaXFV8EKBZscLJ4iyZfF/+c6iKjWDvBsCQHWHOQ6aU4yWNNQTIhg5JvYLmB/R\n7RaKMrllZalEqY+vedVrKN+E0ZQYp1nN3SOPEY2PxHqL8MRFbxLJTzhqmV8CQQCh\numrEQEg3ctvRp2Wu01S3gZJDt7fTaIeKevpAucyabWxtDtzMYrF7paZ4IqQy/5R4\nOy4d9mJxQ+zZ1zLXtMuXAkEAgr9cRDno7Q5OI1zZzEIHHcBCoLiEsGZ3p2JDhHLB\n4K853K3Oe7KKROTbJcS+WgxKgPne3kr2WelJWrIavHdAkg==\n-----END RSA PRIVATE KEY-----\n",
+        "zsk_keytag": 27123,
+        "zsk_alg": 8,
+        "inception": "2025-04-02T02:24:32.482798Z",
+        "until": "2025-07-01T02:24:32.479991Z"
+      }
+    ]
+  }
+]
