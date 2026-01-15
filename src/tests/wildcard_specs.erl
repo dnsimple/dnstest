@@ -34,6 +34,8 @@ definitions() ->
         }},
 
         % Wildcard bounded in A record
+        % b.c.d.cover.wtest.com is an ENT (empty non-terminal) because a.b.c.d.cover.wtest.com exists.
+        % Per RFC 4592 §3.3.1, wildcards should not be synthesized for ENTs.
         {wildcard_bounded, #{
             question => {~"b.c.d.cover.wtest.com", ?DNS_TYPE_ANY},
             response => #{
@@ -45,12 +47,18 @@ definitions() ->
                     aa = true,
                     oc = ?DNS_OPCODE_QUERY
                 },
-                answers => [
-                    {<<"b.c.d.cover.wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 3600, #dns_rrdata_a{
-                        ip = {1, 2, 3, 4}
+                answers => [],
+                authority => [
+                    {<<"wtest.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                        mname = <<"ns1.wtest.com">>,
+                        rname = <<"ahu.example.com">>,
+                        serial = 2005092501,
+                        refresh = 28800,
+                        retry = 7200,
+                        expire = 604800,
+                        minimum = 86400
                     }}
                 ],
-                authority => [],
                 additional => []
             }
         }},
