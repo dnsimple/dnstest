@@ -341,12 +341,8 @@ compare_record_fields(
                 ?DNS_TYPE_TXT when
                     is_record(DataE, dns_rrdata_txt), is_record(DataA, dns_rrdata_txt)
                 ->
-                    TxtE = lists:map(
-                        fun(Bin) -> binary_to_list(Bin) end, DataE#dns_rrdata_txt.txt
-                    ),
-                    TxtA = lists:map(
-                        fun(Bin) -> binary_to_list(Bin) end, DataA#dns_rrdata_txt.txt
-                    ),
+                    TxtE = lists:map(fun binary_to_list/1, DataE#dns_rrdata_txt.txt),
+                    TxtA = lists:map(fun binary_to_list/1, DataA#dns_rrdata_txt.txt),
                     case TxtE =:= TxtA of
                         false ->
                             ?LOG_WARNING_PAD(6, "TXT Text Hex List: Expected ~p, Actual ~p", [
