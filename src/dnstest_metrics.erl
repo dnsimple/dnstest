@@ -1,5 +1,7 @@
 -module(dnstest_metrics).
 
+-include_lib("kernel/include/logger.hrl").
+
 -behaviour(gen_server).
 
 % Public API
@@ -89,10 +91,10 @@ handle_cast(clear, State) ->
 % Internal API
 
 display_list(Results) ->
-    io:format("--- Query Times ---~n"),
+    ?LOG_NOTICE("--- Query Times ---~n"),
     lists:foreach(
         fun({Name, T}) ->
-            io:format("~p: ~p ms~n", [Name, T / 1000])
+            ?LOG_NOTICE("~p: ~p ms~n", [Name, T / 1000])
         end,
         lists:reverse(Results)
     ).
