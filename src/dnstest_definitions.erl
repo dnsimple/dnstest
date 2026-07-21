@@ -3151,6 +3151,46 @@ pdns_definitions() ->
             }
         }},
 
+        % Additional-section name compression for a non-EDNS MX response whose
+        % target has both A and AAAA glue. The additional section then holds two
+        % records sharing an owner name, so its start position must be tracked
+        % correctly; otherwise the second glue record emits a compression pointer
+        % into the middle of an earlier record and the packet fails to decode.
+        % mx_with_simple_additional_processing does not cover this: its glue is
+        % all A records whose name already appears in the answer section.
+
+        % 0  dualstack.example.com.       IN  MX    120  10 mail.dualstack.example.com.
+        % 2  mail.dualstack.example.com.  IN  A     120  192.168.0.5
+        % 2  mail.dualstack.example.com.  IN  AAAA  120  2001:db8::1
+        % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
+        % Reply to question for qname='dualstack.example.com.', qtype=MX
+
+        {mx_with_dualstack_additional_processing, #{
+            question => {<<"dualstack.example.com">>, ?DNS_TYPE_MX},
+            response => #{
+                header => #dns_message{
+                    rc = ?DNS_RCODE_NOERROR,
+                    rd = false,
+                    qr = true,
+                    tc = false,
+                    aa = true,
+                    oc = ?DNS_OPCODE_QUERY
+                },
+                answers => [
+                    {<<"dualstack.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_MX, 120, #dns_rrdata_mx{
+                        exchange = <<"mail.dualstack.example.com">>, preference = 10
+                    }}
+                ],
+                authority => [],
+                additional => [
+                    {<<"mail.dualstack.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_A, 120,
+                        #dns_rrdata_a{ip = {192, 168, 0, 5}}},
+                    {<<"mail.dualstack.example.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_AAAA, 120,
+                        #dns_rrdata_aaaa{ip = {8193, 3512, 0, 0, 0, 0, 0, 1}}}
+                ]
+            }
+        }},
+
         % 0  enum.test.com.  IN  NAPTR  3600  100 50 "u" "e2u+sip" "" testuser.domain.com.
         % Rcode: 0, RD: 0, QR: 1, TC: 0, AA: 1, opcode: 0
         % Reply to question for qname='enum.test.com.', qtype=NAPTR

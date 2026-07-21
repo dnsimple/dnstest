@@ -474,6 +474,31 @@
         }
       },
       {
+        "name": "dualstack.example.com",
+        "type": "MX",
+        "ttl": 120,
+        "data": {
+          "exchange": "mail.dualstack.example.com",
+          "preference": 10
+        }
+      },
+      {
+        "name": "mail.dualstack.example.com",
+        "type": "A",
+        "ttl": 120,
+        "data": {
+          "ip": "192.168.0.5"
+        }
+      },
+      {
+        "name": "mail.dualstack.example.com",
+        "type": "AAAA",
+        "ttl": 120,
+        "data": {
+          "ip": "2001:db8::1"
+        }
+      },
+      {
         "name": "text.example.com",
         "type": "TXT",
         "ttl": 120,
