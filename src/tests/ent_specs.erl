@@ -24,7 +24,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -52,7 +52,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -80,7 +80,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -108,7 +108,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -137,7 +137,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.test.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 1728543606,
@@ -146,7 +146,7 @@ definitions() ->
                         expire = 604800,
                         minimum = 300
                     }},
-                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600, #dns_rrdata_rrsig{
+                    {<<"test.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300, #dns_rrdata_rrsig{
                         type_covered = ?DNS_TYPE_SOA,
                         alg = ?DNS_ALG_RSASHA256,
                         labels = 2,
@@ -193,7 +193,7 @@ definitions() ->
                 },
                 answers => [],
                 authority => [
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 3600, #dns_rrdata_soa{
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_SOA, 300, #dns_rrdata_soa{
                         mname = <<"ns1.example.com">>,
                         rname = <<"ahu.example.com">>,
                         serial = 2000081501,
@@ -202,7 +202,7 @@ definitions() ->
                         expire = 604800,
                         minimum = 300
                     }},
-                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 3600,
+                    {<<"minimal-dnssec.com">>, ?DNS_CLASS_IN, ?DNS_TYPE_RRSIG, 300,
                         #dns_rrdata_rrsig{
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
