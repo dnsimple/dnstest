@@ -17,16 +17,16 @@ jobs:
     name: OTP ${{matrix.otp}}
     strategy:
       matrix:
-        otp: ['28', '27']
-        rebar3: ['3.25']
+        otp: ['29', '28']
+        rebar3: ['3.27']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: erlef/setup-beam@v1
+      - uses: actions/checkout@v7.0.1
+      - uses: erlef/setup-beam@v1.24.1
         with:
           otp-version: ${{ matrix.otp }}
           rebar3-version: ${{matrix.rebar3}}
-      - uses: actions/cache@v6
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/rebar3
