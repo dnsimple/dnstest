@@ -1039,7 +1039,7 @@ erldns_dnssec_definitions() ->
                             type_covered = ?DNS_TYPE_SOA,
                             alg = ?DNS_ALG_RSASHA256,
                             labels = 2,
-                            original_ttl = 3600,
+                            original_ttl = 300,
                             expiration = 0,
                             inception = 0,
                             keytag = 0,
