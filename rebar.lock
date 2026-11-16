@@ -2,7 +2,7 @@
 [{<<"base32">>,{pkg,<<"base32">>,<<"1.0.0">>},1},
  {<<"dns_erlang">>,
   {git,"https://github.com/dnsimple/dns_erlang",
-       {ref,"78031e317ea8b0e4e89205585acc966e230487b6"}},
+       {ref,"60db43f01f221d4da02645d555b8bf8fcbba4dbe"}},
   0}]}.
 [
 {pkg_hash,[
