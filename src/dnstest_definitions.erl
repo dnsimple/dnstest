@@ -444,13 +444,7 @@ erldns_dnssec_definitions() ->
                         }}
                 ],
                 authority => [],
-                additional => [
-                    {<<"ns1.example.com">>, 1, 1, 120, #dns_rrdata_a{ip = {192, 168, 1, 1}}},
-                    {<<"ns1.example.com">>, 1, 28, 120, #dns_rrdata_aaaa{
-                        ip = {8193, 3512, 34211, 0, 0, 35374, 880, 29492}
-                    }},
-                    {<<"ns2.example.com">>, 1, 1, 120, #dns_rrdata_a{ip = {192, 168, 1, 2}}}
-                ]
+                additional => []
             }
         }},
 
