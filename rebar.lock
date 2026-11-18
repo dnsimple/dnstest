@@ -1,12 +1,11 @@
 {"1.2.0",
 [{<<"base32">>,{pkg,<<"base32">>,<<"1.0.0">>},1},
- {<<"dns_erlang">>,
-  {git,"https://github.com/dnsimple/dns_erlang",
-       {ref,"60db43f01f221d4da02645d555b8bf8fcbba4dbe"}},
-  0}]}.
+ {<<"dns_erlang">>,{pkg,<<"dns_erlang">>,<<"6.0.0">>},0}]}.
 [
 {pkg_hash,[
- {<<"base32">>, <<"1AB331F812FCC254C8F7D4348E1E5A6F2B9B32B7A260BF2BC3358E3BF14C841A">>}]},
+ {<<"base32">>, <<"1AB331F812FCC254C8F7D4348E1E5A6F2B9B32B7A260BF2BC3358E3BF14C841A">>},
+ {<<"dns_erlang">>, <<"F71D0A3ADA3D705AB0E458D06F79AD6C4B814F260424988FB6DEEA676937A4BA">>}]},
 {pkg_hash_ext,[
- {<<"base32">>, <<"0449285348ED0C4CD83C7198E76C5FD5A0451C4EF18695B9FD43792A503E551A">>}]}
+ {<<"base32">>, <<"0449285348ED0C4CD83C7198E76C5FD5A0451C4EF18695B9FD43792A503E551A">>},
+ {<<"dns_erlang">>, <<"E387725255207A5DC0FAE6166A383BB99A7E50601C85D4AC2EAAE91B6F181CC1">>}]}
 ].
